@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('products', [ProductController::class,'getProductsAPI']);
-Route::post('products', [ProductController::class,'addProductAPI']);
+Route::post('products', [ProductController::class,'addOrEditProductAPI']);
 Route::get('products/{id}', [ProductController::class,'getProductByIdAPI']);
-Route::put('products/{id}', [ProductController::class,'editProductAPI']);
+Route::put('products/{id}', [ProductController::class,'addOrEditProductAPI']);
 Route::delete('products/{id}', [ProductController::class,'deleteProductAPI']);

@@ -15,7 +15,8 @@ class ProductController extends Controller
     * Main methods
     */
 
-    public function addProductAPI(Request $request){
+    public function addOrEditProductAPI(Request $request)
+    {
         $result = '';
         /**
          * $data get request parameters
@@ -23,58 +24,68 @@ class ProductController extends Controller
          * else return error message
          */
         $result = $this->checkValidateDataProduct($request);
-        
-        if ($result != null && isset($result)) {
-            $product = new Product;
-            $product->name = $result['name'];
-            $product->description = $result['description'];
-            $product->price = $result['price'];
-            $product->quantity = $result['quantity'];
-            $product->image = $result['image'];
-            $product->save();
-            return MyRespone::returnResponeCreatedSuccess($product, "Add Success");
-        }
-        return MyRespone::returnResponeBadRequest($result, "Bad request");
-    } 
 
-    public function getProductsAPI(){
+        if ($result != null && isset($result)) {
+            if(isset($request->id)){
+                $product = Product::find($request->id);
+                $this->setDataToProduct($result,$product);
+                return response($product, 201);
+            }else{
+                $product = new Product;
+                $this->setDataToProduct($result,$product);
+                return response($product, 201);
+            }
+        }
+        return response($result, 400);
+    }
+
+    public function getProductsAPI()
+    {
         $result = '';
         $result = Product::all();
         if ($result != null) {
-            return MyRespone::returnResponeSuccess($result, "Success");
+            return response($result, 200);
         }
-        return MyRespone::returnResponeBadRequest($result, "Bad request");
+        return response($result, 400);
     }
 
-    public function getProductByIdAPI(Request $request){
+    public function getProductByIdAPI(Request $request)
+    {
         $result = '';
         $result = Product::find($request->id);
         if ($result != null) {
-            return MyRespone::returnResponeSuccess($result, "Success");
+            return response($result, 200);
         }
-        return MyRespone::returnResponeBadRequest($result, "Bad request");
+        return response($result, 400);
     }
 
-    public function editProductAPI(Request $request){
-
-    }
-
-    public function deleteProductAPI(Request $request){
-
+    public function deleteProductAPI(Request $request)
+    {
     }
 
     /*
     * Widget methods
     */
 
-    private function checkValidateDataProduct($request){
-        if(!isset($request->name) || !isset($request->image) || !isset($request->quantity) || !isset($request->price) || !isset($request->description)){
-           return null;
+    private function checkValidateDataProduct($request)
+    {
+        if (!isset($request->name) || !isset($request->image) || !isset($request->quantity) || !isset($request->price) || !isset($request->description)) {
+            return null;
         }
 
-        if($request->quantity < 1 || $request->price < 1){
-           return null;
+        if ($request->quantity < 1 || $request->price < 1) {
+            return null;
         }
         return $request->all();
+    }
+
+    private function setDataToProduct($request , $product)
+    {
+        $product->name = $request['name'];
+        $product->description = $request['description'];
+        $product->price = $request['price'];
+        $product->quantity = $request['quantity'];
+        $product->image = $request['image'];
+        $product->save();
     }
 }
