@@ -17,27 +17,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/toolbar_background"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
             android:paddingRight="5dp"
             app:elevation="2dp">
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:contentInsetStart="0dp"
+                app:contentInsetEnd="0dp"
                 app:contentInsetStartWithNavigation="0dp">
 
-                <EditText
+                <SearchView
+                    android:theme="@style/Theme.FoodDelivery.SearchView"
+                    android:iconifiedByDefault="false"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="40dp"
+                    android:inputType="text"
                     android:background="@drawable/search_bar_background"
                     android:drawableStart="@drawable/ic_search_rounded"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="7dp"
-                    android:paddingBottom="7dp"
-                    android:paddingRight="10dp"
-                    android:hint="Tìm món ăn"
-                    android:textSize="16dp" />
+                    android:queryHint="Tìm món ăn"
+                    android:queryBackground="@null" />
 
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
@@ -59,14 +61,16 @@
             app:labelVisibilityMode="labeled"
             app:itemIconTint="@drawable/bottomnavigation_menu_item_foreground"
             app:itemTextColor="@drawable/bottomnavigation_menu_item_foreground"
-            app:menu="@menu/bottomnavigation_menu" />
+            app:menu="@menu/bottom_navigation_menu" />
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start">
+        android:layout_gravity="start"
+        app:menu="@menu/navigation_menu"
+        app:headerLayout="@layout/navigation_header">
     </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

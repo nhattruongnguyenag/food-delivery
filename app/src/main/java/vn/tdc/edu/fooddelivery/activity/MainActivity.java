@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.fragment.AbstractFragment;
@@ -25,6 +26,7 @@ import vn.tdc.edu.fooddelivery.fragment.NotificationFragment;
 import vn.tdc.edu.fooddelivery.fragment.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
+    NavigationView navigation;
     BottomNavigationView bottomNavigation;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
+        navigation = findViewById(R.id.navigation);
         bottomNavigation = findViewById(R.id.bottomNavigation);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -73,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
                         setFragment(HomeFragment.class);
                         break;
                 }
+                return true;
+            }
+        });
+
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 return true;
             }
         });
