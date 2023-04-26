@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\WidgetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,8 +28,13 @@ Route::post('products', [ProductController::class,'addOrEditProductAPI']);
 Route::get('products/{id}', [ProductController::class,'getProductByIdAPI']);
 Route::put('products', [ProductController::class,'addOrEditProductAPI']);
 Route::delete('products', [ProductController::class,'deleteProductAPI']);
-Route::post('upload-image', [ProductController::class,'uploadFileAPI']);
+
 
 /*
 *Categories API routes
 */
+
+/*
+*Widgets API routes
+*/
+Route::post('upload-image', [WidgetController::class,'uploadFileAPI']);

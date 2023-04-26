@@ -10,10 +10,6 @@ use function PHPUnit\Framework\isEmpty;
 
 class ProductController extends Controller
 {
-    private $FILE_PATH_SRC = "D:/wamp64/www/photo";
-    private $ARRAY_FILE_EXTENSION = ['jpeg', 'png', 'jpg'];
-
-
     /*
     * Main methods
     */
@@ -74,21 +70,6 @@ class ProductController extends Controller
         return response($result, 400);
     }
 
-    public function uploadFileAPI(Request $request)
-    {
-        $result = '';
-        if ($this->checkValidateDataImage($request->file('image'))) {
-            $imageName = time() . '.' . $request->image->extension();
-            $result = $imageName;
-            $request->image->move($this->FILE_PATH_SRC, $imageName);
-            return response()->json([
-                'image' => $result,
-            ],200);
-        } else {
-            return response($result, 400);
-        }
-    }
-
 
     /*
     * Widget methods
@@ -116,20 +97,4 @@ class ProductController extends Controller
         $product->save();
     }
 
-    private function checkValidateDataImage($imageFile)
-    {
-        if (!isset($imageFile)) {
-            return null;
-        }
-
-        $originOfFile = explode("/", $imageFile->getClientMimeType());
-        if ($originOfFile[0] != "image") {
-            return null;
-        } else {
-            if (!in_array($originOfFile[1], $this->ARRAY_FILE_EXTENSION, false)) {
-                return null;
-            }
-        }
-        return true;
-    }
 }
