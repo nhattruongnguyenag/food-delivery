@@ -12,7 +12,7 @@ use function PHPUnit\Framework\isEmpty;
 class ProductController extends Controller
 {
     private $FILE_PATH_SRC = "D:/wamp64/www/photo";
-    private $ARRAY_FILE_EXTENSION = ['jpeg','png','jpg'];
+    private $ARRAY_FILE_EXTENSION = ['jpeg', 'png', 'jpg'];
 
 
     /*
@@ -65,19 +65,31 @@ class ProductController extends Controller
 
     public function deleteProductAPI(Request $request)
     {
+        $result = null;
+        if (isset($request->id)) {
+            $product = Product::find($request->id);
+            if ($product != null) {
+                $result = $product;
+                $product->delete();
+                return response($result, 200);
+            }
+            else{
+                return response($result, 400);
+            }
+        }
+        return response($result, 400);
     }
 
     public function uploadFileAPI(Request $request)
     {
         $result = '';
-        if($this->checkValidateDataImage($request->file('image'))){
-            $imageName = time().'.'.$request->image->extension();
+        if ($this->checkValidateDataImage($request->file('image'))) {
+            $imageName = time() . '.' . $request->image->extension();
             $result = $imageName;
             $request->image->move($this->FILE_PATH_SRC, $imageName);
             return $result;
-
-        }else{
-            return response($result , 400);
+        } else {
+            return response($result, 400);
         }
     }
 
@@ -110,15 +122,15 @@ class ProductController extends Controller
 
     private function checkValidateDataImage($imageFile)
     {
-        if(!isset($imageFile)){
+        if (!isset($imageFile)) {
             return null;
         }
-        
-        $originOfFile = explode("/",$imageFile->getClientMimeType());
-        if($originOfFile[0] != "image"){
+
+        $originOfFile = explode("/", $imageFile->getClientMimeType());
+        if ($originOfFile[0] != "image") {
             return null;
-        }else{
-            if(!in_array($originOfFile[1],$this->ARRAY_FILE_EXTENSION,false)){
+        } else {
+            if (!in_array($originOfFile[1], $this->ARRAY_FILE_EXTENSION, false)) {
                 return null;
             }
         }
