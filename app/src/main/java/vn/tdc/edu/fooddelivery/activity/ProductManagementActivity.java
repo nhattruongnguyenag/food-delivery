@@ -8,13 +8,17 @@ import android.view.View;
 
 import vn.tdc.edu.fooddelivery.R;
 
-public class ProductActivity extends AppCompatActivity {
+public class ProductManagementActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
+        setContentView(R.layout.layout_product_management);
+
+        if (getIntent().getAction().equalsIgnoreCase("Home")) {
+            setTitle("Quản lý sản phẩm");
+        }
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

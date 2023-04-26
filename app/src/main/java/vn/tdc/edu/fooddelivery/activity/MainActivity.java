@@ -1,16 +1,15 @@
 package vn.tdc.edu.fooddelivery.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -84,19 +83,27 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = null;
                 switch (item.getItemId()) {
                     case R.id.nav_product_management:
-                        intent = new Intent(MainActivity.this, ProductActivity.class);
+                        intent = new Intent(MainActivity.this, ProductManagementActivity.class);
+                        intent.setAction("Home");
                         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         startActivity(intent);
                         break;
                     case R.id.nav_order_management:
-                        setFragment(CartFragment.class);
+                        intent = new Intent(MainActivity.this, OrderManagementActivity.class);
+                        intent.setAction("Order");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(intent);
                         break;
                     case R.id.nav_user_management:
-                        setFragment(NotificationFragment.class);
+                        intent = new Intent(MainActivity.this, UserManagementActivity.class);
+                        intent.setAction("User");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(intent);
                         break;
                     default:
                         break;
                 }
+                drawerLayout.close();
                 return true;
             }
         });
@@ -107,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.frameLayout, tClass, null)
                 .setReorderingAllowed(true)
-                .addToBackStack("name")
                 .commit();
     }
 
