@@ -87,7 +87,9 @@ class ProductController extends Controller
             $imageName = time() . '.' . $request->image->extension();
             $result = $imageName;
             $request->image->move($this->FILE_PATH_SRC, $imageName);
-            return $result;
+            return response()->json([
+                'image' => $result,
+            ],200);
         } else {
             return response($result, 400);
         }
