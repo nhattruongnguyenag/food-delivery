@@ -1,5 +1,6 @@
 package vn.tdc.edu.fooddelivery.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -41,16 +42,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_layout);
         navigation = findViewById(R.id.navigation);
         bottomNavigation = findViewById(R.id.bottomNavigation);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.search_bar_background, getTheme());
-
         drawerLayout = findViewById(R.id.drawerLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.drawerOpen, R.string.drawerClose);
-
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         toolbar.setNavigationIcon(R.drawable.ic_navigation);
@@ -83,6 +81,22 @@ public class MainActivity extends AppCompatActivity {
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent = null;
+                switch (item.getItemId()) {
+                    case R.id.nav_product_management:
+                        intent = new Intent(MainActivity.this, ProductActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(intent);
+                        break;
+                    case R.id.nav_order_management:
+                        setFragment(CartFragment.class);
+                        break;
+                    case R.id.nav_user_management:
+                        setFragment(NotificationFragment.class);
+                        break;
+                    default:
+                        break;
+                }
                 return true;
             }
         });
