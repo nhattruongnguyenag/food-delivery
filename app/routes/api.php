@@ -19,9 +19,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+/*
+*Products API routes
+*/
 Route::get('products', [ProductController::class,'getProductsAPI']);
 Route::post('products', [ProductController::class,'addOrEditProductAPI']);
 Route::get('products/{id}', [ProductController::class,'getProductByIdAPI']);
 Route::put('products', [ProductController::class,'addOrEditProductAPI']);
 Route::delete('products', [ProductController::class,'deleteProductAPI']);
 Route::post('upload-image', [ProductController::class,'uploadFileAPI']);
+
+/*
+*Categories API routes
+*/
