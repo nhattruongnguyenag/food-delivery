@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 
 use function PHPUnit\Framework\isEmpty;
@@ -22,11 +21,6 @@ class ProductController extends Controller
     public function addOrEditProductAPI(Request $request)
     {
         $result = '';
-        /**
-         * $data get request parameters
-         * if validation successful => $data get $request->all()
-         * else return error message
-         */
         $result = $this->checkValidateDataProduct($request);
 
         if ($result != null && isset($result)) {
