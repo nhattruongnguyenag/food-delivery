@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Exception;
 use Illuminate\Http\Request;
-use App\Models\MyRespone;
+use Illuminate\Support\Str;
+
 
 use function PHPUnit\Framework\isEmpty;
 
 class ProductController extends Controller
 {
+    private $FILE_PATH_SRC = "D:/wamp64/www/photo";
+    private $ARRAY_FILE_EXTENSION = ['jpeg','png','jpg'];
+
+
     /*
     * Main methods
     */
@@ -26,13 +30,13 @@ class ProductController extends Controller
         $result = $this->checkValidateDataProduct($request);
 
         if ($result != null && isset($result)) {
-            if(isset($request->id)){
+            if (isset($request->id)) {
                 $product = Product::find($request->id);
-                $this->setDataToProduct($result,$product);
+                $this->setDataToProduct($result, $product);
                 return response($product, 201);
-            }else{
+            } else {
                 $product = new Product;
-                $this->setDataToProduct($result,$product);
+                $this->setDataToProduct($result, $product);
                 return response($product, 201);
             }
         }
@@ -63,6 +67,21 @@ class ProductController extends Controller
     {
     }
 
+    public function uploadFileAPI(Request $request)
+    {
+        $result = '';
+        if($this->checkValidateDataImage($request->file('image'))){
+            $imageName = time().'.'.$request->image->extension();
+            $result = $imageName;
+            $request->image->move($this->FILE_PATH_SRC, $imageName);
+            return $result;
+
+        }else{
+            return response($result , 400);
+        }
+    }
+
+
     /*
     * Widget methods
     */
@@ -79,7 +98,7 @@ class ProductController extends Controller
         return $request->all();
     }
 
-    private function setDataToProduct($request , $product)
+    private function setDataToProduct($request, $product)
     {
         $product->name = $request['name'];
         $product->description = $request['description'];
@@ -87,5 +106,22 @@ class ProductController extends Controller
         $product->quantity = $request['quantity'];
         $product->image = $request['image'];
         $product->save();
+    }
+
+    private function checkValidateDataImage($imageFile)
+    {
+        if(!isset($imageFile)){
+            return null;
+        }
+        
+        $originOfFile = explode("/",$imageFile->getClientMimeType());
+        if($originOfFile[0] != "image"){
+            return null;
+        }else{
+            if(!in_array($originOfFile[1],$this->ARRAY_FILE_EXTENSION,false)){
+                return null;
+            }
+        }
+        return true;
     }
 }
