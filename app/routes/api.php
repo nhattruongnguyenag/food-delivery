@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WidgetController;
 use Illuminate\Http\Request;
@@ -24,8 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 *Products API routes
 */
 Route::get('products', [ProductController::class,'getProductsAPI']);
-Route::post('products', [ProductController::class,'addOrEditProductAPI']);
 Route::get('products/{id}', [ProductController::class,'getProductByIdAPI']);
+Route::post('products', [ProductController::class,'addOrEditProductAPI']);
 Route::put('products', [ProductController::class,'addOrEditProductAPI']);
 Route::delete('products', [ProductController::class,'deleteProductAPI']);
 
@@ -33,7 +34,11 @@ Route::delete('products', [ProductController::class,'deleteProductAPI']);
 /*
 *Categories API routes
 */
-
+Route::get('categories', [CategoryController::class,'getCategoriesAPI']);
+Route::get('categories/{id}', [CategoryController::class,'getCategoryByIdAPI']);
+Route::post('categories', [CategoryController::class,'addOrEditCategoryAPI']);
+Route::put('categories', [CategoryController::class,'addOrEditCategoryAPI']);
+Route::delete('categories', [CategoryController::class,'deleteCategoryAPI']);
 /*
 *Widgets API routes
 */

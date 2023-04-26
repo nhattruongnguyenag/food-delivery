@@ -17,16 +17,17 @@ class ProductController extends Controller
     public function addOrEditProductAPI(Request $request)
     {
         $result = '';
-        $result = $this->checkValidateDataProduct($request);
-
+        $result = WidgetController::checkValidateDataProduct($request);
         if ($result != null && isset($result)) {
             if (isset($request->id)) {
                 $product = Product::find($request->id);
-                $this->setDataToProduct($result, $product);
+                WidgetController::setDataToProduct($result, $product);
+                $product->save();
                 return response($product, 201);
             } else {
                 $product = new Product;
-                $this->setDataToProduct($result, $product);
+                WidgetController::setDataToProduct($result, $product);
+                $product->save();
                 return response($product, 201);
             }
         }
@@ -69,32 +70,4 @@ class ProductController extends Controller
         }
         return response($result, 400);
     }
-
-
-    /*
-    * Widget methods
-    */
-
-    private function checkValidateDataProduct($request)
-    {
-        if (!isset($request->name) || !isset($request->image) || !isset($request->quantity) || !isset($request->price) || !isset($request->description)) {
-            return null;
-        }
-
-        if ($request->quantity < 1 || $request->price < 1) {
-            return null;
-        }
-        return $request->all();
-    }
-
-    private function setDataToProduct($request, $product)
-    {
-        $product->name = $request['name'];
-        $product->description = $request['description'];
-        $product->price = $request['price'];
-        $product->quantity = $request['quantity'];
-        $product->image = $request['image'];
-        $product->save();
-    }
-
 }

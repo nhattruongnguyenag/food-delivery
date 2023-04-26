@@ -40,4 +40,47 @@ class WidgetController extends Controller
         }
         return true;
     }
+
+    /*
+    * Widget Product methods 
+    */
+
+    public static function checkValidateDataProduct($request)
+    {
+        if (!isset($request->name) || !isset($request->image) || !isset($request->quantity) || !isset($request->price) || !isset($request->description)) {
+            return null;
+        }
+
+        if ($request->quantity < 1 || $request->price < 1) {
+            return null;
+        }
+        return $request->all();
+    }
+
+    public static function setDataToProduct($request, $product)
+    {
+        $product->name = $request['name'];
+        $product->description = $request['description'];
+        $product->price = $request['price'];
+        $product->quantity = $request['quantity'];
+        $product->image = $request['image'];
+    }
+
+    /*
+    * Widget Category methods 
+    */
+
+    public static function checkValidateDataCategory($request)
+    {
+        if (!isset($request->name) || !isset($request->image)) {
+            return null;
+        }
+        return $request->all();
+    }
+
+    public static function setDataToCategory($request, $category)
+    {
+        $category->name = $request['name'];
+        $category->image = $request['image'];
+    }
 }
