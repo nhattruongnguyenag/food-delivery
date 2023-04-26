@@ -7,5 +7,5 @@
         android:centerY="0.1"
         android:endColor="#fff"
         android:startColor="#fff" />
-    <corners android:radius="5dp"/>
+    <corners android:radius="999dp"/>
 </shape>
