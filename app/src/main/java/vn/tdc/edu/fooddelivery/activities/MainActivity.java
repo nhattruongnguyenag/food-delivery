@@ -1,12 +1,10 @@
-package vn.tdc.edu.fooddelivery.activity;
+package vn.tdc.edu.fooddelivery.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -17,14 +15,15 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 import vn.tdc.edu.fooddelivery.R;
-import vn.tdc.edu.fooddelivery.activity.admin.OrderManagementActivity;
-import vn.tdc.edu.fooddelivery.activity.admin.ProductManagementActivity;
-import vn.tdc.edu.fooddelivery.activity.admin.UserManagementActivity;
-import vn.tdc.edu.fooddelivery.fragment.AbstractFragment;
-import vn.tdc.edu.fooddelivery.fragment.CartFragment;
-import vn.tdc.edu.fooddelivery.fragment.HomeFragment;
-import vn.tdc.edu.fooddelivery.fragment.NotificationFragment;
-import vn.tdc.edu.fooddelivery.fragment.ProfileFragment;
+import vn.tdc.edu.fooddelivery.activities.admin.CategoryManagementActivity;
+import vn.tdc.edu.fooddelivery.activities.admin.OrderManagementActivity;
+import vn.tdc.edu.fooddelivery.activities.admin.ProductManagementActivity;
+import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
+import vn.tdc.edu.fooddelivery.fragments.CartFragment;
+import vn.tdc.edu.fooddelivery.fragments.HomeFragment;
+import vn.tdc.edu.fooddelivery.fragments.NotificationFragment;
+import vn.tdc.edu.fooddelivery.fragments.ProfileFragment;
 
 public class MainActivity extends AbstractActivity {
     NavigationView navigation;
@@ -83,21 +82,20 @@ public class MainActivity extends AbstractActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_product_management:
-                        switchActivity(ProductManagementActivity.class, "Quản lý hàng hoá");
+                        switchActivity( ProductManagementActivity.class, "Quản lý hàng hoá");
                         break;
                     case R.id.nav_order_management:
                         switchActivity(OrderManagementActivity.class, "Quản lý đơn hàng");
                         break;
                     case R.id.nav_user_management:
-                        switchActivity(UserManagementActivity.class, "Quản lý người dùng");
+                        switchActivity( UserManagementActivity.class, "Quản lý người dùng");
                         break;
                     case R.id.nav_category_management:
-                        switchActivity(UserManagementActivity.class, "Quản lý danh mục sản phẩm");
+                        switchActivity(CategoryManagementActivity.class, "Quản lý danh mục sản phẩm");
                         break;
                     default:
                         break;
                 }
-                drawerLayout.close();
                 return true;
             }
         });

@@ -1,8 +1,6 @@
-package vn.tdc.edu.fooddelivery.fragment;
+package vn.tdc.edu.fooddelivery.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;

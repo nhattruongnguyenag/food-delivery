@@ -1,4 +1,4 @@
-package vn.tdc.edu.fooddelivery.activity;
+package vn.tdc.edu.fooddelivery.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import vn.tdc.edu.fooddelivery.R;
-import vn.tdc.edu.fooddelivery.activity.admin.UserManagementActivity;
+import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
 
 public abstract class AbstractActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -29,8 +29,8 @@ public abstract class AbstractActivity extends AppCompatActivity {
         });
     }
 
-    public void switchActivity(Class targetActivity, String action) {
-        Intent intent = new Intent(this, UserManagementActivity.class);
+    public void switchActivity(Class<?> targetActivity, String action) {
+        Intent intent = new Intent(this, targetActivity);
         intent.setAction(action);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);

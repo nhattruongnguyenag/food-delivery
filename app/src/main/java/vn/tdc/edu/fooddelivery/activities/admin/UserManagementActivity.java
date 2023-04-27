@@ -1,11 +1,11 @@
-package vn.tdc.edu.fooddelivery.activity.admin;
+package vn.tdc.edu.fooddelivery.activities.admin;
 
 import android.os.Bundle;
 
 import vn.tdc.edu.fooddelivery.R;
-import vn.tdc.edu.fooddelivery.activity.AbstractActivity;
+import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 
-public class OrderManagementActivity extends AbstractActivity {
+public class UserManagementActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

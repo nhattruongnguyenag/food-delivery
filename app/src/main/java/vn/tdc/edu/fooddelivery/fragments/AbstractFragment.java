@@ -1,4 +1,4 @@
-package vn.tdc.edu.fooddelivery.fragment;
+package vn.tdc.edu.fooddelivery.fragments;
 
 import androidx.fragment.app.Fragment;
 

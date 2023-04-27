@@ -10,4 +10,6 @@
     <color name="menu_item_active">#008132</color>
     <color name="menu_item_inactive">#AFADAD</color>
     <color name="toolbar_background">#39D175</color>
+    <color name="textTitlePrimary">#008132</color>
+    <color name="textBlack">#000</color>
 </resources>
