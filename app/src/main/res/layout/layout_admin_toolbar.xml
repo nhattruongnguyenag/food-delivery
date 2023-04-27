@@ -2,7 +2,6 @@
 <com.google.android.material.appbar.AppBarLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@style/Theme.FoodDelivery.ActionBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/toolbar_background"
@@ -12,9 +11,10 @@
     app:elevation="2dp">
 
         <androidx.appcompat.widget.Toolbar
+            android:theme="@style/Theme.FoodDelivery.ActionBar"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             app:contentInsetStart="0dp"
             app:contentInsetEnd="0dp"
             app:contentInsetStartWithNavigation="0dp">

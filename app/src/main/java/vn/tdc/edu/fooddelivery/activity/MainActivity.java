@@ -2,14 +2,12 @@ package vn.tdc.edu.fooddelivery.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,13 +17,16 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.activity.admin.OrderManagementActivity;
+import vn.tdc.edu.fooddelivery.activity.admin.ProductManagementActivity;
+import vn.tdc.edu.fooddelivery.activity.admin.UserManagementActivity;
 import vn.tdc.edu.fooddelivery.fragment.AbstractFragment;
 import vn.tdc.edu.fooddelivery.fragment.CartFragment;
 import vn.tdc.edu.fooddelivery.fragment.HomeFragment;
 import vn.tdc.edu.fooddelivery.fragment.NotificationFragment;
 import vn.tdc.edu.fooddelivery.fragment.ProfileFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AbstractActivity {
     NavigationView navigation;
     BottomNavigationView bottomNavigation;
     private DrawerLayout drawerLayout;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         drawerLayout = findViewById(R.id.drawerLayout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.drawerOpen, R.string.drawerClose);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         toolbar.setNavigationIcon(R.drawable.ic_navigation);
@@ -80,25 +81,18 @@ public class MainActivity extends AppCompatActivity {
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Intent intent = null;
                 switch (item.getItemId()) {
                     case R.id.nav_product_management:
-                        intent = new Intent(MainActivity.this, ProductManagementActivity.class);
-                        intent.setAction("Home");
-                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        startActivity(intent);
+                        switchActivity(ProductManagementActivity.class, "Quản lý hàng hoá");
                         break;
                     case R.id.nav_order_management:
-                        intent = new Intent(MainActivity.this, OrderManagementActivity.class);
-                        intent.setAction("Order");
-                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        startActivity(intent);
+                        switchActivity(OrderManagementActivity.class, "Quản lý đơn hàng");
                         break;
                     case R.id.nav_user_management:
-                        intent = new Intent(MainActivity.this, UserManagementActivity.class);
-                        intent.setAction("User");
-                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        startActivity(intent);
+                        switchActivity(UserManagementActivity.class, "Quản lý người dùng");
+                        break;
+                    case R.id.nav_category_management:
+                        switchActivity(UserManagementActivity.class, "Quản lý danh mục sản phẩm");
                         break;
                     default:
                         break;

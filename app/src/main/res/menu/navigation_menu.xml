@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_product"
             android:title="@string/menu_product_management" />
         <item
+            android:id="@+id/nav_category_management"
+            android:icon="@drawable/ic_category"
+            android:title="@string/menu_category_management" />
+        <item
             android:id="@+id/nav_order_management"
             android:icon="@drawable/ic_order_list"
             android:title="@string/menu_order_management" />

@@ -1,25 +1,20 @@
 package vn.tdc.edu.fooddelivery.activity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.os.Bundle;
-import android.view.View;
-
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.activity.admin.UserManagementActivity;
 
-public class ProductManagementActivity extends AppCompatActivity {
+public abstract class AbstractActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_product_management);
-
-        if (getIntent().getAction().equalsIgnoreCase("Home")) {
-            setTitle("Quản lý sản phẩm");
-        }
-
+    protected void createActionBar() {
+        setTitle(getIntent().getAction());
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -32,5 +27,12 @@ public class ProductManagementActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    public void switchActivity(Class targetActivity, String action) {
+        Intent intent = new Intent(this, UserManagementActivity.class);
+        intent.setAction(action);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
     }
 }
