@@ -38,5 +38,30 @@ class UserController extends Controller
         return response($result, 400);
     }
 
-    
+    public function getUserByIdAPI(Request $request)
+    {
+        $result = '';
+        $result = User::find($request->id);
+        if ($result != null) {
+            $result->passwordUnhide = $result->password;
+            return response($result, 200);
+        }
+        return response($result, 400);
+    }
+
+    public function deleteUserAPI(Request $request)
+    {
+        $result = null;
+        if (isset($request->id)) {
+            $user = User::find($request->id);
+            if ($user != null) {
+                $result = $user;
+                $user->delete();
+                return response($result, 200);
+            } else {
+                return response($result, 400);
+            }
+        }
+        return response($result, 400);
+    }
 }
