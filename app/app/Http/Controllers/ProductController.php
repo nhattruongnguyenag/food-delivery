@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -34,14 +35,18 @@ class ProductController extends Controller
         return response($result, 400);
     }
 
-    public function getProductsAPI()
+    public function getProductsAPI(Request $request)
     {
         $result = '';
-        $result = Product::all();
-        if ($result != null) {
-            return response($result, 200);
+        if ($request->query('categoryId') == null) {
+            $result = Product::all();
+            if ($result != null) {
+                return response($result, 200);
+            }
+            return response($result, 400);
+        }else{
+            dd(Category::find($request->query('categoryId'))->products());die;
         }
-        return response($result, 400);
     }
 
     public function getProductByIdAPI(Request $request)
@@ -63,8 +68,7 @@ class ProductController extends Controller
                 $result = $product;
                 $product->delete();
                 return response($result, 200);
-            }
-            else{
+            } else {
                 return response($result, 400);
             }
         }

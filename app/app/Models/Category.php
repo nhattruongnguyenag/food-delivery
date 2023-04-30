@@ -13,4 +13,8 @@ class Category extends Model
     public $incrementing = true;
     public $keyType = 'integer';
     public $timestamps = true;
+
+    public function products(){
+        return $this->belongsToMany('App\Models\Product','categories_products','categories.id','products.id');
+    }
 }
