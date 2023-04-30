@@ -14,7 +14,8 @@ class Category extends Model
     public $keyType = 'integer';
     public $timestamps = true;
 
-    public function products(){
-        return $this->belongsToMany('App\Models\Product','categories_products','categories.id','products.id');
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)->get();
     }
 }

@@ -14,4 +14,8 @@ class Product extends Model
     public $incrementing = true;
     public $keyType = 'integer';
     public $timestamps = true;
+
+    public function categories(){
+        return $this->belongsToMany(Category::class)->get();
+    }
 }

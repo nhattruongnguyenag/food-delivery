@@ -45,7 +45,14 @@ class ProductController extends Controller
             }
             return response($result, 400);
         }else{
-            dd(Category::find($request->query('categoryId'))->products());die;
+            $category = Category::find($request->query('categoryId'));
+            if($category != null) {
+                $result = $category->products();
+                if ($result != null) {
+                    return response($result, 200);
+                }
+            }
+            return response($result, 400);
         }
     }
 
