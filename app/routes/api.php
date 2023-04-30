@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WidgetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,18 @@ Route::get('categories/{id}', [CategoryController::class,'getCategoryByIdAPI']);
 Route::post('categories', [CategoryController::class,'addOrEditCategoryAPI']);
 Route::put('categories', [CategoryController::class,'addOrEditCategoryAPI']);
 Route::delete('categories', [CategoryController::class,'deleteCategoryAPI']);
+
+
+/*
+*Users API routes 
+*/
+Route::get('users', [UserController::class,'getUserAPI']);
+Route::get('users/{id}', [UserController::class,'getUserByIdAPI']);
+Route::post('users', [UserController::class,'addOrEditUserAPI']);
+Route::put('users', [UserController::class,'addOrEditUserAPI']);
+Route::delete('users', [UserController::class,'deleteUserAPI']);
+
+
 /*
 *Widgets API routes
 */

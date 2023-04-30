@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class WidgetController extends Controller
 {
     private $FILE_PATH_SRC = "D:/wamp64/www/photo";
     private $ARRAY_FILE_EXTENSION = ['jpeg', 'png', 'jpg'];
+    private static $IS_ACTIVE = 1;
+    private static $IS_BLOCK = 0;
+    private static $IS_MAINTAINCE = 2;
 
     public function uploadFileAPI(Request $request)
     {
@@ -18,7 +22,7 @@ class WidgetController extends Controller
             $request->image->move($this->FILE_PATH_SRC, $imageName);
             return response()->json([
                 'image' => $result,
-            ],200);
+            ], 200);
         } else {
             return response($result, 400);
         }
@@ -83,5 +87,40 @@ class WidgetController extends Controller
     {
         $category->name = $request['name'];
         $category->image = $request['image'];
+    }
+
+    /*
+    * Widget User methods 
+    */
+
+    public static function checkValidateDataUser($request)
+    {
+        if (!isset($request->full_name) || !isset($request->image) || !isset($request->email) || !isset($request->password)) {
+            return null;
+        }
+        return $request->all();
+    }
+
+    public static function setDataToUser($request, $user)
+    {
+        $user->full_name = $request['full_name'];
+        $user->image = $request['image'];
+        $user->email = $request['email'];
+        $user->password = Hash::make($request['password']);
+        if (isset($request->status)) {
+            switch ($request->status) {
+                case 0:
+                    $user->status = self::$IS_BLOCK;
+                    break;
+                case 1:
+                    $user->status = self::$IS_ACTIVE;
+                    break;
+                case 2:
+                    $user->status = self::$IS_MAINTAINCE;
+                    break;
+            }
+        } else {
+            $user->status = self::$IS_ACTIVE;
+        }
     }
 }
