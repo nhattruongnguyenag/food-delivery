@@ -47,7 +47,7 @@ class WidgetController extends Controller
 
     public static function checkValidateDataProduct($request)
     {
-        if (!isset($request->name) || !isset($request->image) || !isset($request->quantity) || !isset($request->price) || !isset($request->description)) {
+        if (!isset($request->name) || !isset($request->image) || !isset($request->quantity) || !isset($request->price) || !isset($request->description) || !isset($request->type)) {
             return null;
         }
 
@@ -64,6 +64,7 @@ class WidgetController extends Controller
         $product->price = $request['price'];
         $product->quantity = $request['quantity'];
         $product->image = $request['image'];
+        $product->type = $request['type'];
     }
 
     /*

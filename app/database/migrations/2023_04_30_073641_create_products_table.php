@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->bigInteger('price');
             $table->string('description',255);
+            $table->string('type',255);
             $table->timestamps();
         });
     }
