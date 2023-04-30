@@ -3,18 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function getCategoriesAPI()
+    public function getCategoriesAPI(Request $request)
     {
         $result = '';
-        $result = Category::all();
-        if ($result != null) {
-            return response($result, 200);
+        if ($request->query('productId') == null) {
+            $result = Category::all();
+            if ($result != null) {
+                return response($result, 200);
+            }
+            return response($result, 400);
+        }else{
+            $product = Product::find($request->query('productId'));
+            if($product != null) {
+                $result = $product->categories();
+                if ($result != null) {
+                    return response($result, 200);
+                }
+            }
+            return response($result, 400);
         }
-        return response($result, 400);
     }
 
     public function getCategoryByIdAPI(Request $request)
