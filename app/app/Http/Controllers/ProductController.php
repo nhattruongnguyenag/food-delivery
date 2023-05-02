@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
-
+use PhpParser\Node\Stmt\Else_;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -21,15 +21,21 @@ class ProductController extends Controller
         $result = WidgetController::checkValidateDataProduct($request);
         if ($result != null && isset($result)) {
             if (isset($request->id)) {
-                $product = Product::find($request->id);
-                WidgetController::setDataToProduct($result, $product);
-                $product->save();
-                return response($product, 201);
+                if (isset($request->categories)) {
+                    $product = Product::find($request->id);
+                    WidgetController::setDataToProduct($result, $product);
+                    $product->save();
+                    WidgetController::attachToCategoryProductTable($request->categories, $product);
+                    return response($product, 201);
+                }
             } else {
-                $product = new Product;
-                WidgetController::setDataToProduct($result, $product);
-                $product->save();
-                return response($product, 201);
+                if (isset($request->categories)) {
+                    $product = new Product;
+                    WidgetController::setDataToProduct($result, $product);
+                    $product->save();
+                    WidgetController::attachToCategoryProductTable($request->categories, $product);
+                    return response($product, 201);
+                }
             }
         }
         return response($result, 400);
@@ -44,9 +50,9 @@ class ProductController extends Controller
                 return response($result, 200);
             }
             return response($result, 400);
-        }else{
+        } else {
             $category = Category::find($request->query('categoryId'));
-            if($category != null) {
+            if ($category != null) {
                 $result = $category->products();
                 if ($result != null) {
                     return response($result, 200);

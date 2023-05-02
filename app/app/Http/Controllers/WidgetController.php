@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\CategoryProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class WidgetController extends Controller
@@ -51,11 +54,11 @@ class WidgetController extends Controller
 
     public static function checkValidateDataProduct($request)
     {
-        if (!isset($request->name) || !isset($request->image) || !isset($request->quantity) || !isset($request->price) || !isset($request->description) || !isset($request->type)) {
+        if (!isset($request->name) || !isset($request->image) || !isset($request->quantity) || !isset($request->price) || !isset($request->description) || !isset($request->type) || !isset($request->categories)) {
             return null;
         }
 
-        if ($request->quantity < 1 || $request->price < 1) {
+        if ($request->quantity < 1 || $request->price < 1 || count($request->categories) <1) {
             return null;
         }
         return $request->all();
@@ -69,6 +72,27 @@ class WidgetController extends Controller
         $product->quantity = $request['quantity'];
         $product->image = $request['image'];
         $product->type = $request['type'];
+    }
+
+    public static function attachToCategoryProductTable($array , $product)
+    {
+        $canAttach = $array;
+        for($i = 0; $i < count($array); $i++) {
+            $temp = Category::find($array[$i])->products();
+            for($z = 0; $z < count($temp); $z++) {
+                if($product->id == $temp[$z]['id']){
+                    unset($canAttach[$i]);
+                    break;
+                }   
+            }
+        }
+        
+        foreach($canAttach as $categoryCanAttach){
+            DB::table('category_product')->insert([
+                'category_id' => $categoryCanAttach,
+                'product_id' => $product->id
+            ]);
+        }
     }
 
     /*
