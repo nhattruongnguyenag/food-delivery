@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\CategoryProduct;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -124,7 +125,7 @@ class WidgetController extends Controller
     */
     public static function checkValidateDataUser($request)
     {
-        if (!isset($request->full_name) || !isset($request->image) || !isset($request->email) || !isset($request->password)) {
+        if (!isset($request->full_name) || !isset($request->image) || !isset($request->email) || !isset($request->password) || !isset($request->roles)) {
             return null;
         }
         return $request->all();
@@ -150,6 +151,50 @@ class WidgetController extends Controller
             }
         } else {
             $user->status = self::$IS_ACTIVE;
+        }
+    }
+
+
+    /*
+    * Widget User methods 
+    */
+    public static function checkValidateDataRole($request)
+    {
+        if (!isset($request->code) || !isset($request->name)) {
+            return null;
+        }
+        
+        return $request->all();
+    }
+
+    public static function setDataToRole($request, $role)
+    {
+        $role->code = $request['code'];
+        $role->name = $request['name'];
+    }
+
+
+    /*
+    * Widget RoleUser methods 
+    */
+    public static function attachToRoleUserTable($array , $user)
+    {
+        $canAttach = $array;
+        for($i = 0; $i < count($array); $i++) {
+            $temp = Role::find($array[$i])->users();
+            for($z = 0; $z < count($temp); $z++) {
+                if($user->id == $temp[$z]['id']){
+                    unset($canAttach[$i]);
+                    break;
+                }   
+            }
+        }
+        // var_dump($canAttach);die;
+        foreach($canAttach as $roleCanAttach){
+            DB::table('role_user')->insert([
+                'role_id' => $roleCanAttach,
+                'user_id' => $user->id
+            ]);
         }
     }
 }
