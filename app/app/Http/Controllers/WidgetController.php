@@ -48,10 +48,10 @@ class WidgetController extends Controller
         return true;
     }
 
+
     /*
     * Widget Product methods 
     */
-
     public static function checkValidateDataProduct($request)
     {
         if (!isset($request->name) || !isset($request->image) || !isset($request->quantity) || !isset($request->price) || !isset($request->description) || !isset($request->type) || !isset($request->categories)) {
@@ -74,6 +74,28 @@ class WidgetController extends Controller
         $product->type = $request['type'];
     }
 
+    
+    /*
+    * Widget Category methods 
+    */
+    public static function checkValidateDataCategory($request)
+    {
+        if (!isset($request->name) || !isset($request->image)) {
+            return null;
+        }
+        return $request->all();
+    }
+
+    public static function setDataToCategory($request, $category)
+    {
+        $category->name = $request['name'];
+        $category->image = $request['image'];
+    }
+
+
+    /*
+    * Widget CategoryProduct methods 
+    */
     public static function attachToCategoryProductTable($array , $product)
     {
         $canAttach = $array;
@@ -95,28 +117,11 @@ class WidgetController extends Controller
         }
     }
 
-    /*
-    * Widget Category methods 
-    */
 
-    public static function checkValidateDataCategory($request)
-    {
-        if (!isset($request->name) || !isset($request->image)) {
-            return null;
-        }
-        return $request->all();
-    }
-
-    public static function setDataToCategory($request, $category)
-    {
-        $category->name = $request['name'];
-        $category->image = $request['image'];
-    }
 
     /*
     * Widget User methods 
     */
-
     public static function checkValidateDataUser($request)
     {
         if (!isset($request->full_name) || !isset($request->image) || !isset($request->email) || !isset($request->password)) {

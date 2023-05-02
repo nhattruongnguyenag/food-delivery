@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WidgetController;
 use Illuminate\Http\Request;
@@ -45,11 +46,21 @@ Route::delete('categories', [CategoryController::class,'deleteCategoryAPI']);
 /*
 *Users API routes 
 */
-Route::get('users', [UserController::class,'getUserAPI']);
+Route::get('users', [UserController::class,'getUsersAPI']);
 Route::get('users/{id}', [UserController::class,'getUserByIdAPI']);
 Route::post('users', [UserController::class,'addOrEditUserAPI']);
 Route::put('users', [UserController::class,'addOrEditUserAPI']);
 Route::delete('users', [UserController::class,'deleteUserAPI']);
+
+
+/*
+*Roles API routes 
+*/
+Route::get('roles', [RoleController::class,'getRolesAPI']);
+Route::get('roles/{id}', [RoleController::class,'getRoleByIdAPI']);
+Route::post('roles', [RoleController::class,'addOrEditRoleAPI']);
+Route::put('roles', [RoleController::class,'addOrEditRoleAPI']);
+Route::delete('roles', [RoleController::class,'deleteRoleAPI']);
 
 
 /*

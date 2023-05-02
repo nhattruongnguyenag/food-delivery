@@ -28,7 +28,7 @@ class UserController extends Controller
         return response($result, 400);
     }
 
-    public function getUserAPI(Request $request)
+    public function getUsersAPI(Request $request)
     {
         $result = '';
         $result = User::all();
