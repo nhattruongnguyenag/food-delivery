@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NotifycationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -61,6 +62,16 @@ Route::get('roles/{id}', [RoleController::class,'getRoleByIdAPI']);
 Route::post('roles', [RoleController::class,'addOrEditRoleAPI']);
 Route::put('roles', [RoleController::class,'addOrEditRoleAPI']);
 Route::delete('roles', [RoleController::class,'deleteRoleAPI']);
+
+
+/*
+*Roles API routes 
+*/
+Route::get('notifycations', [NotifycationController::class,'getNotifycationsAPI']);
+Route::get('notifycations/{id}', [NotifycationController::class,'getNotifycationByIdAPI']);
+Route::post('notifycations', [NotifycationController::class,'addOrEditNotifycationAPI']);
+Route::put('notifycations', [NotifycationController::class,'addOrEditNotifycationAPI']);
+Route::delete('notifycations', [NotifycationController::class,'deleteNotifycationAPI']);
 
 
 /*

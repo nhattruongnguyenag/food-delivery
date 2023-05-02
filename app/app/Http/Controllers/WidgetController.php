@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\CategoryProduct;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class WidgetController extends Controller
 {
@@ -136,7 +135,7 @@ class WidgetController extends Controller
         $user->full_name = $request['full_name'];
         $user->image = $request['image'];
         $user->email = $request['email'];
-        $user->password = Hash::make($request['password']);
+        $user->password = Crypt::encrypt($request['password']);
         if (isset($request->status)) {
             switch ($request->status) {
                 case 0:

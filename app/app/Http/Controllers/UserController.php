@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Test\Constraint\RequestAttributeValueSame;
 
 class UserController extends Controller
@@ -61,7 +64,7 @@ class UserController extends Controller
         $result = '';
         $result = User::find($request->id);
         if ($result != null) {
-            $result->passwordUnhide = $result->password;
+            $result->passwordUnhide = Crypt::decrypt($result->password);
             return response($result, 200);
         }
         return response($result, 400);
