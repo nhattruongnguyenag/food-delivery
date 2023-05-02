@@ -30,7 +30,7 @@ public class ProductManagementActivity extends AbstractActivity {
         for (int i = 0; i < 50; i++) {
             ProductModel productModel = new ProductModel();
             productModel.setName("Cơm chiên dương châu");
-            productModel.setUnit("Phần");
+            productModel.setType("Phần");
             productModel.setQuantity(50);
             productModel.setPrice(45000L);
             listProducts.add(productModel);
