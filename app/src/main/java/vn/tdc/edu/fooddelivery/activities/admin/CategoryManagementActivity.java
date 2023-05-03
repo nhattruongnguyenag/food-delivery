@@ -15,6 +15,6 @@ public class CategoryManagementActivity extends AbstractActivity {
         setContentView(R.layout.layout_category_management);
         createActionBar();
 
-        setFragment(CategoriesListFragment.class, R.id.frameLayout);
+        setFragment(CategoriesListFragment.class, R.id.frameLayout, false);
     }
 }

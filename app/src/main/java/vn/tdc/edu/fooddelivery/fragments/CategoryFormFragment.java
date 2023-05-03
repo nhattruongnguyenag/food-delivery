@@ -29,6 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.activities.MainActivity;
 import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
@@ -73,68 +74,21 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
                     .into(imgCategory);
         }
 
-        startActivityForResult = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
-                        Intent data = result.getData();
-                        if (result.getResultCode() == AppCompatActivity.RESULT_OK && data != null) {
-                            switch (getActivity().getIntent().getStringExtra("req")) {
-                                case "Camera":
-                                    Bitmap image = (Bitmap) data.getExtras().get("data");
-                                    selectedImage = FileUtils.getPath(getActivity(), getImageUri(getActivity(), image));
-                                    imgCategory.setImageBitmap(image);
-                                    break;
-                                case "Gallery":
-                                    Uri imageUri = data.getData();
-                                    selectedImage = FileUtils.getPath(getActivity(), imageUri);
-                                    Picasso.get().load(imageUri).into(imgCategory);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                }
-        );
-
+        setOnHandleStartActivityResult(imgCategory);
         return view;
     }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnUploadImage) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Select Image");
-            builder.setItems(options, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (options[which].equals("Camera")) {
-                        if (checkPermissions(Manifest.permission.CAMERA)) {
-                            takePhotoAction();
-                        } else {
-                            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQ_CAMERA);
-                        }
-                    } else if (options[which].equals("Gallery")) {
-                        if (checkPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                            pickImageAction();
-                        } else {
-                            requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, REQ_READ_EXTERNAL_STORAGE);
-                        }
-                    } else {
-                        dialog.dismiss();
-                    }
-                }
-            });
+            ((AbstractActivity) getActivity()).handleChoosingImage(imgCategory);
+        }
 
-            builder.show();
-        } else if (view.getId() == R.id.btnAddOrUpdate) {
-            uploadFileToServer(new Action() {
+        if (view.getId() == R.id.btnAddOrUpdate) {
+            ((AbstractActivity) getActivity()).handleUploadImage(selectedImage, new AbstractActivity.BackwardHandling() {
                 @Override
-                public void callAction(String fileName) {
-
+                public void doAction(String fileName) {
                     CategoryModel categoryModel = new CategoryModel();
-
                     categoryModel.setImage(fileName);
                     categoryModel.setName(edName.getText().toString());
                     categoryModel.setNumberOfProduct(0);
@@ -144,20 +98,13 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
                     call.enqueue(new Callback<CategoryModel>() {
                         @Override
                         public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity())
-                                    .setTitle("Message")
-                                    .setMessage("Thêm danh mục thành công")
-                                    .setPositiveButton("Ok", null);
-                            alert.show();
+                            ((AbstractActivity) getActivity()).showMessageDialog("Thêm danh mục thành công");
+                            ((AbstractActivity) getActivity()).setFragment(CategoriesListFragment.class, R.id.frameLayout, true);
                         }
 
                         @Override
                         public void onFailure(Call<CategoryModel> call, Throwable t) {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity())
-                                    .setTitle("Message")
-                                    .setMessage("Thêm danh mục thất bại")
-                                    .setPositiveButton("Ok", null);
-                            alert.show();
+                            ((AbstractActivity) getActivity()).showMessageDialog("Thêm danh mục thất bại");
                         }
                     });
                 }

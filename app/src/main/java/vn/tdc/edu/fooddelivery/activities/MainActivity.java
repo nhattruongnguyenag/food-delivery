@@ -32,9 +32,6 @@ public class MainActivity extends AbstractActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
 
-    private AbstractFragment fragment;
-    private FragmentTransaction transaction;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,25 +50,25 @@ public class MainActivity extends AbstractActivity {
         actionBarDrawerToggle.syncState();
         toolbar.setNavigationIcon(R.drawable.ic_navigation);
 
-        setFragment(HomeFragment.class, R.id.frameLayout);
+        setFragment(HomeFragment.class, R.id.frameLayout, false);
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_home:
-                        setFragment(HomeFragment.class, R.id.frameLayout);
+                        setFragment(HomeFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_cart:
-                        setFragment(CartFragment.class, R.id.frameLayout);
+                        setFragment(CartFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_notification:
-                        setFragment(NotificationFragment.class, R.id.frameLayout);
+                        setFragment(NotificationFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_profile:
-                        setFragment(ProfileFragment.class, R.id.frameLayout);
+                        setFragment(ProfileFragment.class, R.id.frameLayout, false);
                         break;
                     default:
-                        setFragment(HomeFragment.class, R.id.frameLayout);
+                        setFragment(HomeFragment.class, R.id.frameLayout, false);
                         break;
                 }
                 return true;
