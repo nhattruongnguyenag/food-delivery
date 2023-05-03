@@ -15,8 +15,9 @@ public class ProductModel extends BaseModel {
     private Long price;
     @SerializedName("description")
     private String description;
+
     @SerializedName("type")
-    private String type;
+    private String unit;
 
     public String getName() {
         return name;
@@ -58,11 +59,11 @@ public class ProductModel extends BaseModel {
         this.description = description;
     }
 
-    public String getType() {
-        return type;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }

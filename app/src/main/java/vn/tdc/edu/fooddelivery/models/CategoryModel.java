@@ -2,11 +2,13 @@ package vn.tdc.edu.fooddelivery.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CategoryModel extends BaseModel{
+public class CategoryModel extends BaseModel {
     @SerializedName("name")
     private String name;
     @SerializedName("image")
     private String image;
+
+    private Integer numberOfProduct;
 
     public String getName() {
         return name;
@@ -22,5 +24,13 @@ public class CategoryModel extends BaseModel{
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Integer getNumberOfProduct() {
+        return numberOfProduct;
+    }
+
+    public void setNumberOfProduct(Integer numberOfProduct) {
+        this.numberOfProduct = numberOfProduct;
     }
 }

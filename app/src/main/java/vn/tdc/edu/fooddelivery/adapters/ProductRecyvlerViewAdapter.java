@@ -45,7 +45,7 @@ public class ProductRecyvlerViewAdapter extends RecyclerView.Adapter<ProductRecy
         holder.imgProduct.setImageResource(R.drawable.product_image_default);
         holder.tvName.setText(productModel.getName());
         holder.tvPrice.setText(String.format("%,d VND", productModel.getPrice()));
-        holder.tvQuantity.setText(String.format("%d (%s)", productModel.getQuantity(), productModel.getType()));
+        holder.tvQuantity.setText(String.format("%d (%s)", productModel.getQuantity(), productModel.getUnit()));
     }
 
     @Override
