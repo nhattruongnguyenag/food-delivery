@@ -37,15 +37,15 @@ class WidgetController extends Controller
             return null;
         }
 
-        $originOfFile = explode("/", $imageFile->getClientMimeType());
-        if ($originOfFile[0] != "image") {
-            return null;
-        } else {
-            if (!in_array($originOfFile[1], $this->ARRAY_FILE_EXTENSION, false)) {
-                return null;
-            }
-        }
-        return true;
+        // $originOfFile = explode("/", $imageFile->getClientMimeType());
+        // if ($originOfFile[0] != "image") {
+        //     return null;
+        // } else {
+        //     if (!in_array($originOfFile[1], $this->ARRAY_FILE_EXTENSION, false)) {
+        //         return null;
+        //     }
+        // }
+        // return true;
     }
 
 
@@ -170,6 +170,26 @@ class WidgetController extends Controller
     {
         $role->code = $request['code'];
         $role->name = $request['name'];
+    }
+
+
+    /*
+    * Widget User methods 
+    */
+    public static function checkValidateDataNotifycation($request)
+    {
+        if (!isset($request->image) || !isset($request->content) || !isset($request->user_id)) {
+            return null;
+        }
+        
+        return $request->all();
+    }
+
+    public static function setDataToNotifycation($request, $notifycation)
+    {
+        $notifycation->image = $request['image'];
+        $notifycation->content = $request['content'];
+        $notifycation->user_id = $request['user_id'];
     }
 
 

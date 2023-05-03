@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notifycation;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -41,13 +42,27 @@ class UserController extends Controller
     public function getUsersAPI(Request $request)
     {
         $result = '';
+        //get user by notification
+        if($request->query('notifycationId') != null){
+            $notifycation = Notifycation::find($request->query('notifycationId'));
+            if ($notifycation != null) {
+                $result = $notifycation->user();
+                if ($result != null) {
+                    return response($result, 200);
+                }
+            }
+            return response($result, 400);
+        }
+
         if ($request->query('roleId') == null) {
+            //get all user
             $result = User::all();
             if ($result != null) {
                 return response($result, 200);
             }
             return response($result, 400);
         } else {
+            //get users by role 
             $role = Role::find($request->query('roleId'));
             if ($role != null) {
                 $result = $role->users();

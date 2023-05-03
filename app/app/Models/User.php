@@ -45,4 +45,8 @@ class User extends Authenticatable
     public function roles(){
         return $this->belongsToMany(Role::class)->get();
     }
+
+    public function notifycations(){
+        return $this->hasMany(Notifycation::class)->get();
+    }
 }
