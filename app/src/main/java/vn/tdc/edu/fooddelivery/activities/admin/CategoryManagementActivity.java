@@ -6,6 +6,7 @@ import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.fragments.CategoriesListFragment;
 import vn.tdc.edu.fooddelivery.fragments.CategoryFormFragment;
+import vn.tdc.edu.fooddelivery.utils.ImageUploadUtils;
 
 public class CategoryManagementActivity extends AbstractActivity {
 

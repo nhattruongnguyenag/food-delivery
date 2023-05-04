@@ -1,6 +1,10 @@
 package vn.tdc.edu.fooddelivery.models;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
+
+import vn.tdc.edu.fooddelivery.constant.SystemConstant;
 
 public class CategoryModel extends BaseModel {
     @SerializedName("name")
@@ -9,6 +13,11 @@ public class CategoryModel extends BaseModel {
     private String image;
 
     private Integer numberOfProduct;
+
+    public String getImageUrl() {
+        Log.d("image-url", "url " + SystemConstant.IMAGES_BASE_URL + name);
+        return SystemConstant.IMAGES_BASE_URL + image;
+    }
 
     public String getName() {
         return name;

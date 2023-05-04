@@ -25,7 +25,7 @@ public class ProductManagementActivity extends AbstractActivity {
         setContentView(R.layout.layout_product_management);
         createActionBar();
 
-//
+
 //        listProducts = new ArrayList<>();
 //
 //        for (int i = 0; i < 50; i++) {

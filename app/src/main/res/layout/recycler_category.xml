@@ -15,6 +15,7 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:elevation="5dp"
             android:padding="2dp"
             android:id="@+id/imgCategory"
             app:backgroundTint="@null"

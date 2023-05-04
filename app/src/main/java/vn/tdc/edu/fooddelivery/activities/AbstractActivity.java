@@ -39,20 +39,10 @@ import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.FileModel;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
+import vn.tdc.edu.fooddelivery.utils.ImageUploadUtils;
 
 public abstract class AbstractActivity extends AppCompatActivity {
     private Toolbar toolbar;
-    public ActivityResultLauncher<Intent> startActivityForResult;
-    protected final int REQ_CAMERA = 99;
-    protected final int REQ_READ_EXTERNAL_STORAGE = 100;
-    protected CharSequence[] options = {"Camera", "Gallery", "Cancel"};
-
-    private BackwardHandling action;
-
-    public interface BackwardHandling {
-        void doAction(String fileName);
-    }
-
 
     protected void createActionBar() {
         setTitle(getIntent().getAction());
@@ -107,82 +97,6 @@ public abstract class AbstractActivity extends AppCompatActivity {
         return fragment;
     }
 
-    private boolean checkPermissions(String permission) {
-        int check = checkSelfPermission(permission);
-        return check == PackageManager.PERMISSION_GRANTED;
-    }
-
-    public void handleChoosingImage(ImageView imageView) {;
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Chọn hình ảnh");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (options[which].equals("Camera")) {
-                    if (checkPermissions(Manifest.permission.CAMERA)) {
-                        takePhotoAction();
-                    } else {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, REQ_CAMERA);
-                    }
-                } else if (options[which].equals("Gallery")) {
-                    if (checkPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        pickImageAction();
-                    } else {
-                        requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, REQ_READ_EXTERNAL_STORAGE);
-                    }
-                } else {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        builder.show();
-    }
-
-    public void handleUploadImage(String selectedImage, BackwardHandling action) {
-        if (action != null) {
-            uploadFileToServer(selectedImage, action);
-        }
-    }
-    private void takePhotoAction() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        getIntent().putExtra("req", "Camera");
-        startActivityForResult.launch(intent);
-    }
-
-    private void pickImageAction() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        getIntent().putExtra("req", "Gallery");
-        startActivityForResult.launch(intent);
-    }
-
-    public void uploadFileToServer(String selectedImage, BackwardHandling action) {
-        File file = new File(Uri.parse((selectedImage)).getPath());
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
-
-        UploadAPI uploadAPI = RetrofitBuilder.getClient().create(UploadAPI.class);
-
-        Call<FileModel> call = uploadAPI.callUploadApi(filePart);
-
-        call.enqueue(new Callback<FileModel>() {
-            @Override
-            public void onResponse(Call<FileModel> call, Response<FileModel> response) {
-                FileModel fileModel = response.body();
-
-                if (action != null) {
-                    String fileName = fileModel.getFileName() == null ? "image_upload_default.png" : fileModel.getFileName();
-                    action.doAction(fileName);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<FileModel> call, Throwable t) {
-            }
-        });
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -193,10 +107,10 @@ public abstract class AbstractActivity extends AppCompatActivity {
                 }
             }
 
-            if (requestCode == REQ_CAMERA) {
-                takePhotoAction();
-            } else if (requestCode == REQ_READ_EXTERNAL_STORAGE) {
-                pickImageAction();
+            if (requestCode == ImageUploadUtils.REQ_CAMERA) {
+                ImageUploadUtils.getInstance().takePhotoAction(this);
+            } else if (requestCode == ImageUploadUtils.REQ_READ_EXTERNAL_STORAGE) {
+                ImageUploadUtils.getInstance().takePhotoAction(this);
             }
         }
     }

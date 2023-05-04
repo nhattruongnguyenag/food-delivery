@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,7 +23,7 @@ import vn.tdc.edu.fooddelivery.models.CategoryModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRecyclerViewAdapter.CategoryItemHolder> {
-    private Activity activity;
+    private AppCompatActivity activity;
     private int layout;
     private List<CategoryModel> listCategories;
 
@@ -32,7 +33,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         this.recylerViewItemClickListener = recylerViewItemClickListener;
     }
 
-    public CategoryRecyclerViewAdapter(@NonNull Activity activity, int layout, @NonNull List<CategoryModel> listCategories) {
+    public CategoryRecyclerViewAdapter(@NonNull AppCompatActivity activity, int layout, @NonNull List<CategoryModel> listCategories) {
         this.activity = activity;
         this.layout = layout;
         this.listCategories = listCategories;
@@ -49,7 +50,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
     @Override
     public void onBindViewHolder(@NonNull CategoryItemHolder holder, int position) {
         CategoryModel categoryModel = listCategories.get(position);
-        Glide.with(activity).load(categoryModel.getImage())
+        Glide.with(activity).load(categoryModel.getImageUrl())
                 .into(holder.imgCategory);
         holder.tvName.setText(categoryModel.getName());
         holder.tvNumberOfProduct.setText(categoryModel.getNumberOfProduct() + "(sp)");
