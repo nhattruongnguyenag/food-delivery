@@ -27,11 +27,11 @@ public class CategoryModel extends BaseModel {
         this.name = name;
     }
 
-    public String getImage() {
+    public String getImageName() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImageName(String image) {
         this.image = image;
     }
 

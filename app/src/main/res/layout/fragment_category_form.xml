@@ -54,11 +54,11 @@
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <EditText
-        android:visibility="invisible"
-        android:id="@+id/edID"
+        android:id="@+id/edId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ID"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +71,7 @@
         android:layout_marginHorizontal="15dp"
         android:background="@drawable/btn_add_bg"
         android:drawableRight="@drawable/ic_arrow_forward"
-        android:text="Thêm danh mục"
+        android:text="@string/btn_add_category"
         android:textAllCaps="false"
         android:textColor="#000"
         android:textSize="16sp"

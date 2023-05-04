@@ -38,15 +38,6 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
 
         List<CategoryModel> categoryModels = new ArrayList<>();
 
-//        for (int i = 0; i < 10; i++) {
-//            CategoryModel categoryModel = new CategoryModel();
-//            categoryModel.setId(1);
-//            categoryModel.setImage("https://www.freepnglogos.com/uploads/android-logo-png/android-logo-0.png");
-//            categoryModel.setName("Nước ép");
-//            categoryModel.setNumberOfProduct(12);
-//            categoryModels.add(categoryModel);
-//        }
-
         CategoryRecyclerViewAdapter adapter = new CategoryRecyclerViewAdapter((AbstractActivity) getActivity(), R.layout.recycler_category, categoryModels);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
