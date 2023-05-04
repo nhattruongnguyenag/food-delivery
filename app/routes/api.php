@@ -75,6 +75,12 @@ Route::delete('notifycations', [NotifycationController::class,'deleteNotifycatio
 
 
 /*
+*Carts API routes 
+*/
+
+
+
+/*
 *Widgets API routes
 */
 Route::post('upload-image', [WidgetController::class,'uploadFileAPI']);
