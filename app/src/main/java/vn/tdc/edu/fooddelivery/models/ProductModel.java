@@ -1,26 +1,23 @@
 package vn.tdc.edu.fooddelivery.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.sql.Timestamp;
 
-public class ProductModel {
-    private Integer id;
+public class ProductModel extends BaseModel {
+    @SerializedName("name")
     private String name;
+    @SerializedName("image")
     private String image;
+    @SerializedName("quantity")
     private Integer quantity;
+    @SerializedName("price")
     private Long price;
+    @SerializedName("description")
     private String description;
 
+    @SerializedName("type")
     private String unit;
-    private String createdAt;
-    private String updatedAt;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -62,27 +59,11 @@ public class ProductModel {
         this.description = description;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public String getUnit() {
         return unit;
     }
 
     public void setUnit(String unit) {
         this.unit = unit;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

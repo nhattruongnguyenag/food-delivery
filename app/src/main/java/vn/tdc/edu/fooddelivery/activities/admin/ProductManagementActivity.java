@@ -25,25 +25,26 @@ public class ProductManagementActivity extends AbstractActivity {
         setContentView(R.layout.layout_product_management);
         createActionBar();
 
-        listProducts = new ArrayList<>();
-
-        for (int i = 0; i < 50; i++) {
-            ProductModel productModel = new ProductModel();
-            productModel.setName("Cơm chiên dương châu");
-            productModel.setUnit("Phần");
-            productModel.setQuantity(50);
-            productModel.setPrice(45000L);
-            listProducts.add(productModel);
-        }
-
-        recyclerViewProduct = findViewById(R.id.recyclerViewProduct);
-
-        ProductRecyvlerViewAdapter adapter = new ProductRecyvlerViewAdapter(this, R.layout.recycler_product, listProducts);
-
-        // Create layout manager
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerViewProduct.setLayoutManager(layoutManager);
-        recyclerViewProduct.setAdapter(adapter);
+//
+//        listProducts = new ArrayList<>();
+//
+//        for (int i = 0; i < 50; i++) {
+//            ProductModel productModel = new ProductModel();
+//            productModel.setName("Cơm chiên dương châu");
+//            productModel.setUnit("Phần");
+//            productModel.setQuantity(50);
+//            productModel.setPrice(45000L);
+//            listProducts.add(productModel);
+//        }
+//
+//        recyclerViewProduct = findViewById(R.id.recyclerViewProduct);
+//
+//        ProductRecyvlerViewAdapter adapter = new ProductRecyvlerViewAdapter(this, R.layout.recycler_product, listProducts);
+//
+//        // Create layout manager
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        recyclerViewProduct.setLayoutManager(layoutManager);
+//        recyclerViewProduct.setAdapter(adapter);
     }
 }

@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
+import vn.tdc.edu.fooddelivery.fragments.CategoriesListFragment;
+import vn.tdc.edu.fooddelivery.fragments.CategoryFormFragment;
 
 public class CategoryManagementActivity extends AbstractActivity {
 
@@ -12,5 +14,7 @@ public class CategoryManagementActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_category_management);
         createActionBar();
+
+        setFragment(CategoriesListFragment.class, R.id.frameLayout, false);
     }
 }

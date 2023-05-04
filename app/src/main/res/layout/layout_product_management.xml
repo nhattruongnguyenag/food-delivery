@@ -16,39 +16,16 @@
         <include
             layout="@layout/layout_admin_toolbar"/>
 
-        <androidx.core.widget.NestedScrollView
+        <LinearLayout
+            android:padding="15dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp">
-            <LinearLayout
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <Button
-                    android:elevation="@dimen/btn_elevation"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/btn_add_bg"
-                    app:backgroundTint="@null"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Thêm sản phẩm"
-                    android:textSize="16sp"
-                    android:textAllCaps="false"
-                    android:textStyle="bold"
-                    android:textColor="@color/textBlack"
-                    android:drawableEnd="@drawable/ic_add"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewProduct"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </androidx.recyclerview.widget.RecyclerView>
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+                android:layout_height="match_parent"/>
+        </LinearLayout>
 
     </LinearLayout>
 
