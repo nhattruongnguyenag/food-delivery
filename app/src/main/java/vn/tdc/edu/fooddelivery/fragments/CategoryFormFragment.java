@@ -27,6 +27,7 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
     private FloatingActionButton btnUploadImage;
     private EditText edId;
     private EditText edName;
+    private EditText edImage;
     private ShapeableImageView imgCategory;
     private Button btnAddOrUpdate;
 
@@ -44,6 +45,7 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         if (categoryModel != null && categoryModel.getId() != null) {
             btnAddOrUpdate.setText(R.string.btn_update_category);
             edId.setText(categoryModel.getId().toString());
+            edImage.setText(categoryModel.getImageName() == null ? "" : categoryModel.getImageName());
             edName.setText(categoryModel.getName());
             Glide.with(getActivity()).load(categoryModel.getImageUrl())
                     .into(imgCategory);
@@ -57,6 +59,7 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         imgCategory = view.findViewById(R.id.imgCategory);
         edId = view.findViewById(R.id.edId);
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
+        edImage = view.findViewById(R.id.edImage);
         edName = view.findViewById(R.id.edName);
         btnAddOrUpdate = view.findViewById(R.id.btnAddOrUpdate);
 
@@ -89,6 +92,9 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         categoryModel = new CategoryModel();
         if (edId.getText() != null &&!edId.getText().toString().isEmpty()) {
             categoryModel.setId(Integer.valueOf(edId.getText().toString()));
+        }
+        if (edImage.getText() != null && !edImage.getText().toString().isEmpty()) {
+            categoryModel.setImageName(edImage.getText().toString());
         }
         categoryModel.setName(edName.getText().toString());
         categoryModel.setNumberOfProduct(0);
@@ -127,7 +133,7 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         ImageUploadUtils.getInstance().handleUploadFileToServer(new ImageUploadUtils.Action() {
             @Override
             public void onSucess(String fileName) {
-                getCategoryFromUserInputs().setImageName(fileName);
+                getCategoryFromUserInputs().setImageName(categoryModel.getImageName());
 
                 Call<CategoryModel> call = RetrofitBuilder.getClient().create(CategoryAPI.class).updateCategory(categoryModel);
 

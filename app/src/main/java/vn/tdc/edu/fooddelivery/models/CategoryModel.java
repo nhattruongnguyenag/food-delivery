@@ -12,6 +12,7 @@ public class CategoryModel extends BaseModel {
     @SerializedName("image")
     private String image;
 
+    @SerializedName("numberOfProduct")
     private Integer numberOfProduct;
 
     public String getImageUrl() {

@@ -53,7 +53,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         Glide.with(activity).load(categoryModel.getImageUrl())
                 .into(holder.imgCategory);
         holder.tvName.setText(categoryModel.getName());
-        holder.tvNumberOfProduct.setText(categoryModel.getNumberOfProduct() + "(sp)");
+        holder.tvNumberOfProduct.setText(categoryModel.getNumberOfProduct() + " (sản phẩm)");
 
         holder.onClickListener = new View.OnClickListener() {
             @Override
