@@ -1,4 +1,4 @@
-package vn.tdc.edu.fooddelivery.activities;
+package vn.tdc.edu.fooddelivery.components;
 
 import android.app.Dialog;
 import android.content.Context;

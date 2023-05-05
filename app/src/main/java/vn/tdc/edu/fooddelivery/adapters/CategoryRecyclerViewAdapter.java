@@ -60,10 +60,8 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
             public void onClick(View view) {
                 if (recylerViewItemClickListener != null) {
                     if (view.getId() == R.id.btnEdit) {
-                        holder.btnEdit.setSelected(!holder.btnEdit.isSelected());
                         recylerViewItemClickListener.onButtonEditClickListener(position, listCategories.get(position));
                     } else if (view.getId() == R.id.btnDelete) {
-                        holder.btnDelete.setSelected(!holder.btnEdit.isSelected());
                         recylerViewItemClickListener.onButtonDeleteClickListener(position, listCategories.get(position));
                     }
                 }
