@@ -12,8 +12,12 @@ class CategoryController extends Controller
     {
         $result = '';
         if ($request->query('productId') == null) {
-            $result = Category::all();
+            $result = Category::select("*")->orderBy('categories.id', 'desc')->get();
             if ($result != null) {
+                foreach ($result as $i){
+                    $category = Category::find($i->id);
+                    $i->numberOfProduct = $category->products()->count();
+                }
                 return response($result, 200);
             }
             return response($result, 400);
