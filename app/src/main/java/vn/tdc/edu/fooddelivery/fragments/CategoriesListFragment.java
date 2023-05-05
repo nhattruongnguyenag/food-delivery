@@ -26,6 +26,8 @@ import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.models.CategoryModel;
 
 public class CategoriesListFragment extends AbstractFragment implements View.OnClickListener {
+    CategoryRecyclerViewAdapter adapter;
+    List<CategoryModel> categoriesList;
     private Button btnAdd;
     private RecyclerView recyclerViewCategory;
     @Override
@@ -38,9 +40,9 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
         btnAdd = view.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(this);
 
-        List<CategoryModel> categoryModels = new ArrayList<>();
+        categoriesList = new ArrayList<>();
 
-        CategoryRecyclerViewAdapter adapter = new CategoryRecyclerViewAdapter((AbstractActivity) getActivity(), R.layout.recycler_category, categoryModels);
+        adapter = new CategoryRecyclerViewAdapter((AbstractActivity) getActivity(), R.layout.recycler_category, categoriesList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -52,8 +54,8 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
         call.enqueue(new Callback<List<CategoryModel>>() {
             @Override
             public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
-                categoryModels.clear();
-                categoryModels.addAll(response.body());
+                categoriesList.clear();
+                categoriesList.addAll(response.body());
                 adapter.notifyDataSetChanged();
             }
 
@@ -67,7 +69,7 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
             @Override
             public void onButtonEditClickListener(int position, CategoryModel categoryModel) {
                 ((AbstractActivity) getActivity()).setFragment(CategoryFormFragment.class, R.id.frameLayout, true)
-                        .setCategoryModel(categoryModels.get(position));
+                        .setCategoryModel(categoriesList.get(position));
             }
 
             @Override
@@ -83,7 +85,8 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
 
                     @Override
                     public void ok() {
-                        Toast.makeText(getActivity(), "Bạn nhấn ok", Toast.LENGTH_SHORT).show();
+                        deleteCategory(categoriesList.get(position));
+                        confirmDialog.dismiss();
                     }
                 });
 
@@ -92,6 +95,24 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
         });
 
         return view;
+    }
+
+    private void deleteCategory(CategoryModel categoryModel) {
+        Call<CategoryModel> call = RetrofitBuilder.getClient().create(CategoryAPI.class).deleteCategory(categoryModel);
+        call.enqueue(new Callback<CategoryModel>() {
+            @Override
+            public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
+                ((AbstractActivity) getActivity()).showMessageDialog("Xoá danh mục thành công");
+                categoriesList.remove(categoryModel);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<CategoryModel> call, Throwable t) {
+                ((AbstractActivity) getActivity()).showMessageDialog("Xoá danh mục thất bại");
+            }
+        });
+
     }
 
     @Override

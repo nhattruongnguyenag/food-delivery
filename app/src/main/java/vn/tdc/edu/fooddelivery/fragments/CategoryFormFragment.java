@@ -105,7 +105,11 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         ImageUploadUtils.getInstance().handleUploadFileToServer(new ImageUploadUtils.Action() {
             @Override
             public void onSucess(String fileName) {
-                getCategoryFromUserInputs().setImageName(fileName);
+                categoryModel = getCategoryFromUserInputs().setImageName(fileName);
+
+                if (fileName.isEmpty()) {
+                    categoryModel.setImageName(ImageUploadUtils.IMAGE_UPLOAD_DEFAULT);
+                }
 
                 Call<CategoryModel> call = RetrofitBuilder.getClient().create(CategoryAPI.class).saveCategory(categoryModel);
 
@@ -133,7 +137,11 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         ImageUploadUtils.getInstance().handleUploadFileToServer(new ImageUploadUtils.Action() {
             @Override
             public void onSucess(String fileName) {
-                getCategoryFromUserInputs().setImageName(categoryModel.getImageName());
+                categoryModel = getCategoryFromUserInputs();
+
+                if (!fileName.isEmpty()) {
+                    categoryModel.setImageName(fileName);
+                }
 
                 Call<CategoryModel> call = RetrofitBuilder.getClient().create(CategoryAPI.class).updateCategory(categoryModel);
 

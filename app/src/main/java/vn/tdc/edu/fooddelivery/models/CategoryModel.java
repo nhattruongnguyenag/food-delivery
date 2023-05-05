@@ -16,7 +16,6 @@ public class CategoryModel extends BaseModel {
     private Integer numberOfProduct;
 
     public String getImageUrl() {
-        Log.d("image-url", "url " + SystemConstant.IMAGES_BASE_URL + name);
         return SystemConstant.IMAGES_BASE_URL + image;
     }
 
@@ -32,8 +31,9 @@ public class CategoryModel extends BaseModel {
         return image;
     }
 
-    public void setImageName(String image) {
+    public CategoryModel setImageName(String image) {
         this.image = image;
+        return this;
     }
 
     public Integer getNumberOfProduct() {

@@ -137,7 +137,7 @@ public class ImageUploadUtils {
     // Ham upload file tu dien thoai len server
     public void handleUploadFileToServer(Action action) {
         if (imageSelected == null) {
-            action.onSucess(IMAGE_UPLOAD_DEFAULT);
+            action.onSucess("");
             return;
         }
 
@@ -157,7 +157,7 @@ public class ImageUploadUtils {
 
                 if (action != null) {
                     imageSelected = null;
-                    String fileName = fileModel.getFileName() == null ? IMAGE_UPLOAD_DEFAULT : fileModel.getFileName();
+                    String fileName = fileModel == null ? IMAGE_UPLOAD_DEFAULT : fileModel.getFileName();
                     action.onSucess(fileName);
                 }
             }

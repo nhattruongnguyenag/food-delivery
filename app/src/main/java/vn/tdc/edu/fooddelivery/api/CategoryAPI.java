@@ -7,6 +7,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import vn.tdc.edu.fooddelivery.models.CategoryModel;
@@ -21,6 +22,6 @@ public interface CategoryAPI {
     @PUT("api/categories")
     Call<CategoryModel> updateCategory(@Body CategoryModel categoryModel);
 
-    @DELETE("api/categories")
-    Call<CategoryModel> deleteCategory(@Field("categoryId") Integer categoryId);
+    @HTTP(method = "DELETE", path = "api/categories", hasBody = true)
+    Call<CategoryModel> deleteCategory(@Body CategoryModel categoryModel);
 }
