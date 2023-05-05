@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
+import vn.tdc.edu.fooddelivery.activities.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.adapters.CategoryRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
@@ -70,7 +72,22 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
 
             @Override
             public void onButtonDeleteClickListener(int position, CategoryModel categoryModel) {
+                ConfirmDialog confirmDialog = new ConfirmDialog(getActivity());
+                confirmDialog.setTitle("Xác nhận");
+                confirmDialog.setMessage("Dữ liệu đã xoá không thể hoàn tác.\nBạn có muốn tiếp tục không?");
+                confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
+                    @Override
+                    public void cancel() {
+                        confirmDialog.dismiss();
+                    }
 
+                    @Override
+                    public void ok() {
+                        Toast.makeText(getActivity(), "Bạn nhấn ok", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                confirmDialog.show();
             }
         });
 

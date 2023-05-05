@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="btn_elevation">5dp</dimen>
+    <dimen name="textNormal">16sp</dimen>
+    <dimen name="confirm_dialog_btn_bg">15dp</dimen>
+    <dimen name="textMedium">18sp</dimen>
+    <dimen name="confirm_dialog_btn_horizontal_pd">30dp</dimen>
 </resources>
