@@ -12,10 +12,10 @@ public class CategoryModel extends BaseModel {
     @SerializedName("image")
     private String image;
 
+    @SerializedName("numberOfProduct")
     private Integer numberOfProduct;
 
     public String getImageUrl() {
-        Log.d("image-url", "url " + SystemConstant.IMAGES_BASE_URL + name);
         return SystemConstant.IMAGES_BASE_URL + image;
     }
 
@@ -27,12 +27,13 @@ public class CategoryModel extends BaseModel {
         this.name = name;
     }
 
-    public String getImage() {
+    public String getImageName() {
         return image;
     }
 
-    public void setImage(String image) {
+    public CategoryModel setImageName(String image) {
         this.image = image;
+        return this;
     }
 
     public Integer getNumberOfProduct() {

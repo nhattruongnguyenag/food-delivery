@@ -50,6 +50,10 @@ public class ImageUploadUtils {
         return imageSelected;
     }
 
+    public void setImageSelected(String imageSelected) {
+        this.imageSelected = imageSelected;
+    }
+
     public void pickImageAction(AppCompatActivity activity) {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         activity.getIntent().putExtra("req", GALLERY);
@@ -133,7 +137,7 @@ public class ImageUploadUtils {
     // Ham upload file tu dien thoai len server
     public void handleUploadFileToServer(Action action) {
         if (imageSelected == null) {
-            action.onSucess(IMAGE_UPLOAD_DEFAULT);
+            action.onSucess("");
             return;
         }
 
@@ -153,7 +157,7 @@ public class ImageUploadUtils {
 
                 if (action != null) {
                     imageSelected = null;
-                    String fileName = fileModel.getFileName() == null ? IMAGE_UPLOAD_DEFAULT : fileModel.getFileName();
+                    String fileName = fileModel == null ? IMAGE_UPLOAD_DEFAULT : fileModel.getFileName();
                     action.onSucess(fileName);
                 }
             }

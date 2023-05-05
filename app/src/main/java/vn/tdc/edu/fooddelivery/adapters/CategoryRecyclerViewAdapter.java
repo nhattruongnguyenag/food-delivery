@@ -53,17 +53,15 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         Glide.with(activity).load(categoryModel.getImageUrl())
                 .into(holder.imgCategory);
         holder.tvName.setText(categoryModel.getName());
-        holder.tvNumberOfProduct.setText(categoryModel.getNumberOfProduct() + "(sp)");
+        holder.tvNumberOfProduct.setText(categoryModel.getNumberOfProduct() + " (sản phẩm)");
 
         holder.onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (recylerViewItemClickListener != null) {
                     if (view.getId() == R.id.btnEdit) {
-                        holder.btnEdit.setSelected(!holder.btnEdit.isSelected());
                         recylerViewItemClickListener.onButtonEditClickListener(position, listCategories.get(position));
                     } else if (view.getId() == R.id.btnDelete) {
-                        holder.btnDelete.setSelected(!holder.btnEdit.isSelected());
                         recylerViewItemClickListener.onButtonDeleteClickListener(position, listCategories.get(position));
                     }
                 }

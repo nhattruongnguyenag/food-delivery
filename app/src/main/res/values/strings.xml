@@ -14,4 +14,8 @@
     <string name="menu_category_management">Quản lý danh mục sản phẩm</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btn_add_category">Thêm danh mục</string>
+    <string name="btn_update_category">Cập nhật danh mục</string>
+    <string name="confirm_dialog_title">Xác nhận</string>
+    <string name="confirm_dialog_content">Dữ liệu đã xoá không thể hoàn tác. \nBạn có muốn xoá không?</string>
 </resources>

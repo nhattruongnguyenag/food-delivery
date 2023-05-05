@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +19,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
+import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.adapters.CategoryRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.models.CategoryModel;
 
 public class CategoriesListFragment extends AbstractFragment implements View.OnClickListener {
+    CategoryRecyclerViewAdapter adapter;
+    List<CategoryModel> categoriesList;
     private Button btnAdd;
     private RecyclerView recyclerViewCategory;
     @Override
@@ -36,18 +40,9 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
         btnAdd = view.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(this);
 
-        List<CategoryModel> categoryModels = new ArrayList<>();
+        categoriesList = new ArrayList<>();
 
-//        for (int i = 0; i < 10; i++) {
-//            CategoryModel categoryModel = new CategoryModel();
-//            categoryModel.setId(1);
-//            categoryModel.setImage("https://www.freepnglogos.com/uploads/android-logo-png/android-logo-0.png");
-//            categoryModel.setName("Nước ép");
-//            categoryModel.setNumberOfProduct(12);
-//            categoryModels.add(categoryModel);
-//        }
-
-        CategoryRecyclerViewAdapter adapter = new CategoryRecyclerViewAdapter((AbstractActivity) getActivity(), R.layout.recycler_category, categoryModels);
+        adapter = new CategoryRecyclerViewAdapter((AbstractActivity) getActivity(), R.layout.recycler_category, categoriesList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -59,8 +54,8 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
         call.enqueue(new Callback<List<CategoryModel>>() {
             @Override
             public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
-                categoryModels.clear();
-                categoryModels.addAll(response.body());
+                categoriesList.clear();
+                categoriesList.addAll(response.body());
                 adapter.notifyDataSetChanged();
             }
 
@@ -74,16 +69,50 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
             @Override
             public void onButtonEditClickListener(int position, CategoryModel categoryModel) {
                 ((AbstractActivity) getActivity()).setFragment(CategoryFormFragment.class, R.id.frameLayout, true)
-                        .setCategoryModel(categoryModels.get(position));
+                        .setCategoryModel(categoriesList.get(position));
             }
 
             @Override
             public void onButtonDeleteClickListener(int position, CategoryModel categoryModel) {
+                ConfirmDialog confirmDialog = new ConfirmDialog(getActivity());
+                confirmDialog.setTitle("Xác nhận");
+                confirmDialog.setMessage("Dữ liệu đã xoá không thể hoàn tác.\nBạn có muốn tiếp tục không?");
+                confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
+                    @Override
+                    public void cancel() {
+                        confirmDialog.dismiss();
+                    }
 
+                    @Override
+                    public void ok() {
+                        deleteCategory(categoriesList.get(position));
+                        confirmDialog.dismiss();
+                    }
+                });
+
+                confirmDialog.show();
             }
         });
 
         return view;
+    }
+
+    private void deleteCategory(CategoryModel categoryModel) {
+        Call<CategoryModel> call = RetrofitBuilder.getClient().create(CategoryAPI.class).deleteCategory(categoryModel);
+        call.enqueue(new Callback<CategoryModel>() {
+            @Override
+            public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
+                ((AbstractActivity) getActivity()).showMessageDialog("Xoá danh mục thành công");
+                categoriesList.remove(categoryModel);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<CategoryModel> call, Throwable t) {
+                ((AbstractActivity) getActivity()).showMessageDialog("Xoá danh mục thất bại");
+            }
+        });
+
     }
 
     @Override
