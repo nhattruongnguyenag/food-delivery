@@ -86,8 +86,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
             fragment = tClass.newInstance();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction()
-                    .replace(layout, (Fragment) fragment)
-                    .setReorderingAllowed(true);
+                    .replace(layout, (Fragment) fragment);
             if (addToBackStack) {
                 transaction.addToBackStack(null);
             }

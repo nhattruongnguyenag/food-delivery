@@ -68,7 +68,7 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
         adapter.setRecylerViewItemClickListener(new CategoryRecyclerViewAdapter.OnRecylerViewItemClickListener() {
             @Override
             public void onButtonEditClickListener(int position, CategoryModel categoryModel) {
-                ((AbstractActivity) getActivity()).setFragment(CategoryFormFragment.class, R.id.frameLayout, true)
+                ((AbstractActivity) getActivity()).setFragment(CategoryFormFragment.class, R.id.frameLayout, false)
                         .setCategoryModel(categoriesList.get(position));
             }
 
