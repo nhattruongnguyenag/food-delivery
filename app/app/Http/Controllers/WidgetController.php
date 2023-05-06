@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +47,7 @@ class WidgetController extends Controller
         //         return null;
         //     }
         // }
-        // return true;
+        return true;
     }
 
 
@@ -58,7 +60,7 @@ class WidgetController extends Controller
             return null;
         }
 
-        if ($request->quantity < 1 || $request->price < 1 || count($request->categories) <1) {
+        if ($request->quantity < 1 || $request->price < 1 || count($request->categories) < 1) {
             return null;
         }
         return $request->all();
@@ -74,7 +76,7 @@ class WidgetController extends Controller
         $product->type = $request['type'];
     }
 
-    
+
     /*
     * Widget Category methods 
     */
@@ -96,20 +98,20 @@ class WidgetController extends Controller
     /*
     * Widget CategoryProduct methods 
     */
-    public static function attachToCategoryProductTable($array , $product)
+    public static function attachToCategoryProductTable($array, $product)
     {
         $canAttach = $array;
-        for($i = 0; $i < count($array); $i++) {
+        for ($i = 0; $i < count($array); $i++) {
             $temp = Category::find($array[$i])->products();
-            for($z = 0; $z < count($temp); $z++) {
-                if($product->id == $temp[$z]['id']){
+            for ($z = 0; $z < count($temp); $z++) {
+                if ($product->id == $temp[$z]['id']) {
                     unset($canAttach[$i]);
                     break;
-                }   
+                }
             }
         }
-        
-        foreach($canAttach as $categoryCanAttach){
+
+        foreach ($canAttach as $categoryCanAttach) {
             DB::table('category_product')->insert([
                 'category_id' => $categoryCanAttach,
                 'product_id' => $product->id
@@ -162,7 +164,7 @@ class WidgetController extends Controller
         if (!isset($request->code) || !isset($request->name)) {
             return null;
         }
-        
+
         return $request->all();
     }
 
@@ -181,7 +183,7 @@ class WidgetController extends Controller
         if (!isset($request->image) || !isset($request->content) || !isset($request->user_id)) {
             return null;
         }
-        
+
         return $request->all();
     }
 
@@ -194,22 +196,55 @@ class WidgetController extends Controller
 
 
     /*
+    * Widget User methods 
+    */
+    public static function checkValidateDataCartItem($request)
+    {
+        if (!isset($request->user_id) || !isset($request->product_id) || !isset($request->quantity)) {
+            return null;
+        }
+
+        if(User::find($request->user_id) == null){
+            return null;
+        }
+
+        if( Product::find($request->product_id) == null){
+            return null;
+        }
+
+        if($request->quantity < 1){
+            return null;
+        }
+
+
+        return $request->all();
+    }
+
+    public static function setDataToCartItem($request, $cartItem)
+    {
+        $cartItem->user_id = $request['user_id'];
+        $cartItem->product_id = $request['product_id'];
+        $cartItem->quantity = $request['quantity'];
+    }
+
+
+    /*
     * Widget RoleUser methods 
     */
-    public static function attachToRoleUserTable($array , $user)
+    public static function attachToRoleUserTable($array, $user)
     {
         $canAttach = $array;
-        for($i = 0; $i < count($array); $i++) {
+        for ($i = 0; $i < count($array); $i++) {
             $temp = Role::find($array[$i])->users();
-            for($z = 0; $z < count($temp); $z++) {
-                if($user->id == $temp[$z]['id']){
+            for ($z = 0; $z < count($temp); $z++) {
+                if ($user->id == $temp[$z]['id']) {
                     unset($canAttach[$i]);
                     break;
-                }   
+                }
             }
         }
         // var_dump($canAttach);die;
-        foreach($canAttach as $roleCanAttach){
+        foreach ($canAttach as $roleCanAttach) {
             DB::table('role_user')->insert([
                 'role_id' => $roleCanAttach,
                 'user_id' => $user->id

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CartResource;
 use App\Models\Notifycation;
 use App\Models\Role;
 use App\Models\User;
