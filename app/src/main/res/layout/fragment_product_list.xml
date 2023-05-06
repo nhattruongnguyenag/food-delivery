@@ -12,10 +12,10 @@
             <Button
                 android:id="@+id/btnAdd"
                 style="@style/btnAddRouned"
-                android:text="Thêm danh mục" />
+                android:text="@string/them_san_pham"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewCategory"
+                android:id="@+id/recyclerViewProduct"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 

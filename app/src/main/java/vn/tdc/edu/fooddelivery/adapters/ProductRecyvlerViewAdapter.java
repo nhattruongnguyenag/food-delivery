@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,17 +15,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
+import vn.tdc.edu.fooddelivery.fragments.NotificationFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class ProductRecyvlerViewAdapter extends RecyclerView.Adapter<ProductRecyvlerViewAdapter.ProductItemHolder> {
     private Activity activity;
     private int layout;
     private List<ProductModel> listProducts;
-
     private OnRecylerViewItemClickListener recylerViewItemClickListener;
+
+    public void setRecylerViewItemClickListener(OnRecylerViewItemClickListener recylerViewItemClickListener) {
+        this.recylerViewItemClickListener = recylerViewItemClickListener;
+    }
 
     public ProductRecyvlerViewAdapter(@NonNull Activity activity, int layout, @NonNull List<ProductModel> listProducts) {
         this.activity = activity;
@@ -46,6 +54,19 @@ public class ProductRecyvlerViewAdapter extends RecyclerView.Adapter<ProductRecy
         holder.tvName.setText(productModel.getName());
         holder.tvPrice.setText(String.format("%,d VND", productModel.getPrice()));
         holder.tvQuantity.setText(String.format("%d (%s)", productModel.getQuantity(), productModel.getUnit()));
+
+        holder.onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (recylerViewItemClickListener != null) {
+                    if (view.getId() == R.id.btnEdit) {
+                        recylerViewItemClickListener.onButtonEditClickListener(position);
+                    } else if (view.getId() == R.id.btnDelete) {
+                        recylerViewItemClickListener.onButtonDeleteClickListener(position);
+                    }
+                }
+            }
+        };
     }
 
     @Override
@@ -59,8 +80,9 @@ public class ProductRecyvlerViewAdapter extends RecyclerView.Adapter<ProductRecy
     }
 
     public interface OnRecylerViewItemClickListener {
-        public void onButtonEditClickListener(int position, View cardView);
-        public void onButtonDeleteClickListener(int position, View cardView);
+        public void onButtonEditClickListener(int position);
+
+        public void onButtonDeleteClickListener(int position);
     }
 
     public static class ProductItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -68,6 +90,9 @@ public class ProductRecyvlerViewAdapter extends RecyclerView.Adapter<ProductRecy
         private TextView tvName;
         private TextView tvPrice;
         private TextView tvQuantity;
+        private ImageButton btnEdit;
+        private ImageButton btnDelete;
+
         private View.OnClickListener onClickListener;
 
         public ProductItemHolder(@NonNull View itemView) {
@@ -76,9 +101,11 @@ public class ProductRecyvlerViewAdapter extends RecyclerView.Adapter<ProductRecy
             this.tvName = itemView.findViewById(R.id.tvName);
             this.tvPrice = itemView.findViewById(R.id.tvPrice);
             this.tvQuantity = itemView.findViewById(R.id.tvQuantity);
+            this.btnEdit = itemView.findViewById(R.id.btnEdit);
+            this.btnDelete = itemView.findViewById(R.id.btnDelete);
 
-            // Event processing
-            itemView.setOnClickListener(this);
+            btnEdit.setOnClickListener(this);
+            btnDelete.setOnClickListener(this);
         }
 
         @Override

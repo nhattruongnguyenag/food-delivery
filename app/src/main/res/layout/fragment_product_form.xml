@@ -7,7 +7,6 @@
     android:layout_height="match_parent">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="45dp"
@@ -18,7 +17,7 @@
         app:statusBarBackground="#eee">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgCategory"
+            android:id="@+id/imgProduct"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/image_upload_default"
@@ -40,21 +39,44 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline5"
-        tools:layout_editor_absoluteX="53dp">
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/edName"
-            android:hint="Tên danh mục"
+            android:hint="Tên sản phẩm"
             style="@style/edTextField"/>
+
+        <EditText
+            android:id="@+id/edCategories"
+            android:hint="-- Chọn danh mục --"
+            style="@style/edTextField"/>
+
+        <EditText
+            android:id="@+id/edPrice"
+            android:hint="Giá bán"
+            style="@style/edTextField"/>
+
+        <EditText
+            android:id="@+id/edQuantity"
+            android:hint="Số lượng"
+            style="@style/edTextField"/>
+
+        <EditText
+            android:id="@+id/edUnit"
+            android:hint="Đơn vị tính"
+            style="@style/edTextField"/>
+
+        <EditText
+            android:id="@+id/edDescription"
+            style="@style/textArea"
+            android:hint="Mô tả" />
 
         <Button
             android:id="@+id/btnAddOrUpdate"
-            android:text="@string/btn_add_category"
-            style="@style/btnAdd"/>
-
+            android:text="Thêm sản phẩm"
+            style="@style/btnAdd" />
 
         <EditText
             android:id="@+id/edId"

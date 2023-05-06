@@ -54,9 +54,11 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
         call.enqueue(new Callback<List<CategoryModel>>() {
             @Override
             public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
-                categoriesList.clear();
-                categoriesList.addAll(response.body());
-                adapter.notifyDataSetChanged();
+                if (response.body() != null) {
+                    categoriesList.clear();
+                    categoriesList.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -67,13 +69,13 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
 
         adapter.setRecylerViewItemClickListener(new CategoryRecyclerViewAdapter.OnRecylerViewItemClickListener() {
             @Override
-            public void onButtonEditClickListener(int position, CategoryModel categoryModel) {
+            public void onButtonEditClickListener(int position) {
                 ((AbstractActivity) getActivity()).setFragment(CategoryFormFragment.class, R.id.frameLayout, false)
                         .setCategoryModel(categoriesList.get(position));
             }
 
             @Override
-            public void onButtonDeleteClickListener(int position, CategoryModel categoryModel) {
+            public void onButtonDeleteClickListener(int position) {
                 ConfirmDialog confirmDialog = new ConfirmDialog(getActivity());
                 confirmDialog.setTitle("Xác nhận");
                 confirmDialog.setMessage("Dữ liệu đã xoá không thể hoàn tác.\nBạn có muốn tiếp tục không?");

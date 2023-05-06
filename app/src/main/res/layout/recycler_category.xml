@@ -5,37 +5,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardUseCompatPadding="true"
-    app:cardElevation="5dp"
-    app:cardCornerRadius="5dp">
+    style="@style/cardViewRecyclerItem">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:padding="5dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <ImageView
-            android:elevation="5dp"
-            android:padding="2dp"
             android:id="@+id/imgCategory"
-            app:backgroundTint="@null"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            style="@style/imageRecyclerItem"
             app:srcCompat="@drawable/product_image_default" />
 
         <LinearLayout
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2"
-            app:layout_constraintEnd_toStartOf="@+id/guideline3"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="50dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvName"
@@ -75,59 +64,29 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btnEdit"
+        <LinearLayout
+            android:layout_marginLeft="-50dp"
+            android:layout_gravity="end"
             android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="0dp"
-            android:background="@drawable/btn_edit_bg"
-            android:src="@drawable/ic_edit"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/btnDelete"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/btn_delete_bg"
-            android:src="@drawable/ic_delete"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="@+id/guideline4" />
+            <ImageButton
+                android:id="@+id/btnEdit"
+                android:layout_width="@dimen/btnSize50"
+                android:layout_height="@dimen/btnSize50"
+                android:background="@drawable/btn_edit_bg"
+                android:src="@drawable/ic_edit" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.2914573" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="110dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.85" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="55dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="@dimen/btnSize50"
+                android:layout_height="@dimen/btnSize50"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_delete_bg"
+                android:src="@drawable/ic_delete" />
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>
 

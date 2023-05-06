@@ -60,9 +60,9 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
             public void onClick(View view) {
                 if (recylerViewItemClickListener != null) {
                     if (view.getId() == R.id.btnEdit) {
-                        recylerViewItemClickListener.onButtonEditClickListener(position, listCategories.get(position));
+                        recylerViewItemClickListener.onButtonEditClickListener(position);
                     } else if (view.getId() == R.id.btnDelete) {
-                        recylerViewItemClickListener.onButtonDeleteClickListener(position, listCategories.get(position));
+                        recylerViewItemClickListener.onButtonDeleteClickListener(position);
                     }
                 }
             }
@@ -80,9 +80,9 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
     }
 
     public interface OnRecylerViewItemClickListener {
-        public void onButtonEditClickListener(int position, CategoryModel categoryModel);
+        public void onButtonEditClickListener(int position);
 
-        public void onButtonDeleteClickListener(int position, CategoryModel categoryModel);
+        public void onButtonDeleteClickListener(int position);
     }
 
     public static class CategoryItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

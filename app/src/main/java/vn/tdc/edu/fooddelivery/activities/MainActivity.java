@@ -42,12 +42,14 @@ public class MainActivity extends AbstractActivity {
         // Show the navigation view and display the button for navigation view toggle in tool bar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         drawerLayout = findViewById(R.id.drawerLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+
         toolbar.setNavigationIcon(R.drawable.ic_navigation);
 
         setFragment(HomeFragment.class, R.id.frameLayout, false);

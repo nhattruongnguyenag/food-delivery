@@ -18,4 +18,5 @@
     <string name="btn_update_category">Cập nhật danh mục</string>
     <string name="confirm_dialog_title">Xác nhận</string>
     <string name="confirm_dialog_content">Dữ liệu đã xoá không thể hoàn tác. \nBạn có muốn xoá không?</string>
+    <string name="them_san_pham">Thêm sản phẩm</string>
 </resources>
