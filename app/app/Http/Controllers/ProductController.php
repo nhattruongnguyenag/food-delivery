@@ -21,19 +21,19 @@ class ProductController extends Controller
         $result = WidgetController::checkValidateDataProduct($request);
         if ($result != null && isset($result)) {
             if (isset($request->id)) {
-                if (isset($request->categories)) {
+                if (isset($request->categoryIds)) {
                     $product = Product::find($request->id);
                     WidgetController::setDataToProduct($result, $product);
                     $product->save();
-                    WidgetController::attachToCategoryProductTable($request->categories, $product);
+                    WidgetController::attachToCategoryProductTable($request->categoryIds, $product);
                     return response($product, 201);
                 }
             } else {
-                if (isset($request->categories)) {
+                if (isset($request->categoryIds)) {
                     $product = new Product;
                     WidgetController::setDataToProduct($result, $product);
                     $product->save();
-                    WidgetController::attachToCategoryProductTable($request->categories, $product);
+                    WidgetController::attachToCategoryProductTable($request->categoryIds, $product);
                     return response($product, 201);
                 }
             }
@@ -44,14 +44,14 @@ class ProductController extends Controller
     public function getProductsAPI(Request $request)
     {
         $result = '';
-        if ($request->query('categoryId') == null) {
+        if ($request->query('categoryIds') == null) {
             $result = Product::all();
             if ($result != null) {
                 return response($result, 200);
             }
             return response($result, 400);
         } else {
-            $category = Category::find($request->query('categoryId'));
+            $category = Category::find($request->query('categoryIds'));
             if ($category != null) {
                 $result = $category->products();
                 if ($result != null) {
@@ -66,6 +66,11 @@ class ProductController extends Controller
     {
         $result = '';
         $result = Product::find($request->id);
+        $categoryIds = [];
+        foreach($result->categories() as $i){
+            array_push($categoryIds , $i->id);
+        }
+        $result->categoryIds = $categoryIds;
         if ($result != null) {
             return response($result, 200);
         }

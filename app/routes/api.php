@@ -79,7 +79,8 @@ Route::delete('notifycations', [NotifycationController::class,'deleteNotifycatio
 *Carts API routes 
 */
 Route::get('carts', [CartController::class,'getCartItemAPI']);
-Route::post('carts', [CartController::class,'addToCartAPI']);
+Route::post('carts', [CartController::class,'addOrEditCartAPI']);
+Route::delete('carts', [CartController::class,'deleteCartAPI']);
 
 
 /*

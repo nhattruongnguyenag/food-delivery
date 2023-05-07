@@ -11,14 +11,14 @@ class RoleController extends Controller
     public function getRolesAPI(Request $request)
     {
         $result = '';
-        if ($request->query('userId') == null) {
+        if ($request->query('userRole') == null) {
             $result = Role::all();
             if ($result != null) {
                 return response($result, 200);
             }
             return response($result, 400);
         }else{
-            $user = User::find($request->query('userId'));
+            $user = User::find($request->query('userRole'));
             if ($user != null) {
                 $result = $user->roles();
                 if ($result != null) {
