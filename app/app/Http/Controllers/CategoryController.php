@@ -12,7 +12,12 @@ class CategoryController extends Controller
     {
         $result = '';
         if ($request->query('productId') == null) {
-            $result = Category::select("*")->orderBy('categories.id', 'desc')->get();
+            if($request->query('sort') == "name"){
+                $result = Category::select("*")->orderBy('categories.name', 'asc')->get();
+            }else{
+                $result = Category::select("*")->orderBy('categories.id', 'desc')->get();
+            }
+            
             if ($result != null) {
                 foreach ($result as $i){
                     $category = Category::find($i->id);

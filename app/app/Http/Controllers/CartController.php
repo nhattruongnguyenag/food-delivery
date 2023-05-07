@@ -39,14 +39,24 @@ class CartController extends Controller
                 DB::table('product_user')->insert([
                     'user_id' => $result['user_id'],
                     'product_id' => $result['product_id'],
-                    'quantity' => $result['quantity']
+                    'quantity' => 1
                 ]);
                 $cartItem = Cart::where('user_id', '=',$result['user_id'])->where('product_id', '=', $result['product_id'])->get()->first();
                 return response($cartItem, 201);
             } else {
                 //neu cart da ton tai
-                DB::table('product_user')->where('id', $cartItem->id)->update(array('quantity' => $result['quantity']));
-                return response($cartItem, 201);
+                if($result['process'] == 1){
+                    $newQuantity = 
+                    DB::table('product_user')->where('id', $cartItem->id)->update(array('quantity' => $cartItem->quantity+1));
+                    $cartItem = Cart::where('user_id', '=', $request->user_id)->where('product_id', '=', $request->product_id)->get()->first();
+                    return response($cartItem, 201);
+                }
+                if($result['process'] == 0){
+                    DB::table('product_user')->where('id', $cartItem->id)->update(array('quantity' => $cartItem->quantity-1));
+                    $cartItem = Cart::where('user_id', '=', $request->user_id)->where('product_id', '=', $request->product_id)->get()->first();
+                    return response($cartItem, 201);
+                }
+                
             }
         } else {
             return response([
@@ -58,14 +68,21 @@ class CartController extends Controller
     public function deleteCartAPI(Request $request)
     {
         $result = '';
-        $result = Cart::where('user_id', '=', $request->user_id)->where('product_id', '=', $request->product_id)->get()->first();
-        if ($result != null && isset($result)) {
-            Cart::find($result->id)->delete();
-            return response($result, 201);
-        } else {
+        if($request->query("deleteAll") == true){
+            Cart::where('user_id', '=', $request->user_id)->delete();
             return response([
-                'msg' => "khong tim thay thong tin cart"
-            ], 400);
+                "msg" => "Xoa tat ca cart"
+            ], 200);
+        }else{
+            $result = Cart::where('user_id', '=', $request->user_id)->where('product_id', '=', $request->product_id)->get()->first();
+            if ($result != null && isset($result)) {
+                Cart::find($result->id)->delete();
+                return response($result, 200);
+            } else {
+                return response([
+                    'msg' => "khong tim thay thong tin cart"
+                ], 400);
+            }
         }
     }
 }

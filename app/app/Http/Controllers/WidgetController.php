@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
@@ -56,7 +57,7 @@ class WidgetController extends Controller
     */
     public static function checkValidateDataProduct($request)
     {
-        if (!isset($request->name) || !isset($request->image) || !isset($request->quantity) || !isset($request->price) || !isset($request->description) || !isset($request->type) || !isset($request->categoryIds)) {
+        if (!isset($request->name) || !isset($request->quantity) || !isset($request->price) || !isset($request->description) || !isset($request->type) || !isset($request->categoryIds)) {
             return null;
         }
 
@@ -72,7 +73,7 @@ class WidgetController extends Controller
         $product->description = $request['description'];
         $product->price = $request['price'];
         $product->quantity = $request['quantity'];
-        $product->image = $request['image'];
+        $product->image = $request['image'] == null ? null: $request['image'];
         $product->type = $request['type'];
     }
 
@@ -200,7 +201,7 @@ class WidgetController extends Controller
     */
     public static function checkValidateDataCartItem($request)
     {
-        if (!isset($request->user_id) || !isset($request->product_id) || !isset($request->quantity)) {
+        if (!isset($request->user_id) || !isset($request->product_id) || !isset($request->process)) {
             return null;
         }
 
@@ -212,11 +213,6 @@ class WidgetController extends Controller
             return null;
         }
 
-        if($request->quantity < 1){
-            return null;
-        }
-
-
         return $request->all();
     }
 
@@ -227,6 +223,22 @@ class WidgetController extends Controller
         $cartItem->quantity = $request['quantity'];
     }
 
+
+    /*
+    * Widget Order methods 
+    */
+    public static function checkValidateDataOrder($request)
+    {
+        if (!isset($request->order_id) || !isset($request->shipper_id)) {
+            return null;
+        }
+
+        if( User::find($request->shipper_id) == null){
+            return null;
+        }
+
+        return $request->all();
+    }
 
     /*
     * Widget RoleUser methods 

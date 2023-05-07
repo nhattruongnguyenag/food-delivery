@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NotifycationController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -82,6 +83,15 @@ Route::get('carts', [CartController::class,'getCartItemAPI']);
 Route::post('carts', [CartController::class,'addOrEditCartAPI']);
 Route::delete('carts', [CartController::class,'deleteCartAPI']);
 
+
+/*
+*Orders API routes 
+*/
+Route::get('orders', [OrderController::class,'getOrdersAPI']);
+Route::get('orders/{id}', [OrderController::class,'getOrderByIdAPI']);
+Route::post('orders', [OrderController::class,'addOrEditOrderAPI']);
+Route::put('orders', [OrderController::class,'updateShipperAPI']);
+Route::delete('orders', [OrderController::class,'deleteOrderAPI']);
 
 /*
 *Widgets API routes

@@ -46,6 +46,13 @@ class ProductController extends Controller
         $result = '';
         if ($request->query('categoryIds') == null) {
             $result = Product::all();
+            foreach ($result as $item){
+                $categoryIds = [];
+                foreach ($item->categories() as $i){
+                    array_push($categoryIds , $i->id);
+                }
+                $item->categoryIds = $categoryIds;
+            }
             if ($result != null) {
                 return response($result, 200);
             }
