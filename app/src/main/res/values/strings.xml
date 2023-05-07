@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FoodDelivery</string>
+    <string name="app_name">Đặt đồ ăn</string>
     <string name="drawerOpen">Open</string>
     <string name="drawerClose">Close</string>
 
@@ -32,4 +32,7 @@
         <item>Thành công</item>
         <item>Thất bại</item>
     </string-array>
+    <string name="title_activity_launcher">LauncherActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
