@@ -19,8 +19,11 @@ import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.adapters.ProductManagementRecyclerViewAdapter;
+import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.ProductAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
+import vn.tdc.edu.fooddelivery.models.CategoryModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class ProductsListFragment extends Fragment implements View.OnClickListener {
@@ -72,16 +75,53 @@ public class ProductsListFragment extends Fragment implements View.OnClickListen
         adapter.setRecylerViewItemClickListener(new ProductManagementRecyclerViewAdapter.OnRecylerViewItemClickListener() {
             @Override
             public void onButtonEditClickListener(int position) {
-                ((AbstractActivity) getActivity()).showMessageDialog("Cập nhật tại: " + position);
+                ((AbstractActivity) getActivity()).setFragment(ProductFormFragment.class, R.id.frameLayout, false)
+                        .setProductModel(productsList.get(position));
             }
 
             @Override
             public void onButtonDeleteClickListener(int position) {
-                ((AbstractActivity) getActivity()).showMessageDialog("Xoá tại " + position);
+                ConfirmDialog confirmDialog = new ConfirmDialog(getActivity());
+                confirmDialog.setTitle("Xác nhận");
+                confirmDialog.setMessage("Dữ liệu đã xoá không thể hoàn tác.\nBạn có muốn tiếp tục không?");
+                confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
+                    @Override
+                    public void cancel() {
+                        confirmDialog.dismiss();
+                    }
+
+                    @Override
+                    public void ok() {
+                        deleteProduct(productsList.get(position));
+                        confirmDialog.dismiss();
+                    }
+                });
             }
         });
 
         return view;
+    }
+
+    private void deleteProduct(ProductModel productModel) {
+        Call<ProductModel> call = RetrofitBuilder.getClient().create(ProductAPI.class).deleteProduct(productModel);
+        call.enqueue(new Callback<ProductModel>() {
+            @Override
+            public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
+                if (response.code() == 200) {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Xoá sản phẩm thành công");
+                    productsList.remove(productModel);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Xoá sản phẩm thất bại");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProductModel> call, Throwable t) {
+                ((AbstractActivity) getActivity()).showMessageDialog("Xoá sản phẩm thất bại");
+            }
+        });
+
     }
 
     @Override

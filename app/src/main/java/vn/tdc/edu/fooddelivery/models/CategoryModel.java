@@ -31,11 +31,6 @@ public class CategoryModel extends BaseModel {
         return SystemConstant.IMAGES_BASE_URL + image;
     }
 
-    public static List<CategoryModel> getCategoriesList() {
-        getCategoriesAPI();
-        return categoriesList;
-    }
-
     public String getName() {
         return name;
     }
@@ -59,29 +54,6 @@ public class CategoryModel extends BaseModel {
 
     public void setNumberOfProduct(Integer numberOfProduct) {
         this.numberOfProduct = numberOfProduct;
-    }
-
-    private static void getCategoriesAPI() {
-        if (categoriesList == null) {
-            categoriesList = new ArrayList<>();
-        }
-
-        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).getCategories();
-
-        call.enqueue(new Callback<List<CategoryModel>>() {
-            @Override
-            public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
-                if (response.body() != null) {
-                    categoriesList.clear();
-                    categoriesList.addAll(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<CategoryModel>> call, Throwable t) {
-                categoriesList.clear();
-            }
-        });
     }
 
     @NonNull

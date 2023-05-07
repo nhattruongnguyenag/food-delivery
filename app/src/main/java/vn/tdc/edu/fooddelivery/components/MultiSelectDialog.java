@@ -23,9 +23,10 @@ public class MultiSelectDialog<T extends BaseModel> extends AlertDialog.Builder 
         this.onActionClickListener = actionClickListener;
     }
 
-    public MultiSelectDialog(@NonNull Context context, List<T> listObjects) {
+    public MultiSelectDialog(@NonNull Context context, List<T> listObjects, List<Integer> listSelectedObjectsId) {
         super(context);
         this.listObjects = listObjects;
+        this.listSelectedObjectsId = listSelectedObjectsId;
         init();
     }
 
@@ -39,8 +40,12 @@ public class MultiSelectDialog<T extends BaseModel> extends AlertDialog.Builder 
         List<CharSequence> options = listObjects.stream().map(option -> option.toString()).collect(Collectors.toList());
         boolean[] checkedItems = new boolean[listObjects.size()];
 
-        for (int i = 0; i < checkedItems.length; i++) {
-            checkedItems[i] = true;
+        for (int i = 0; i < listObjects.size(); i++) {
+           for (int j = 0; j < listSelectedObjectsId.size(); j++) {
+               if (listObjects.get(i).getId() == listSelectedObjectsId.get(j)) {
+                   checkedItems[i] = true;
+               }
+           }
         }
 
         setMultiChoiceItems(options.toArray(new CharSequence[options.size()]), checkedItems, new DialogInterface.OnMultiChoiceClickListener() {

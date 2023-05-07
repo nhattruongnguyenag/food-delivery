@@ -58,11 +58,13 @@
         <EditText
             android:id="@+id/edPrice"
             android:hint="Giá bán"
+            android:inputType="number"
             style="@style/edTextField"/>
 
         <EditText
             android:id="@+id/edQuantity"
             android:hint="Số lượng"
+            android:inputType="number"
             style="@style/edTextField"/>
 
         <EditText

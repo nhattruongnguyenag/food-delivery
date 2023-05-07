@@ -98,7 +98,6 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
                 ((AbstractActivity) getActivity()).showMessageDialog("Xoá danh mục thất bại");
             }
         });
-
     }
 
     private void dropCategoriesToRecyclerView() {
