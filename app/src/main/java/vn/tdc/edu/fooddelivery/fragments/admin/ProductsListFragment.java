@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,6 +97,8 @@ public class ProductsListFragment extends Fragment implements View.OnClickListen
                         confirmDialog.dismiss();
                     }
                 });
+
+                confirmDialog.show();
             }
         });
 
@@ -107,7 +110,7 @@ public class ProductsListFragment extends Fragment implements View.OnClickListen
         call.enqueue(new Callback<ProductModel>() {
             @Override
             public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
-                if (response.code() == 200) {
+                if (response.code() == HttpURLConnection.HTTP_OK) {
                     ((AbstractActivity) getActivity()).showMessageDialog("Xoá sản phẩm thành công");
                     productsList.remove(productModel);
                     adapter.notifyDataSetChanged();

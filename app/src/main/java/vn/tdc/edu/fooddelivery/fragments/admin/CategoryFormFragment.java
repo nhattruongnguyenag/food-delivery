@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 
+import java.net.HttpURLConnection;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -115,7 +117,7 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
                 call.enqueue(new Callback<CategoryModel>() {
                     @Override
                     public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
-                        if (response.code() == 201) {
+                        if (response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Thêm danh mục thành công");
                             ((AbstractActivity) getActivity()).setFragment(CategoriesListFragment.class, R.id.frameLayout, false);
                         } else {
@@ -151,7 +153,7 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
                 call.enqueue(new Callback<CategoryModel>() {
                     @Override
                     public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
-                        if (response.code() == 201) {
+                        if (response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Cập nhật danh mục thành công");
                             ((AbstractActivity) getActivity()).setFragment(CategoriesListFragment.class, R.id.frameLayout, false);
                         } else {

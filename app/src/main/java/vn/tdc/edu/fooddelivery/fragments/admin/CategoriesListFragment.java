@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.HttpException;
 import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
@@ -88,9 +90,11 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
         call.enqueue(new Callback<CategoryModel>() {
             @Override
             public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
-                ((AbstractActivity) getActivity()).showMessageDialog("Xoá danh mục thành công");
-                categoriesList.remove(categoryModel);
-                adapter.notifyDataSetChanged();
+                if (response.code() == HttpURLConnection.HTTP_OK) {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Xoá danh mục thành công");
+                    categoriesList.remove(categoryModel);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
