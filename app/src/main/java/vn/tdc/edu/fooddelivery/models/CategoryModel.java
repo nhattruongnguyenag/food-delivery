@@ -2,11 +2,23 @@ package vn.tdc.edu.fooddelivery.models;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import vn.tdc.edu.fooddelivery.api.CategoryAPI;
+import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.constant.SystemConstant;
 
 public class CategoryModel extends BaseModel {
+    private static List<CategoryModel> categoriesList;
     @SerializedName("name")
     private String name;
     @SerializedName("image")
@@ -17,6 +29,11 @@ public class CategoryModel extends BaseModel {
 
     public String getImageUrl() {
         return SystemConstant.IMAGES_BASE_URL + image;
+    }
+
+    public static List<CategoryModel> getCategoriesList() {
+        getCategoriesAPI();
+        return categoriesList;
     }
 
     public String getName() {
@@ -42,5 +59,34 @@ public class CategoryModel extends BaseModel {
 
     public void setNumberOfProduct(Integer numberOfProduct) {
         this.numberOfProduct = numberOfProduct;
+    }
+
+    private static void getCategoriesAPI() {
+        if (categoriesList == null) {
+            categoriesList = new ArrayList<>();
+        }
+
+        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).getCategories();
+
+        call.enqueue(new Callback<List<CategoryModel>>() {
+            @Override
+            public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
+                if (response.body() != null) {
+                    categoriesList.clear();
+                    categoriesList.addAll(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryModel>> call, Throwable t) {
+                categoriesList.clear();
+            }
+        });
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }

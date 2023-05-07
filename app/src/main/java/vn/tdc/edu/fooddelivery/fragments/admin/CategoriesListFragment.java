@@ -1,4 +1,4 @@
-package vn.tdc.edu.fooddelivery.fragments;
+package vn.tdc.edu.fooddelivery.fragments.admin;
 
 import android.os.Bundle;
 
@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +19,15 @@ import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
-import vn.tdc.edu.fooddelivery.adapters.CategoryRecyclerViewAdapter;
+import vn.tdc.edu.fooddelivery.adapters.CategoryManagementRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.CategoryModel;
 
 public class CategoriesListFragment extends AbstractFragment implements View.OnClickListener {
-    CategoryRecyclerViewAdapter adapter;
-    List<CategoryModel> categoriesList;
+    private CategoryManagementRecyclerViewAdapter adapter;
+    private List<CategoryModel> categoriesList;
     private Button btnAdd;
     private RecyclerView recyclerViewCategory;
     @Override
@@ -42,32 +42,16 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
 
         categoriesList = new ArrayList<>();
 
-        adapter = new CategoryRecyclerViewAdapter((AbstractActivity) getActivity(), R.layout.recycler_category, categoriesList);
+        adapter = new CategoryManagementRecyclerViewAdapter((AbstractActivity) getActivity(), R.layout.recycler_category, categoriesList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewCategory.setLayoutManager(layoutManager);
         recyclerViewCategory.setAdapter(adapter);
 
-        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).getCategories();
+        dropCategoriesToRecyclerView();
 
-        call.enqueue(new Callback<List<CategoryModel>>() {
-            @Override
-            public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
-                if (response.body() != null) {
-                    categoriesList.clear();
-                    categoriesList.addAll(response.body());
-                    adapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<CategoryModel>> call, Throwable t) {
-
-            }
-        });
-
-        adapter.setRecylerViewItemClickListener(new CategoryRecyclerViewAdapter.OnRecylerViewItemClickListener() {
+        adapter.setRecylerViewItemClickListener(new CategoryManagementRecyclerViewAdapter.OnRecylerViewItemClickListener() {
             @Override
             public void onButtonEditClickListener(int position) {
                 ((AbstractActivity) getActivity()).setFragment(CategoryFormFragment.class, R.id.frameLayout, false)
@@ -115,6 +99,26 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
             }
         });
 
+    }
+
+    private void dropCategoriesToRecyclerView() {
+        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).getCategories();
+
+        call.enqueue(new Callback<List<CategoryModel>>() {
+            @Override
+            public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
+                if (response.body() != null) {
+                    categoriesList.clear();
+                    categoriesList.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryModel>> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

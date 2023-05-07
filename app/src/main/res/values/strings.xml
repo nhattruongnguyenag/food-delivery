@@ -19,4 +19,16 @@
     <string name="confirm_dialog_title">Xác nhận</string>
     <string name="confirm_dialog_content">Dữ liệu đã xoá không thể hoàn tác. \nBạn có muốn xoá không?</string>
     <string name="them_san_pham">Thêm sản phẩm</string>
+    <string name="address">53, Võ Văn Ngân, Phường Linh Chiểu, Tp. Thủ Đức, Tp. HCM</string>
+    <string name="btn_order_detail">Chi tiết</string>
+    <string name="btn_order_phone">Gọi điện</string>
+    <string name="btn_accept">Duyệt</string>
+    <string name="btn_delete">Xoá</string>
+
+    <string-array name="orderStatus">
+        <item>Chưa xử lý</item>
+        <item>Đang giao hàng</item>
+        <item>Thành công</item>
+        <item>Thất bại</item>
+    </string-array>
 </resources>

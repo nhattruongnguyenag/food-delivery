@@ -1,4 +1,4 @@
-package vn.tdc.edu.fooddelivery.fragments;
+package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.os.Bundle;
 
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class NotificationFragment extends AbstractFragment {

@@ -7,8 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -19,11 +17,10 @@ import vn.tdc.edu.fooddelivery.activities.admin.CategoryManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.OrderManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.ProductManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
-import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.fragments.CartFragment;
-import vn.tdc.edu.fooddelivery.fragments.HomeFragment;
-import vn.tdc.edu.fooddelivery.fragments.NotificationFragment;
-import vn.tdc.edu.fooddelivery.fragments.ProfileFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.NotificationFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.ProfileFragment;
 
 public class MainActivity extends AbstractActivity {
     NavigationView navigation;

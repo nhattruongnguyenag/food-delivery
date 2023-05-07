@@ -1,4 +1,4 @@
-package vn.tdc.edu.fooddelivery.fragments;
+package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.os.Bundle;
 
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 
 public class HomeFragment extends AbstractFragment {
     @Override

@@ -1,4 +1,4 @@
-package vn.tdc.edu.fooddelivery.fragments;
+package vn.tdc.edu.fooddelivery.fragments.admin;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,13 +18,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
-import vn.tdc.edu.fooddelivery.adapters.ProductRecyvlerViewAdapter;
+import vn.tdc.edu.fooddelivery.adapters.ProductManagementRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.api.ProductAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class ProductsListFragment extends Fragment implements View.OnClickListener {
-    ProductRecyvlerViewAdapter adapter;
+    ProductManagementRecyclerViewAdapter adapter;
     List<ProductModel> productsList;
     private Button btnAdd;
     private RecyclerView recyclerViewProduct;
@@ -45,7 +45,7 @@ public class ProductsListFragment extends Fragment implements View.OnClickListen
             productsList = new ArrayList<>();
         }
 
-        adapter = new ProductRecyvlerViewAdapter(getActivity(), R.layout.recycler_product, productsList);
+        adapter = new ProductManagementRecyclerViewAdapter(getActivity(), R.layout.recycler_product, productsList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewProduct.setLayoutManager(layoutManager);
@@ -69,7 +69,7 @@ public class ProductsListFragment extends Fragment implements View.OnClickListen
             }
         });
 
-        adapter.setRecylerViewItemClickListener(new ProductRecyvlerViewAdapter.OnRecylerViewItemClickListener() {
+        adapter.setRecylerViewItemClickListener(new ProductManagementRecyclerViewAdapter.OnRecylerViewItemClickListener() {
             @Override
             public void onButtonEditClickListener(int position) {
                 ((AbstractActivity) getActivity()).showMessageDialog("Cập nhật tại: " + position);

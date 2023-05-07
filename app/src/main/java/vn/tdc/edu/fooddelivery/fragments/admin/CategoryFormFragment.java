@@ -1,4 +1,4 @@
-package vn.tdc.edu.fooddelivery.fragments;
+package vn.tdc.edu.fooddelivery.fragments.admin;
 
 import android.os.Bundle;
 
@@ -19,6 +19,7 @@ import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.CategoryModel;
 import vn.tdc.edu.fooddelivery.utils.ImageUploadUtils;
 
