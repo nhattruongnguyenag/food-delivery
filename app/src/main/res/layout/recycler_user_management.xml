@@ -14,9 +14,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imgProduct"
+            android:id="@+id/imgCategory"
             style="@style/imageRecyclerItem"
-            app:srcCompat="@drawable/product_image_default" />
+            app:srcCompat="@drawable/user_image_default" />
 
         <LinearLayout
             android:paddingLeft="10dp"
@@ -27,14 +27,26 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvName"
+                android:id="@+id/tvFullName"
                 android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Cơm chiên dương châu"
+                android:text="Nguyễn Văn A"
                 android:textColor="@color/textTitlePrimary"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/guideline3"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                tools:layout_editor_absoluteY="155dp" />
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="nguyenvana@gmail.com"
+                android:textColor="@color/textBlack"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 tools:layout_editor_absoluteY="155dp" />
@@ -47,42 +59,20 @@
 
                 <TextView
                     android:gravity="center_vertical"
-                    android:layout_width="60dp"
+                    android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:text="Giá bán:"
+                    android:text="Ngày tham gia"
                     android:textColor="@color/textTitlePrimary"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/tvPrice"
+                    android:id="@+id/tvRegisterDate"
                     android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="40,000 VND"
-                    android:textColor="@color/textBlack"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:gravity="center_vertical"
-                    android:layout_width="55dp"
-                    android:layout_height="match_parent"
-                    android:text="Còn lại:"
-                    android:textColor="@color/textTitlePrimary"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tvQuantity"
-                    android:gravity="center_vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="40 (phần)"
+                    android:textStyle="italic"
+                    android:text="07/05/2023"
                     android:textColor="@color/textBlack"/>
             </LinearLayout>
         </LinearLayout>

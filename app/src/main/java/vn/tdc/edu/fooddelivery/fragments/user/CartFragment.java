@@ -1,4 +1,4 @@
-package vn.tdc.edu.fooddelivery.fragments;
+package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.os.Bundle;
 
@@ -7,15 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 
-public class ProfileFragment extends AbstractFragment {
-
+public class CartFragment extends AbstractFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentLayout = null;
-        fragmentLayout = inflater.inflate(R.layout.fragment_profile, container, false);
+        fragmentLayout = inflater.inflate(R.layout.fragment_cart, container, false);
         return fragmentLayout;
     }
 }
