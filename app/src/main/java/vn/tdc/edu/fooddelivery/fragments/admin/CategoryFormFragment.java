@@ -70,7 +70,11 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         if (view.getId() == R.id.btnUploadImage) {
             ImageUploadUtils.getInstance().showChoosingImageOptionsDialog((AbstractActivity) getActivity(), imgCategory);
         } else if (view.getId() == R.id.btnAddOrUpdate) {
-            if (((Button) view).getText().equals(getText(R.string.btn_update_category))) {
+            if (!validateData()) {
+                return;
+            }
+
+            if (categoryModel.getId() != null) {
                 updateCategory();
             } else {
                 saveCategory();
@@ -78,7 +82,16 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         }
     }
 
-    private CategoryModel getCategoryFromUserInputs() {
+    private boolean validateData() {
+        if (edName.getText().toString().isEmpty()) {
+            edName.setError("Tên danh mục không được để trống");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void getCategoryFromUserInputs() {
         categoryModel = new CategoryModel();
         if (edId.getText() != null && !edId.getText().toString().isEmpty()) {
             categoryModel.setId(Integer.valueOf(edId.getText().toString()));
@@ -88,7 +101,6 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         }
         categoryModel.setName(edName.getText().toString());
         categoryModel.setNumberOfProduct(0);
-        return categoryModel;
     }
 
     private void dropCategoryModelToEditForm() {
@@ -106,7 +118,8 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         ImageUploadUtils.getInstance().handleUploadFileToServer(new ImageUploadUtils.Action() {
             @Override
             public void onSucess(String fileName) {
-                categoryModel = getCategoryFromUserInputs().setImageName(fileName);
+                getCategoryFromUserInputs();
+                categoryModel.setImageName(fileName);
 
                 if (fileName.isEmpty()) {
                     categoryModel.setImageName(ImageUploadUtils.IMAGE_UPLOAD_DEFAULT);
@@ -142,7 +155,7 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         ImageUploadUtils.getInstance().handleUploadFileToServer(new ImageUploadUtils.Action() {
             @Override
             public void onSucess(String fileName) {
-                categoryModel = getCategoryFromUserInputs();
+                getCategoryFromUserInputs();
 
                 if (!fileName.isEmpty()) {
                     categoryModel.setImageName(fileName);

@@ -89,7 +89,6 @@
 
         <LinearLayout
             android:layout_marginLeft="-50dp"
-            android:layout_gravity="end"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -105,7 +104,7 @@
                 android:id="@+id/btnDelete"
                 android:layout_width="@dimen/btnSize50"
                 android:layout_height="@dimen/btnSize50"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="9dp"
                 android:background="@drawable/btn_delete_bg"
                 android:src="@drawable/ic_delete" />
         </LinearLayout>

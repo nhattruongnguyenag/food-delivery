@@ -16,7 +16,7 @@ import vn.tdc.edu.fooddelivery.models.BaseModel;
 public class MultiSelectDialog<T extends BaseModel> extends AlertDialog.Builder {
 
     private List<T> listObjects;
-    private List<Integer> listSelectedObjectsId = new ArrayList<Integer>();
+    private List<Integer> listSelectedObjectsId;
     private Action onActionClickListener;
 
     public void setOnActionClickListener(Action actionClickListener) {
@@ -26,7 +26,11 @@ public class MultiSelectDialog<T extends BaseModel> extends AlertDialog.Builder 
     public MultiSelectDialog(@NonNull Context context, List<T> listObjects, List<Integer> listSelectedObjectsId) {
         super(context);
         this.listObjects = listObjects;
-        this.listSelectedObjectsId = listSelectedObjectsId;
+
+        if (listSelectedObjectsId != null && !listSelectedObjectsId.isEmpty()) {
+            this.listSelectedObjectsId = listSelectedObjectsId;
+        }
+
         init();
     }
 
@@ -37,26 +41,33 @@ public class MultiSelectDialog<T extends BaseModel> extends AlertDialog.Builder 
     }
 
     private void init() {
+        if (listObjects == null) {
+            return;
+        }
+
         List<CharSequence> options = listObjects.stream().map(option -> option.toString()).collect(Collectors.toList());
         boolean[] checkedItems = new boolean[listObjects.size()];
 
+        if (listSelectedObjectsId == null) {
+            listSelectedObjectsId = new ArrayList<>();
+        }
+
         for (int i = 0; i < listObjects.size(); i++) {
-           for (int j = 0; j < listSelectedObjectsId.size(); j++) {
-               if (listObjects.get(i).getId() == listSelectedObjectsId.get(j)) {
-                   checkedItems[i] = true;
-               }
-           }
+            for (int j = 0; j < listSelectedObjectsId.size(); j++) {
+                if (listObjects.get(i).getId() == listSelectedObjectsId.get(j)) {
+                    checkedItems[i] = true;
+                }
+            }
         }
 
         setMultiChoiceItems(options.toArray(new CharSequence[options.size()]), checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+
                 if (b) {
-                    Log.d("categories", "add " + listObjects.get(i).getId());
                     listSelectedObjectsId.add(listObjects.get(i).getId());
                 } else {
-                    Log.d("categories", "remove " + listObjects.get(i).getId());
-                    listSelectedObjectsId.remove(listObjects.get(i));
+                    listSelectedObjectsId.remove(listObjects.get(i).getId());
                 }
             }
         });
@@ -81,6 +92,7 @@ public class MultiSelectDialog<T extends BaseModel> extends AlertDialog.Builder 
 
     public interface Action {
         void cancel();
+
         void ok(List<Integer> listObjectSelectedId);
     }
 }

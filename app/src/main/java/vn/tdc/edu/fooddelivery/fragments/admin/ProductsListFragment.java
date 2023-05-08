@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +50,7 @@ public class ProductsListFragment extends Fragment implements View.OnClickListen
             productsList = new ArrayList<>();
         }
 
-        adapter = new ProductManagementRecyclerViewAdapter(getActivity(), R.layout.recycler_product, productsList);
+        adapter = new ProductManagementRecyclerViewAdapter((AppCompatActivity) getActivity(), R.layout.recycler_product, productsList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewProduct.setLayoutManager(layoutManager);
@@ -76,7 +77,7 @@ public class ProductsListFragment extends Fragment implements View.OnClickListen
         adapter.setRecylerViewItemClickListener(new ProductManagementRecyclerViewAdapter.OnRecylerViewItemClickListener() {
             @Override
             public void onButtonEditClickListener(int position) {
-                ((AbstractActivity) getActivity()).setFragment(ProductFormFragment.class, R.id.frameLayout, false)
+                ((AbstractActivity) getActivity()).setFragment(ProductFormFragment.class, R.id.frameLayout, true)
                         .setProductModel(productsList.get(position));
             }
 

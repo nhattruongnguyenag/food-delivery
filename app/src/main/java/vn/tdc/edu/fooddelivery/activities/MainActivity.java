@@ -3,8 +3,11 @@ package vn.tdc.edu.fooddelivery.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
@@ -31,8 +34,11 @@ public class MainActivity extends AbstractActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
 
+    private SearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
         navigation = findViewById(R.id.navigation);
@@ -40,6 +46,7 @@ public class MainActivity extends AbstractActivity {
 
         // Show the navigation view and display the button for navigation view toggle in tool bar
         toolbar = findViewById(R.id.toolbar);
+        searchView = findViewById(R.id.searchView);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -95,6 +102,20 @@ public class MainActivity extends AbstractActivity {
                     default:
                         break;
                 }
+                return true;
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("searchView", "On submit");
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("searchView", "On text change");
                 return true;
             }
         });

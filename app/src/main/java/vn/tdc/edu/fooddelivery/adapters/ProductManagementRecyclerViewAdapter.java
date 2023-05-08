@@ -9,8 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class ProductManagementRecyclerViewAdapter extends RecyclerView.Adapter<ProductManagementRecyclerViewAdapter.ProductItemHolder> {
-    private Activity activity;
+    private AppCompatActivity activity;
     private int layout;
     private List<ProductModel> listProducts;
     private OnRecylerViewItemClickListener recylerViewItemClickListener;
@@ -27,7 +30,7 @@ public class ProductManagementRecyclerViewAdapter extends RecyclerView.Adapter<P
         this.recylerViewItemClickListener = recylerViewItemClickListener;
     }
 
-    public ProductManagementRecyclerViewAdapter(@NonNull Activity activity, int layout, @NonNull List<ProductModel> listProducts) {
+    public ProductManagementRecyclerViewAdapter(@NonNull AppCompatActivity activity, int layout, @NonNull List<ProductModel> listProducts) {
         this.activity = activity;
         this.layout = layout;
         this.listProducts = listProducts;
@@ -44,7 +47,8 @@ public class ProductManagementRecyclerViewAdapter extends RecyclerView.Adapter<P
     @Override
     public void onBindViewHolder(@NonNull ProductItemHolder holder, int position) {
         ProductModel productModel = listProducts.get(position);
-        holder.imgProduct.setImageResource(R.drawable.product_image_default);
+        Glide.with(activity).load(productModel.getImageUrl())
+                .into(holder.imgProduct);
         holder.tvName.setText(productModel.getName());
         holder.tvPrice.setText(String.format("%,d VND", productModel.getPrice()));
         holder.tvQuantity.setText(String.format("%d (%s)", productModel.getQuantity(), productModel.getUnit()));
