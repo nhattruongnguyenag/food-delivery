@@ -16,7 +16,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,7 +34,6 @@ import vn.tdc.edu.fooddelivery.utils.ImageUploadUtils;
 public class ProductFormFragment extends Fragment implements View.OnClickListener {
     private ProductModel productModel;
     private List<CategoryModel> categoriesList;
-    private List<Integer> categoryIds;
     private TextView tvCategories;
 
     private ShapeableImageView imgProduct;
@@ -47,6 +45,7 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
     private EditText edUnit;
     private EditText edDescription;
     private Button btnAddOrUpdate;
+    MultiSelectDialog<CategoryModel> multiSelectDialog;
 
     private FloatingActionButton btnUploadImage;
 
@@ -62,11 +61,8 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = null;
-        view = inflater.inflate(R.layout.fragment_product_form, container, false);
+        View view = inflater.inflate(R.layout.fragment_product_form, container, false);
         tvCategories = view.findViewById(R.id.edCategories);
-        tvCategories.setOnClickListener(this);
-
         imgProduct = view.findViewById(R.id.imgProduct);
         edId = view.findViewById(R.id.edId);
         edName = view.findViewById(R.id.edName);
@@ -78,60 +74,47 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
         btnAddOrUpdate = view.findViewById(R.id.btnAddOrUpdate);
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
 
+        tvCategories.setOnClickListener(this);
         btnAddOrUpdate.setOnClickListener(this);
         btnUploadImage.setOnClickListener(this);
 
+        if (this.productModel == null) {
+            this.productModel = new ProductModel();
+        }
+
         ImageUploadUtils.getInstance().registerForUploadImageActivityResult(this, imgProduct);
 
+        createMultiSelectCategoryDialog();
         dropProductToEditForm();
 
         return view;
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.edCategories) {
-            showMultiSelectCategoryDialog();
-        } else if (view.getId() == R.id.btnAddOrUpdate) {
-            getProductFromUserInput();
-            if (productModel != null && productModel.getId() != null) {
-                updateProduct();
-            } else {
-                saveProduct();
-            }
-        } else if (view.getId() == R.id.btnUploadImage) {
-            ImageUploadUtils.getInstance().showChoosingImageOptionsDialog((AbstractActivity) getActivity(), imgProduct);
-        }
-    }
-
-    private void showMultiSelectCategoryDialog() {
-        if (categoriesList == null) {
-            categoriesList = new ArrayList<>();
-        }
-
-        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).getCategories();
+    private void createMultiSelectCategoryDialog() {
+        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).getCategories("name");
 
         call.enqueue(new Callback<List<CategoryModel>>() {
             @Override
             public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
-                if (response.body() != null) {
-                    categoriesList.clear();
-                    categoriesList.addAll(response.body());
+                if (response.code() == HttpURLConnection.HTTP_OK) {
+                    categoriesList = response.body();
+
+                    if (multiSelectDialog == null) {
+                        multiSelectDialog = new MultiSelectDialog(getActivity(), categoriesList, productModel.getCategoryIds());
+
+                        multiSelectDialog.setTitle("Chọn danh mục");
+                        multiSelectDialog.setOnActionClickListener(new MultiSelectDialog.Action() {
+                            @Override
+                            public void cancel() {
+                            }
+
+                            @Override
+                            public void ok(List<Integer> listObjectSelected) {
+                                productModel.setCategoryIds(listObjectSelected);
+                            }
+                        });
+                    }
                 }
-
-                MultiSelectDialog<CategoryModel> multiSelectDialog = new MultiSelectDialog(getContext(), categoriesList, productModel.getCategoryIds());
-                multiSelectDialog.setTitle("Chọn danh mục");
-                multiSelectDialog.setOnActionClickListener(new MultiSelectDialog.Action() {
-                    @Override
-                    public void cancel() {
-                    }
-
-                    @Override
-                    public void ok(List<Integer> listObjectSelected) {
-                        categoryIds = listObjectSelected;
-                    }
-                });
-                multiSelectDialog.show();
             }
 
             @Override
@@ -141,12 +124,45 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
         });
     }
 
-    private void getProductFromUserInput() {
-        if (!validateData()) {
-            productModel = null;
+    private boolean validateData() {
+        if (edName.getText().toString().isEmpty()) {
+            edName.setError("Tên không được để trống");
+            return false;
         }
 
-        productModel = new ProductModel();
+        if (productModel.getCategoryIds() == null || productModel.getCategoryIds().isEmpty()) {
+            tvCategories.setError("Bạn chưa chọn danh mục");
+            return false;
+        } else {
+            tvCategories.setError(null);
+        }
+
+        if (edPrice.getText().toString().isEmpty()) {
+            edPrice.setError("Giá sản phẩm không được để trống");
+            return false;
+        }
+
+        if (edQuantity.getText().toString().isEmpty()) {
+            edQuantity.setError("Số lượng sản phẩm không được để trống");
+            return false;
+        }
+
+        if (edUnit.getText().toString().isEmpty()) {
+            edUnit.setError("Đơn vị sản phẩm không được để trống");
+            return false;
+        }
+
+        if (edDescription.getText().toString().isEmpty()) {
+            edDescription.setError("Chi tiết sản phẩm không được để trống");
+            return false;
+        }
+        return true;
+    }
+
+    private void getProductFromUserInput() {
+        if (productModel == null) {
+            productModel = new ProductModel();
+        }
 
         if (edId.getText() != null && !edId.getText().toString().isEmpty()) {
             productModel.setId(Integer.valueOf(String.valueOf(edId.getText())));
@@ -157,24 +173,10 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
         }
 
         productModel.setName(edName.getText().toString());
-
-        if (categoriesList != null) {
-            productModel.setCategoryIds(categoryIds);
-        }
-
         productModel.setPrice(Long.valueOf(edPrice.getText().toString()));
         productModel.setQuantity(Integer.valueOf(edQuantity.getText().toString()));
         productModel.setUnit(edUnit.getText().toString());
         productModel.setDescription(edDescription.getText().toString());
-    }
-
-    private boolean validateData() {
-        if (edName.getText().toString().isEmpty()) {
-            edName.setError("Tên không được để trống");
-            return false;
-        }
-
-        return true;
     }
 
     private void dropProductToEditForm() {
@@ -196,21 +198,13 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
         ImageUploadUtils.getInstance().handleUploadFileToServer(new ImageUploadUtils.Action() {
             @Override
             public void onSucess(String fileName) {
-                // Drop data from product form to product model
-                getProductFromUserInput();
-
-                if (productModel == null) {
-                    return;
-                }
-
                 productModel.setImageName(fileName);
 
-                // In the case user didn't choose any image or the image is upload failed
                 if (fileName.isEmpty()) {
                     productModel.setImageName(ImageUploadUtils.IMAGE_UPLOAD_DEFAULT);
                 }
 
-                Call<ProductModel> call = RetrofitBuilder.getClient().create(ProductAPI.class).saveProduct();
+                Call<ProductModel> call = RetrofitBuilder.getClient().create(ProductAPI.class).saveProduct(productModel);
 
                 call.enqueue(new Callback<ProductModel>() {
                     @Override
@@ -240,8 +234,6 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
         ImageUploadUtils.getInstance().handleUploadFileToServer(new ImageUploadUtils.Action() {
             @Override
             public void onSucess(String fileName) {
-                getProductFromUserInput();
-
                 if (!fileName.isEmpty()) {
                     productModel.setImageName(fileName);
                 }
@@ -270,5 +262,28 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
             public void onFailed() {
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.edCategories) {
+            if (multiSelectDialog != null) {
+                multiSelectDialog.show();
+            }
+        } else if (view.getId() == R.id.btnAddOrUpdate) {
+            if (!validateData()) {
+                return;
+            }
+
+            getProductFromUserInput();
+
+            if (productModel != null && productModel.getId() != null) {
+                updateProduct();
+            } else {
+                saveProduct();
+            }
+        } else if (view.getId() == R.id.btnUploadImage) {
+            ImageUploadUtils.getInstance().showChoosingImageOptionsDialog((AbstractActivity) getActivity(), imgProduct);
+        }
     }
 }

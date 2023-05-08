@@ -31,6 +31,7 @@
                 app:contentInsetStartWithNavigation="0dp">
 
                 <SearchView
+                    android:id="@+id/searchView"
                     android:theme="@style/Theme.FoodDelivery.SearchView"
                     android:iconifiedByDefault="false"
                     android:layout_width="match_parent"

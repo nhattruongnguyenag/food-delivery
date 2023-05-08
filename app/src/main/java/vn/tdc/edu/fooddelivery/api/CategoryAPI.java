@@ -10,11 +10,12 @@ import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Query;
 import vn.tdc.edu.fooddelivery.models.CategoryModel;
 
 public interface CategoryAPI {
     @GET("api/categories")
-    Call<List<CategoryModel>> getCategories();
+    Call<List<CategoryModel>> getCategories(@Query("sort") String sortBy);
 
     @POST("api/categories")
     Call<CategoryModel> saveCategory(@Body CategoryModel categoryModel);
