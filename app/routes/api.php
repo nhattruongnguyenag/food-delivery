@@ -88,10 +88,10 @@ Route::delete('carts', [CartController::class,'deleteCartAPI']);
 *Orders API routes 
 */
 Route::get('orders', [OrderController::class,'getOrdersAPI']);
-Route::get('orders/{id}', [OrderController::class,'getOrderByIdAPI']);
-Route::post('orders', [OrderController::class,'addOrEditOrderAPI']);
+// Route::get('orders/{id}', [OrderController::class,'getOrderByIdAPI']);
+Route::post('orders', [OrderController::class,'addOrderAPI']);
 Route::put('orders', [OrderController::class,'updateShipperAPI']);
-Route::delete('orders', [OrderController::class,'deleteOrderAPI']);
+// Route::delete('orders', [OrderController::class,'deleteOrderAPI']);
 
 /*
 *Widgets API routes

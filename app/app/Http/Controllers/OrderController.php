@@ -67,7 +67,10 @@ class OrderController extends Controller
         return response([
             "msg" => "Ban co the sai key hoac khong ton tai shipper"
         ], 400);
-    }
+    } 
 
-    
+    public function addOrderAPI(Request $request)
+    {
+        
+    }
 }

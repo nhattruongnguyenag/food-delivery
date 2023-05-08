@@ -21,7 +21,7 @@ class OrderResource extends JsonResource
             array_push($resource,[
                 "id" => $item["id"],
                 "user"=> User::select('id','full_name','image','email')->where('id', $item['user_id'])->first(),
-                "total"=> $this->getTotal($item['total']),
+                "total"=> $item['total'],
                 "shipper"=> User::select('id','full_name','image','email')->where('id', $item['shipper_id'])->first(),
                 "customer_phone"=>$item["customer_phone"],
                 "delivery_address"=>$item["delivery_address"],
@@ -32,9 +32,5 @@ class OrderResource extends JsonResource
         }
 
         return $resource;
-    }
-
-    public function getTotal($total){
-        return $total;
     }
 }

@@ -101,18 +101,8 @@ class WidgetController extends Controller
     */
     public static function attachToCategoryProductTable($array, $product)
     {
-        $canAttach = $array;
-        for ($i = 0; $i < count($array); $i++) {
-            $temp = Category::find($array[$i])->products();
-            for ($z = 0; $z < count($temp); $z++) {
-                if ($product->id == $temp[$z]['id']) {
-                    unset($canAttach[$i]);
-                    break;
-                }
-            }
-        }
-
-        foreach ($canAttach as $categoryCanAttach) {
+        DB::table('category_product')->where('product_id', $product->id)->delete();
+        foreach ($array as $categoryCanAttach) {
             DB::table('category_product')->insert([
                 'category_id' => $categoryCanAttach,
                 'product_id' => $product->id
