@@ -134,7 +134,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
             if (requestCode == ImageUploadUtils.REQ_CAMERA) {
                 ImageUploadUtils.getInstance().takePhotoAction(this);
             } else if (requestCode == ImageUploadUtils.REQ_READ_EXTERNAL_STORAGE) {
-                ImageUploadUtils.getInstance().takePhotoAction(this);
+                ImageUploadUtils.getInstance().pickImageAction(this);
             }
         }
     }

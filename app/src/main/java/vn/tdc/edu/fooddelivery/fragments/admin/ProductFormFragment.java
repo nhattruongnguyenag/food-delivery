@@ -74,7 +74,7 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
         edPrice = view.findViewById(R.id.edPrice);
         edQuantity = view.findViewById(R.id.edQuantity);
         edUnit = view.findViewById(R.id.edUnit);
-        edDescription = view.findViewById(R.id.edUnit);
+        edDescription = view.findViewById(R.id.edDescription);
         btnAddOrUpdate = view.findViewById(R.id.btnAddOrUpdate);
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
 
@@ -82,7 +82,8 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
         btnUploadImage.setOnClickListener(this);
 
         ImageUploadUtils.getInstance().registerForUploadImageActivityResult(this, imgProduct);
-        dropProductToFormEdit();
+
+        dropProductToEditForm();
 
         return view;
     }
@@ -140,9 +141,9 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
         });
     }
 
-    private ProductModel getProductFromUserInput() {
+    private void getProductFromUserInput() {
         if (!validateData()) {
-            return null;
+            productModel = null;
         }
 
         productModel = new ProductModel();
@@ -163,9 +164,8 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
 
         productModel.setPrice(Long.valueOf(edPrice.getText().toString()));
         productModel.setQuantity(Integer.valueOf(edQuantity.getText().toString()));
+        productModel.setUnit(edUnit.getText().toString());
         productModel.setDescription(edDescription.getText().toString());
-
-        return productModel;
     }
 
     private boolean validateData() {
@@ -177,8 +177,8 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
         return true;
     }
 
-    private void dropProductToFormEdit() {
-        if (productModel != null && productModel != null) {
+    private void dropProductToEditForm() {
+        if (productModel != null && productModel.getId() != null) {
             btnAddOrUpdate.setText(R.string.btn_update_product);
             edId.setText(productModel.getId() == null ? "" : productModel.getId().toString());
             edImage.setText(productModel.getImageName() == null ? "" : productModel.getImageName());
