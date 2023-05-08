@@ -19,7 +19,8 @@ class CartController extends Controller
         if ($request->query('userId') != null) {
             $user = User::find($request->query('userId'));
             if ($user != null) {
-                $result = new CartResource($user);
+                $resource = new CartResource($user);
+                $result = json_decode($resource->toJson(), true);
                 if ($result != null) {
                     return response($result, 200);
                 }
