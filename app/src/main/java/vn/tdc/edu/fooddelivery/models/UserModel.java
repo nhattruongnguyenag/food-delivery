@@ -2,6 +2,8 @@ package vn.tdc.edu.fooddelivery.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import vn.tdc.edu.fooddelivery.constant.SystemConstant;
+
 public class UserModel extends BaseModel {
     @SerializedName("full_name")
     private String fullName;
@@ -22,13 +24,18 @@ public class UserModel extends BaseModel {
         this.fullName = fullName;
     }
 
-    public String getImage() {
+    public String getImageName() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImageName(String image) {
         this.image = image;
     }
+
+    public String getImageUrl() {
+        return SystemConstant.IMAGES_BASE_URL + image;
+    }
+
 
     public String getEmail() {
         return email;

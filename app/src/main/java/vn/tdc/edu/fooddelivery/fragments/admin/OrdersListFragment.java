@@ -33,7 +33,6 @@ public class OrdersListFragment extends Fragment implements OrderManagementItemR
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_list, container, false);
 
-//        spOrderStatus = view.findViewById(R.id.spOrderStatus);
         TabLayout tabLayout = view.findViewById(R.id.tabOrderStatus);
         tabLayout.addTab(tabLayout.newTab().setText("Chưa xử lý"));
         tabLayout.addTab(tabLayout.newTab().setText("Đang giao hàng"));
