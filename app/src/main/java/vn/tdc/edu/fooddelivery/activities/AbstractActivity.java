@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -81,12 +82,15 @@ public abstract class AbstractActivity extends AppCompatActivity {
     }
 
     public <T> T setFragment(Class<T> tClass, int layout, boolean addToBackStack) {
-        T fragment = null;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        T fragment = (T) fragmentManager.findFragmentByTag("fragment");
         try {
+            if (fragment != null) {
+                transaction.remove((Fragment) fragment);
+            }
             fragment = tClass.newInstance();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction()
-                    .replace(layout, (Fragment) fragment);
+            transaction.replace(layout, (Fragment) fragment, "fragment");
             if (addToBackStack) {
                 transaction.addToBackStack(null);
             }

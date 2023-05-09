@@ -1,27 +1,29 @@
-package vn.tdc.edu.fooddelivery.activities;
+package vn.tdc.edu.fooddelivery.activities.users;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SearchView;
 
-import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.CategoryManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.OrderManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.ProductManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
+import vn.tdc.edu.fooddelivery.fragments.SearchFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.NotificationFragment;
@@ -36,6 +38,11 @@ public class MainActivity extends AbstractActivity {
 
     private SearchView searchView;
 
+    private Fragment currentFragment;
+    private Fragment prevFragment;
+
+    private boolean isNavigationBarActive = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -49,34 +56,27 @@ public class MainActivity extends AbstractActivity {
         searchView = findViewById(R.id.searchView);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        drawerLayout = findViewById(R.id.drawerLayout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
+        setNavigationView();
 
-        toolbar.setNavigationIcon(R.drawable.ic_navigation);
-
-        setFragment(HomeFragment.class, R.id.frameLayout, false);
+        prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_home:
-                        setFragment(HomeFragment.class, R.id.frameLayout, false);
+                        prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_cart:
-                        setFragment(CartFragment.class, R.id.frameLayout, false);
+                        prevFragment = setFragment(CartFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_notification:
-                        setFragment(NotificationFragment.class, R.id.frameLayout, false);
+                        prevFragment = setFragment(NotificationFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_profile:
-                        setFragment(ProfileFragment.class, R.id.frameLayout, false);
+                        prevFragment = setFragment(ProfileFragment.class, R.id.frameLayout, false);
                         break;
                     default:
-                        setFragment(HomeFragment.class, R.id.frameLayout, false);
+                        prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
                         break;
                 }
                 return true;
@@ -106,10 +106,19 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                setToolbarButtonToClearFocusSearchView();
+                setFragment(SearchFragment.class,R.id.frameLayout,false);
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d("searchView", "On submit");
+                setToolbarButtonToOpenNavigationView();
                 return true;
             }
 
@@ -117,6 +126,39 @@ public class MainActivity extends AbstractActivity {
             public boolean onQueryTextChange(String newText) {
                 Log.d("searchView", "On text change");
                 return true;
+            }
+        });
+    }
+
+    private void setNavigationView() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        drawerLayout = findViewById(R.id.drawerLayout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        setToolbarButtonToOpenNavigationView();
+    }
+
+    private void setToolbarButtonToOpenNavigationView() {
+        searchView.clearFocus();
+        toolbar.setNavigationIcon(R.drawable.ic_navigation);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.open();
+            }
+        });
+    }
+
+    private void setToolbarButtonToClearFocusSearchView() {
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchView.clearFocus();
+                setToolbarButtonToOpenNavigationView();
+                setFragment(prevFragment.getClass(),R.id.frameLayout,false);
             }
         });
     }
