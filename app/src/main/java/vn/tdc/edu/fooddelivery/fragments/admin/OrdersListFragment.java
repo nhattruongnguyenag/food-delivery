@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,11 @@ public class OrdersListFragment extends Fragment implements OrderManagementItemR
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_list, container, false);
 
-        spOrderStatus = view.findViewById(R.id.spOrderStatus);
+        TabLayout tabLayout = view.findViewById(R.id.tabOrderStatus);
+        tabLayout.addTab(tabLayout.newTab().setText("Chưa xử lý"));
+        tabLayout.addTab(tabLayout.newTab().setText("Đang giao hàng"));
+        tabLayout.addTab(tabLayout.newTab().setText("Thành công"));
+        tabLayout.addTab(tabLayout.newTab().setText("Thất bại"));
         recyclerViewOrder = view.findViewById(R.id.recyclerViewOrder);
 
         listOrders = new ArrayList<>();

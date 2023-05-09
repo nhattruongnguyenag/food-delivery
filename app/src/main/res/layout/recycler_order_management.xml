@@ -181,8 +181,7 @@
                 android:textSize="@dimen/textSmall"
                 android:layout_marginRight="@dimen/button_order_recyler_margin"
                 android:text="@string/btn_order_detail"
-                android:background="@drawable/btn_order_detail_bg"
-                app:backgroundTint="@null"
+                app:backgroundTint="#337ab7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAllCaps="false" />
@@ -192,8 +191,7 @@
                 android:textSize="@dimen/textSmall"
                 android:layout_marginRight="@dimen/button_order_recyler_margin"
                 android:text="@string/btn_order_phone"
-                app:backgroundTint="@null"
-                android:background="@drawable/btn_order_phone_bg"
+                app:backgroundTint="#01b552"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAllCaps="false" />
@@ -206,8 +204,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAllCaps="false"
-                android:background="@drawable/btn_order_accept_bg"
-                app:backgroundTint="@null" />
+                app:backgroundTint="#3DABEC" />
 
             <Button
                 android:id="@+id/btnDelete"
@@ -216,8 +213,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAllCaps="false"
-                android:background="@drawable/btn_order_delete_bg"
-                app:backgroundTint="@null" />
+                app:backgroundTint="#fbac45" />
         </LinearLayout>
     </LinearLayout>
 

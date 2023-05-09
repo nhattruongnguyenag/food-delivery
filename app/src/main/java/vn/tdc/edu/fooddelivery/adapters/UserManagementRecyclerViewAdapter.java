@@ -1,6 +1,5 @@
 package vn.tdc.edu.fooddelivery.adapters;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,39 +18,41 @@ import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
+import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.CommonUtils;
 
-public class ProductManagementRecyclerViewAdapter extends RecyclerView.Adapter<ProductManagementRecyclerViewAdapter.ProductItemHolder> {
+public class UserManagementRecyclerViewAdapter extends RecyclerView.Adapter<UserManagementRecyclerViewAdapter.UserAccountItemHolder> {
     private AppCompatActivity activity;
     private int layout;
-    private List<ProductModel> listProducts;
+    private List<UserModel> listUsers;
     private OnRecylerViewItemClickListener recylerViewItemClickListener;
 
     public void setRecylerViewItemClickListener(OnRecylerViewItemClickListener recylerViewItemClickListener) {
         this.recylerViewItemClickListener = recylerViewItemClickListener;
     }
 
-    public ProductManagementRecyclerViewAdapter(@NonNull AppCompatActivity activity, int layout, @NonNull List<ProductModel> listProducts) {
+    public UserManagementRecyclerViewAdapter(@NonNull AppCompatActivity activity, int layout, @NonNull List<UserModel> listUsers) {
         this.activity = activity;
         this.layout = layout;
-        this.listProducts = listProducts;
+        this.listUsers = listUsers;
     }
 
     @NonNull
     @Override
-    public ProductItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public UserAccountItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = activity.getLayoutInflater();
-        CardView view = (CardView) inflater.inflate(layout, parent, false);
-        return new ProductItemHolder(view);
+        CardView cardView = (CardView) inflater.inflate(layout,parent, false);
+        return new UserAccountItemHolder(cardView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductItemHolder holder, int position) {
-        ProductModel productModel = listProducts.get(position);
-        Glide.with(activity).load(productModel.getImageUrl())
-                .into(holder.imgProduct);
-        holder.tvName.setText(productModel.getName());
-        holder.tvPrice.setText(String.format("%,d VND", productModel.getPrice()));
-        holder.tvQuantity.setText(String.format("%d (%s)", productModel.getQuantity(), productModel.getUnit()));
+    public void onBindViewHolder(@NonNull UserAccountItemHolder holder, int position) {
+        UserModel userModel = listUsers.get(position);
+        Glide.with(activity).load(userModel.getImageUrl())
+                .into(holder.imgUser);
+        holder.tvFullName.setText(userModel.getFullName());
+        holder.tvEmail.setText(userModel.getEmail());
+        holder.tvCreatedAt.setText(CommonUtils.convertDateToString(userModel.getCreatedAt()));
 
         holder.onClickListener = new View.OnClickListener() {
             @Override
@@ -69,7 +70,7 @@ public class ProductManagementRecyclerViewAdapter extends RecyclerView.Adapter<P
 
     @Override
     public int getItemCount() {
-        return listProducts.size();
+        return listUsers.size();
     }
 
     @Override
@@ -83,22 +84,21 @@ public class ProductManagementRecyclerViewAdapter extends RecyclerView.Adapter<P
         public void onButtonDeleteClickListener(int position);
     }
 
-    public static class ProductItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView imgProduct;
-        private TextView tvName;
-        private TextView tvPrice;
-        private TextView tvQuantity;
+    public static class UserAccountItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private ImageView imgUser;
+        private TextView tvFullName;
+        private TextView tvEmail;
+        private TextView tvCreatedAt;
         private ImageButton btnEdit;
         private ImageButton btnDelete;
 
         private View.OnClickListener onClickListener;
 
-        public ProductItemHolder(@NonNull View itemView) {
+        public UserAccountItemHolder(@NonNull View itemView) {
             super(itemView);
-            this.imgProduct = itemView.findViewById(R.id.imgProduct);
-            this.tvName = itemView.findViewById(R.id.tvName);
-            this.tvPrice = itemView.findViewById(R.id.tvPrice);
-            this.tvQuantity = itemView.findViewById(R.id.tvQuantity);
+            this.imgUser = itemView.findViewById(R.id.imgUser);
+            this.tvFullName = itemView.findViewById(R.id.tvFullName);
+            this.tvEmail = itemView.findViewById(R.id.tvEmail);
             this.btnEdit = itemView.findViewById(R.id.btnEdit);
             this.btnDelete = itemView.findViewById(R.id.btnDelete);
 

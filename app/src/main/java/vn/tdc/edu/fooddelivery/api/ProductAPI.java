@@ -16,7 +16,7 @@ public interface ProductAPI {
     Call<List<ProductModel>> getProducts();
 
     @POST("api/products")
-    Call<ProductModel> saveProduct();
+    Call<ProductModel> saveProduct(@Body ProductModel productModel);
 
     @PUT("api/products")
     Call<ProductModel> updateProduct(@Body ProductModel productModel);

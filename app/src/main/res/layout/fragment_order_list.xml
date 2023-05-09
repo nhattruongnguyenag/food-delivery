@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/linearLayoutNestestScrollerContainer">
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <LinearLayout
             style="@style/linearLayoutListContainer">
 
-            <Spinner
-                android:id="@+id/spOrderStatus"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabOrderStatus"
+                app:tabMode="scrollable"
+                app:tabMaxWidth="0dp"
+                app:tabIndicatorColor="#008132"
+                app:tabSelectedTextColor="#008132"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/spinner"
-                android:entries="@array/orderStatus"/>
+                android:layout_height="wrap_content" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewOrder"
@@ -23,6 +23,5 @@
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

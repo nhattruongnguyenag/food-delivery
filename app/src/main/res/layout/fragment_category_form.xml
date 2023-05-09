@@ -45,6 +45,10 @@
         app:layout_constraintTop_toTopOf="@+id/guideline5"
         tools:layout_editor_absoluteX="53dp">
 
+        <TextView
+            style="@style/textViewInputLabel"
+            android:text="Tên danh mục"/>
+
         <EditText
             android:id="@+id/edName"
             android:hint="Tên danh mục"

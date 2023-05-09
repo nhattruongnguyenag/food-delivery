@@ -56,7 +56,7 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
         adapter.setRecylerViewItemClickListener(new CategoryManagementRecyclerViewAdapter.OnRecylerViewItemClickListener() {
             @Override
             public void onButtonEditClickListener(int position) {
-                ((AbstractActivity) getActivity()).setFragment(CategoryFormFragment.class, R.id.frameLayout, false)
+                ((AbstractActivity) getActivity()).setFragment(CategoryFormFragment.class, R.id.frameLayout, true)
                         .setCategoryModel(categoriesList.get(position));
             }
 
@@ -105,7 +105,7 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
     }
 
     private void dropCategoriesToRecyclerView() {
-        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).getCategories();
+        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).getCategories(null);
 
         call.enqueue(new Callback<List<CategoryModel>>() {
             @Override
