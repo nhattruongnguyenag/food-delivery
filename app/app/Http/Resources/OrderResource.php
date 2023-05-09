@@ -28,9 +28,9 @@ class OrderResource extends JsonResource
                 "status"=>$item["status"],
                 "created_at"=>$item["created_at"],
                 "updated_at"=>$item["updated_at"],
+                "products" => User::find($item['user_id'])->cartItems()
             ]);
         }
-
         return $resource;
     }
 }

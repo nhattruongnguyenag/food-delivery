@@ -110,7 +110,9 @@ class OrderController extends Controller
                 ], 400);
             }
             WidgetController::attachToOrderProductTable($order);
-            return response($order, 201);
+            $resource = new OrderResource(Order::where('id', $order->id)->get());
+            $result = json_decode($resource->toJson(), true);
+            return response($resource, 201);
         }
     }
 }
