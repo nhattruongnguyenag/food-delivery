@@ -1,8 +1,7 @@
-package vn.tdc.edu.fooddelivery.activities.users;
+package vn.tdc.edu.fooddelivery.activities.user;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
@@ -38,7 +37,6 @@ public class MainActivity extends AbstractActivity {
 
     private SearchView searchView;
 
-    private Fragment currentFragment;
     private Fragment prevFragment;
 
     private boolean isNavigationBarActive = false;
@@ -169,5 +167,11 @@ public class MainActivity extends AbstractActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        drawerLayout.close();
     }
 }

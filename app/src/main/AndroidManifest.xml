@@ -39,7 +39,7 @@
             android:name=".activities.admin.ProductManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.users.MainActivity"
+            android:name=".activities.user.MainActivity"
             android:exported="false"/>
     </application>
 

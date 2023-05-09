@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import vn.tdc.edu.fooddelivery.R;
-import vn.tdc.edu.fooddelivery.activities.users.MainActivity;
+import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 
 public class LaucherActivity extends AppCompatActivity {
 
