@@ -19,12 +19,13 @@ class CartResource extends JsonResource
     {
         $resource = [];
         $count = $this->cartItems()->count();
-        for($i = 0; $i < $count; $i++){
-            array_push( $resource ,[
+        for ($i = 0; $i < $count; $i++) {
+            array_push($resource, [
+                'cart_id' => DB::table('product_user')->where('user_id', '=', $this->id)->where('product_id', '=', $this->cartItems()[$i]['id'])->get('id')->first()->id,
                 'product' => $this->cartItems()[$i],
-                'user'=> User::find($this->id),
-                'cart_id' => DB::table('product_user')->where('user_id','=',$this->id)->where('product_id','=',$this->cartItems()[$i]['id'])->get('id')->first()->id,
-                'quantity' => DB::table('product_user')->where('user_id','=',$this->id)->where('product_id','=',$this->cartItems()[$i]['id'])->get('quantity')->first()->quantity
+                'user' => User::find($this->id),
+                'quantity' => DB::table('product_user')->where('user_id', '=', $this->id)->where('product_id', '=', $this->cartItems()[$i]['id'])->get('quantity')->first()->quantity,
+                // 'price' => DB::table('order_product')->where('user_id', '=', $this->id)->where('product_id', '=', $this->cartItems()[$i]['id'])->get('price')->first()->price
             ]);
         }
         return $resource;
