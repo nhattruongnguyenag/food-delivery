@@ -43,6 +43,7 @@ import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
 import vn.tdc.edu.fooddelivery.api.UploadAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.models.FileModel;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 import vn.tdc.edu.fooddelivery.utils.ImageUploadUtils;
@@ -81,7 +82,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public <T> T setFragment(Class<T> tClass, int layout, boolean addToBackStack) {
+    public <T> T setFragment(Class<T> tClass, int layout, boolean addCurrentFragmentToBackStack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         T fragment = (T) fragmentManager.findFragmentByTag("fragment");
@@ -91,7 +92,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
             }
             fragment = tClass.newInstance();
             transaction.replace(layout, (Fragment) fragment, "fragment");
-            if (addToBackStack) {
+            if (addCurrentFragmentToBackStack) {
                 transaction.addToBackStack(null);
             }
 

@@ -125,7 +125,6 @@ public class ProductsListFragment extends Fragment implements View.OnClickListen
                 ((AbstractActivity) getActivity()).showMessageDialog("Xoá sản phẩm thất bại");
             }
         });
-
     }
 
     @Override

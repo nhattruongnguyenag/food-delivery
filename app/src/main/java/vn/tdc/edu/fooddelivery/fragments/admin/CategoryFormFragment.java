@@ -53,7 +53,7 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
         edImage = view.findViewById(R.id.edImage);
         edName = view.findViewById(R.id.edName);
-        btnAddOrUpdate = view.findViewById(R.id.btnAddOrUpdate);
+        btnAddOrUpdate = view.findViewById(R.id.btnAddUser);
 
         imgCategory.setOnClickListener(this);
         btnUploadImage.setOnClickListener(this);
@@ -69,7 +69,7 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
     public void onClick(View view) {
         if (view.getId() == R.id.btnUploadImage) {
             ImageUploadUtils.getInstance().showChoosingImageOptionsDialog((AbstractActivity) getActivity(), imgCategory);
-        } else if (view.getId() == R.id.btnAddOrUpdate) {
+        } else if (view.getId() == R.id.btnAddUser) {
             if (!validateData()) {
                 return;
             }
