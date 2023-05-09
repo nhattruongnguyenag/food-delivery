@@ -122,7 +122,7 @@
                     android:visibility="gone" />
 
                 <Button
-                    android:id="@+id/btnAddOrUpdate"
+                    android:id="@+id/btnAddUser"
                     style="@style/btnAdd"
                     android:layout_marginBottom="50dp"
                     android:text="Thêm sản phẩm" />

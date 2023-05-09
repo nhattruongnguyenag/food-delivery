@@ -99,6 +99,7 @@ public class UserManagementRecyclerViewAdapter extends RecyclerView.Adapter<User
             this.imgUser = itemView.findViewById(R.id.imgUser);
             this.tvFullName = itemView.findViewById(R.id.tvFullName);
             this.tvEmail = itemView.findViewById(R.id.tvEmail);
+            this.tvCreatedAt = itemView.findViewById(R.id.tvCreatedAt);
             this.btnEdit = itemView.findViewById(R.id.btnEdit);
             this.btnDelete = itemView.findViewById(R.id.btnDelete);
 
