@@ -32,8 +32,6 @@ import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.utils.ImageUploadUtils;
 
 public class ProductFormFragment extends Fragment implements View.OnClickListener {
-    private ProductModel productModel;
-    private List<CategoryModel> categoriesList;
     private TextView tvCategories;
 
     private ShapeableImageView imgProduct;
@@ -46,6 +44,8 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
     private EditText edDescription;
     private Button btnAddOrUpdate;
     MultiSelectDialog<CategoryModel> multiSelectDialog;
+    private ProductModel productModel;
+    private List<CategoryModel> categoriesList;
 
     private FloatingActionButton btnUploadImage;
 
@@ -71,7 +71,7 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
         edQuantity = view.findViewById(R.id.edQuantity);
         edUnit = view.findViewById(R.id.edUnit);
         edDescription = view.findViewById(R.id.edDescription);
-        btnAddOrUpdate = view.findViewById(R.id.btnAddOrUpdate);
+        btnAddOrUpdate = view.findViewById(R.id.btnAddUser);
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
 
         tvCategories.setOnClickListener(this);
@@ -270,7 +270,7 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
             if (multiSelectDialog != null) {
                 multiSelectDialog.show();
             }
-        } else if (view.getId() == R.id.btnAddOrUpdate) {
+        } else if (view.getId() == R.id.btnAddUser) {
             if (!validateData()) {
                 return;
             }

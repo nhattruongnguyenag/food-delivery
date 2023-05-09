@@ -41,6 +41,7 @@ public class ImageUploadUtils {
     public static final String CANCEL = "Huỷ";
 
     public static final String IMAGE_UPLOAD_DEFAULT = "image_upload_default.png";
+    public static final String USER_IMAGE_UPLOAD_DEFAULT = "user_image_default.png";
     public static final CharSequence[] OPTIONS = {CAMERA, GALLERY, CANCEL};
     private ActivityResultLauncher<Intent> startActivityForResult;
 

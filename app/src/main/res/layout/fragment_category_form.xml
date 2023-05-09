@@ -55,7 +55,7 @@
             style="@style/edTextField"/>
 
         <Button
-            android:id="@+id/btnAddOrUpdate"
+            android:id="@+id/btnAddUser"
             android:text="@string/btn_add_category"
             style="@style/btnAdd"/>
 
