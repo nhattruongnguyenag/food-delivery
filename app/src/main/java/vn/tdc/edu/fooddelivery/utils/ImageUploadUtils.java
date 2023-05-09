@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.preference.MultiSelectListPreference;
 import android.provider.MediaStore;
 import android.widget.ImageView;
 
@@ -26,6 +27,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.api.UploadAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.models.FileModel;
@@ -110,6 +112,7 @@ public class ImageUploadUtils {
     public void showChoosingImageOptionsDialog(AppCompatActivity activity, ImageView imageView) {;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Chọn hình ảnh");
+
         builder.setItems(OPTIONS, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

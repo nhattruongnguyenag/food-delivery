@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FoodDelivery</string>
+    <string name="app_name">Đặt đồ ăn</string>
     <string name="drawerOpen">Open</string>
     <string name="drawerClose">Close</string>
 
@@ -16,6 +16,23 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="btn_add_category">Thêm danh mục</string>
     <string name="btn_update_category">Cập nhật danh mục</string>
+    <string name="btn_update_product">Cập nhật sản phẩm</string>
     <string name="confirm_dialog_title">Xác nhận</string>
     <string name="confirm_dialog_content">Dữ liệu đã xoá không thể hoàn tác. \nBạn có muốn xoá không?</string>
+    <string name="them_san_pham">Thêm sản phẩm</string>
+    <string name="address">53, Võ Văn Ngân, Phường Linh Chiểu, Tp. Thủ Đức, Tp. HCM</string>
+    <string name="btn_order_detail">Chi tiết</string>
+    <string name="btn_order_phone">Gọi điện</string>
+    <string name="btn_accept">Duyệt</string>
+    <string name="btn_delete">Xoá</string>
+
+    <string-array name="orderStatus">
+        <item>Chưa xử lý</item>
+        <item>Đang giao hàng</item>
+        <item>Thành công</item>
+        <item>Thất bại</item>
+    </string-array>
+    <string name="title_activity_launcher">LauncherActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

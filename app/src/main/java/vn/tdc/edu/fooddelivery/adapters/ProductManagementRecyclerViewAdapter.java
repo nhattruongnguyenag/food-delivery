@@ -1,7 +1,6 @@
 package vn.tdc.edu.fooddelivery.adapters;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,50 +18,49 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
-import vn.tdc.edu.fooddelivery.models.CategoryModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
-public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRecyclerViewAdapter.CategoryItemHolder> {
+public class ProductManagementRecyclerViewAdapter extends RecyclerView.Adapter<ProductManagementRecyclerViewAdapter.ProductItemHolder> {
     private AppCompatActivity activity;
     private int layout;
-    private List<CategoryModel> listCategories;
-
-    private  OnRecylerViewItemClickListener recylerViewItemClickListener;
+    private List<ProductModel> listProducts;
+    private OnRecylerViewItemClickListener recylerViewItemClickListener;
 
     public void setRecylerViewItemClickListener(OnRecylerViewItemClickListener recylerViewItemClickListener) {
         this.recylerViewItemClickListener = recylerViewItemClickListener;
     }
 
-    public CategoryRecyclerViewAdapter(@NonNull AppCompatActivity activity, int layout, @NonNull List<CategoryModel> listCategories) {
+    public ProductManagementRecyclerViewAdapter(@NonNull AppCompatActivity activity, int layout, @NonNull List<ProductModel> listProducts) {
         this.activity = activity;
         this.layout = layout;
-        this.listCategories = listCategories;
+        this.listProducts = listProducts;
     }
 
     @NonNull
     @Override
-    public CategoryItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ProductItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = activity.getLayoutInflater();
         CardView view = (CardView) inflater.inflate(layout, parent, false);
-        return new CategoryItemHolder(view);
+        return new ProductItemHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryItemHolder holder, int position) {
-        CategoryModel categoryModel = listCategories.get(position);
-        Glide.with(activity).load(categoryModel.getImageUrl())
-                .into(holder.imgCategory);
-        holder.tvName.setText(categoryModel.getName());
-        holder.tvNumberOfProduct.setText(categoryModel.getNumberOfProduct() + " (sản phẩm)");
+    public void onBindViewHolder(@NonNull ProductItemHolder holder, int position) {
+        ProductModel productModel = listProducts.get(position);
+        Glide.with(activity).load(productModel.getImageUrl())
+                .into(holder.imgProduct);
+        holder.tvName.setText(productModel.getName());
+        holder.tvPrice.setText(String.format("%,d VND", productModel.getPrice()));
+        holder.tvQuantity.setText(String.format("%d (%s)", productModel.getQuantity(), productModel.getUnit()));
 
         holder.onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (recylerViewItemClickListener != null) {
                     if (view.getId() == R.id.btnEdit) {
-                        recylerViewItemClickListener.onButtonEditClickListener(position, listCategories.get(position));
+                        recylerViewItemClickListener.onButtonEditClickListener(position);
                     } else if (view.getId() == R.id.btnDelete) {
-                        recylerViewItemClickListener.onButtonDeleteClickListener(position, listCategories.get(position));
+                        recylerViewItemClickListener.onButtonDeleteClickListener(position);
                     }
                 }
             }
@@ -71,7 +69,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
 
     @Override
     public int getItemCount() {
-        return listCategories.size();
+        return listProducts.size();
     }
 
     @Override
@@ -80,29 +78,30 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
     }
 
     public interface OnRecylerViewItemClickListener {
-        public void onButtonEditClickListener(int position, CategoryModel categoryModel);
+        public void onButtonEditClickListener(int position);
 
-        public void onButtonDeleteClickListener(int position, CategoryModel categoryModel);
+        public void onButtonDeleteClickListener(int position);
     }
 
-    public static class CategoryItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView imgCategory;
+    public static class ProductItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private ImageView imgProduct;
         private TextView tvName;
-        private TextView tvNumberOfProduct;
-        private View.OnClickListener onClickListener;
-
+        private TextView tvPrice;
+        private TextView tvQuantity;
         private ImageButton btnEdit;
         private ImageButton btnDelete;
 
-        public CategoryItemHolder(@NonNull View itemView) {
+        private View.OnClickListener onClickListener;
+
+        public ProductItemHolder(@NonNull View itemView) {
             super(itemView);
-            this.imgCategory = itemView.findViewById(R.id.imgCategory);
+            this.imgProduct = itemView.findViewById(R.id.imgProduct);
             this.tvName = itemView.findViewById(R.id.tvName);
-            this.tvNumberOfProduct = itemView.findViewById(R.id.tvNumberOfProduct);
+            this.tvPrice = itemView.findViewById(R.id.tvPrice);
+            this.tvQuantity = itemView.findViewById(R.id.tvQuantity);
             this.btnEdit = itemView.findViewById(R.id.btnEdit);
             this.btnDelete = itemView.findViewById(R.id.btnDelete);
 
-            // Event processing
             btnEdit.setOnClickListener(this);
             btnDelete.setOnClickListener(this);
         }
