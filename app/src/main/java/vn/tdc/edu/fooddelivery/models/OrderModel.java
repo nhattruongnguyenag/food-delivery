@@ -2,22 +2,52 @@ package vn.tdc.edu.fooddelivery.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class OrderModel extends BaseModel {
-    @SerializedName("customerFullName")
-    private String customerFullName;
-    @SerializedName("address")
-    private String address;
-    @SerializedName("phone")
-    private String phone;
+    @SerializedName("user")
+    private UserModel customer;
+
+    @SerializedName("shipper")
+    private UserModel shipper;
+
     @SerializedName("total")
     private Long total;
 
-    public String getCustomerFullName() {
-        return customerFullName;
+    @SerializedName("delivery_address")
+    private String address;
+
+    @SerializedName("customer_phone")
+    private String phone;
+
+    @SerializedName("status")
+    private Integer status;
+
+    @SerializedName("items")
+    private List<OrderItemModel> items;
+
+    public UserModel getCustomer() {
+        return customer;
     }
 
-    public void setCustomerFullName(String customerFullName) {
-        this.customerFullName = customerFullName;
+    public void setCustomer(UserModel customer) {
+        this.customer = customer;
+    }
+
+    public UserModel getShipper() {
+        return shipper;
+    }
+
+    public void setShipper(UserModel shipper) {
+        this.shipper = shipper;
+    }
+
+    public Long getTotal() {
+        return total;
+    }
+
+    public void setTotal(Long total) {
+        this.total = total;
     }
 
     public String getAddress() {
@@ -36,11 +66,19 @@ public class OrderModel extends BaseModel {
         this.phone = phone;
     }
 
-    public Long getTotal() {
-        return total;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setTotal(Long total) {
-        this.total = total;
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public List<OrderItemModel> getItems() {
+        return items;
+    }
+
+    public void setItems(List<OrderItemModel> items) {
+        this.items = items;
     }
 }
