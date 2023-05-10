@@ -1,5 +1,7 @@
 package vn.tdc.edu.fooddelivery.fragments.admin;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -119,7 +121,9 @@ public class OrdersListFragment extends Fragment implements OrderManagementItemR
 
     @Override
     public void onButtonPhoneClickListener(int position) {
-        Log.d("recyclerTest", "Phone clicked at " + position);
+        String phone = "tel:" + listOrders.get(position).getPhone();
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(phone));
+        getActivity().startActivity(intent);
     }
 
     @Override
