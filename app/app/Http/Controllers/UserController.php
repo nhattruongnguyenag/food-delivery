@@ -88,7 +88,7 @@ class UserController extends Controller
             $role = Role::where('code', $request->query('roleCode'))->first();
             if ($role != null) {
                 $result = $role->users();
-                if ($result != null) {
+                if ($result->count() != 0) {
                     $resource = new UserResource($result);
                     $result = json_decode($resource->toJson(), true);
                     return response($result, 200);
