@@ -23,28 +23,21 @@ class UserController extends Controller
         $result = WidgetController::checkValidateDataUser($request);
         if ($result != null && isset($result)) {
             if (isset($request->id)) {
-                if (isset($request->roles)) {
+                if (isset($request->roleIds)) {
                     $user = User::find($request->id);
                     WidgetController::setDataToUser($result, $user, false);
-                    $checkEmail = User::whereEmail($user->email)->first();
-                    if ($checkEmail == null) {
-                        $user->save();
-                        WidgetController::attachToRoleUserTable($request->roles, $user);
-                        return response($user, 201);
-                    }else {
-                        return response([
-                            'msg' => 'email da ton tai , khong the cap nhat'
-                        ], 400);
-                    }
+                    $user->save();
+                    WidgetController::attachToRoleUserTable($request->roleIds, $user);
+                    return response($user, 201);
                 }
             } else {
-                if (isset($request->roles)) {
+                if (isset($request->roleIds)) {
                     $user = new User();
                     WidgetController::setDataToUser($result, $user, true);
                     $checkEmail = User::whereEmail($request->email)->first();
                     if ($checkEmail == null) {
                         $user->save();
-                        WidgetController::attachToRoleUserTable($request->roles, $user);
+                        WidgetController::attachToRoleUserTable($request->roleIds, $user);
                         return response($user, 201);
                     } else {
                         return response([
@@ -150,20 +143,19 @@ class UserController extends Controller
     {
         $result = '';
         $user = User::whereEmail($request->email)->first();
-        if($user != null){
-            if(isset($request->password) && $request->password != '') {
+        if ($user != null) {
+            if (isset($request->password) && $request->password != '') {
                 $check = strcmp(Crypt::decrypt($user->password), $request->password) == 0;
-                if($check){
+                if ($check) {
                     return response([
                         'login' => $check
-                    ],200);
+                    ], 200);
                 }
                 return response([
                     'login' => $check,
                     'msg' => "sai passsword"
-                ],200);
-            }
-            else{
+                ], 200);
+            } else {
                 return response([
                     "msg" => "Thong tin password co the ko tim thay"
                 ], 400);

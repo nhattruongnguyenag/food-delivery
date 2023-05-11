@@ -47,14 +47,13 @@ class CategoryController extends Controller
         }
         return response($result, 400);
     }
-
+  
 
     public function addOrEditCategoryAPI(Request $request)
     {
-        
+                 
         $result = '';
         $result = WidgetController::checkValidateDataCategory($request);
-
         if ($result != null && isset($result)) {
             if (isset($request->id)) {
                 $category = Category::find($request->id);
