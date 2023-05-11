@@ -106,18 +106,20 @@ class WidgetController extends Controller
     */
     public static function checkValidateDataUser($request)
     {
-        if (!isset($request->full_name) || !isset($request->image) || !isset($request->email) || !isset($request->password) || !isset($request->roles)) {
+        if (!isset($request->full_name) || !isset($request->image) || !isset($request->email) || !isset($request->roles)) {
             return null;
         }
         return $request->all();
     }
 
-    public static function setDataToUser($request, $user)
+    public static function setDataToUser($request, $user , $setPassword)
     {
         $user->full_name = $request['full_name'];
         $user->image = $request['image'];
         $user->email = $request['email'];
-        $user->password = Crypt::encrypt($request['password']);
+        if($setPassword == true){
+            $user->password = Crypt::encrypt($request['password']);
+        }
         if (isset($request->status)) {
             switch ($request->status) {
                 case 0:

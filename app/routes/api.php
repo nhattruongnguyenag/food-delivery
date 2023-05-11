@@ -54,6 +54,8 @@ Route::get('users/{id}', [UserController::class,'getUserByIdAPI']);
 Route::post('users', [UserController::class,'addOrEditUserAPI']);
 Route::put('users', [UserController::class,'addOrEditUserAPI']);
 Route::delete('users', [UserController::class,'deleteUserAPI']);
+Route::put('users/changePassword', [UserController::class,'changePasswordAPI']);
+Route::post('users/login', [UserController::class,'loginAPI']);
 
 
 /*

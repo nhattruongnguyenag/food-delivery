@@ -25,7 +25,6 @@ class CartResource extends JsonResource
                 'product' => $this->cartItems()[$i],
                 'user' => User::find($this->id),
                 'quantity' => DB::table('product_user')->where('user_id', '=', $this->id)->where('product_id', '=', $this->cartItems()[$i]['id'])->get('quantity')->first()->quantity,
-                // 'price' => DB::table('order_product')->where('user_id', '=', $this->id)->where('product_id', '=', $this->cartItems()[$i]['id'])->get('price')->first()->price
             ]);
         }
         return $resource;
