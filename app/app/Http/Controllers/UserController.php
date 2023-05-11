@@ -150,6 +150,11 @@ class UserController extends Controller
         if ($user != null) {
             if (isset($request->password) && $request->password != '') {
                 $check = strcmp(Crypt::decrypt($user->password), $request->password) == 0;
+                $roleCodes = [];
+                foreach($user->roles() as $item){
+                    array_push($roleCodes,$item->code); 
+                }
+                $user->roleCodes = $roleCodes;
                 if ($check) {
                     return response([
                         'login' => $check,
@@ -159,15 +164,15 @@ class UserController extends Controller
                 return response([
                     'login' => $check,
                     'msg' => "sai passsword"
-                ], 200);
+                ], 401);
             } else {
                 return response([
                     "msg" => "Thong tin password co the ko tim thay"
-                ], 400);
+                ], 401);
             }
         }
         return response([
             "msg" => "Khong tim thay user"
-        ], 400);
+        ], 401);
     }
 }
