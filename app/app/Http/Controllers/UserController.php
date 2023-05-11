@@ -28,7 +28,9 @@ class UserController extends Controller
                     WidgetController::setDataToUser($result, $user, false);
                     $user->save();
                     WidgetController::attachToRoleUserTable($request->roleIds, $user);
-                    return response($user, 201);
+                    $resource = new UserResource($user);
+                    $result = json_decode($resource->toJson(), true);
+                    return response($result[0], 200);
                 }
             } else {
                 if (isset($request->roleIds)) {
@@ -38,7 +40,9 @@ class UserController extends Controller
                     if ($checkEmail == null) {
                         $user->save();
                         WidgetController::attachToRoleUserTable($request->roleIds, $user);
-                        return response($user, 201);
+                        $resource = new UserResource($user);
+                        $result = json_decode($resource->toJson(), true);
+                        return response($result[0], 200);
                     } else {
                         return response([
                             'msg' => 'email da ton tai , khong the them'
@@ -148,7 +152,8 @@ class UserController extends Controller
                 $check = strcmp(Crypt::decrypt($user->password), $request->password) == 0;
                 if ($check) {
                     return response([
-                        'login' => $check
+                        'login' => $check,
+                        'user' => $user
                     ], 200);
                 }
                 return response([

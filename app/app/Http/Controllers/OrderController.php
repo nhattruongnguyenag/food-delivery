@@ -56,8 +56,8 @@ class OrderController extends Controller
     public function updateOrderAPI(Request $request)
     {
         $result = '';
-        if (isset($request->order_id)) {
-            $order = Order::where('id', $request->order_id)->first();
+        if (isset($request->id)) {
+            $order = Order::where('id', $request->id)->first();
             if ($order != null) {
                 //update shipper
                 if (isset($request->shipper_id)) {
