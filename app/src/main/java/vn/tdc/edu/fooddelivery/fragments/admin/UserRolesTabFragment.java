@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class UserRolesTabFragment extends Fragment {
         call.enqueue(new Callback<List<RoleModel>>() {
             @Override
             public void onResponse(Call<List<RoleModel>> call, Response<List<RoleModel>> response) {
-                if (response.code() == 200) {
+                if (response.code() == HttpURLConnection.HTTP_OK) {
                     if (listRoles == null) {
                         listRoles = new ArrayList<>();
                     }

@@ -1,5 +1,7 @@
 package vn.tdc.edu.fooddelivery.fragments.admin;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,22 +12,41 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
 
-import com.google.android.material.tabs.TabLayout;
-
-import java.sql.Timestamp;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.adapters.OrderManagementItemRecyclerViewAdapter;
+import vn.tdc.edu.fooddelivery.api.OrderAPI;
+import vn.tdc.edu.fooddelivery.api.UserAPI;
+import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
+import vn.tdc.edu.fooddelivery.models.UserModel;
 
 public class OrdersListFragment extends Fragment implements OrderManagementItemRecyclerViewAdapter.OnRecylerViewItemClickListener {
     private OrderManagementItemRecyclerViewAdapter adapter;
     private List<OrderModel> listOrders;
-    private Spinner spOrderStatus;
+    private Integer status;
+
+    public List<OrderModel> getListOrders() {
+        return listOrders;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     private RecyclerView recyclerViewOrder;
 
     @Override
@@ -33,36 +54,64 @@ public class OrdersListFragment extends Fragment implements OrderManagementItemR
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_list, container, false);
 
-        TabLayout tabLayout = view.findViewById(R.id.tabOrderStatus);
-        tabLayout.addTab(tabLayout.newTab().setText("Chưa xử lý"));
-        tabLayout.addTab(tabLayout.newTab().setText("Đang giao hàng"));
-        tabLayout.addTab(tabLayout.newTab().setText("Thành công"));
-        tabLayout.addTab(tabLayout.newTab().setText("Thất bại"));
         recyclerViewOrder = view.findViewById(R.id.recyclerViewOrder);
 
-        listOrders = new ArrayList<>();
-
-        for (int i = 0; i < 50; i++) {
-            OrderModel orderModel = new OrderModel();
-            orderModel.setId(1);
-            orderModel.setCustomerFullName("Nguyễn Văn A");
-            orderModel.setPhone("0706600000");
-            orderModel.setAddress("53, Võ Văn Ngân, Phường Linh Chiểu, Tp. Thủ Đức, Tp. HCM");
-            orderModel.setTotal(500000L);
-            orderModel.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-            listOrders.add(orderModel);
-        }
-
-        adapter = new OrderManagementItemRecyclerViewAdapter(getActivity(), R.layout.recycler_order_management,listOrders);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerViewOrder.setLayoutManager(layoutManager);
-        recyclerViewOrder.setAdapter(adapter);
-
-        adapter.setOnRecylerViewItemClickListener(this);
+        getOrderListFromAPI(status);
 
         return view;
+    }
+
+    private void deleteUser(OrderModel orderModel) {
+        Call<OrderModel> call = RetrofitBuilder.getClient().create(OrderAPI.class).delete(orderModel);
+        call.enqueue(new Callback<OrderModel>() {
+            @Override
+            public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
+                if (response.code() == HttpURLConnection.HTTP_OK) {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Xoá đơn hàng thành công");
+                    listOrders.remove(orderModel);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Xoá đơn hàng thất bại");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderModel> call, Throwable t) {
+                ((AbstractActivity) getActivity()).showMessageDialog("Xoá đơn hàng thất bại");
+            }
+        });
+    }
+
+    private void getOrderListFromAPI(Integer status) {
+        Call<List<OrderModel>> call = RetrofitBuilder.getClient().create(OrderAPI.class).getAll(status);
+        call.enqueue(new Callback<List<OrderModel>>() {
+            @Override
+            public void onResponse(Call<List<OrderModel>> call, Response<List<OrderModel>> response) {
+                if (response.code() == HttpURLConnection.HTTP_OK) {
+                    if (listOrders == null) {
+                        listOrders = new ArrayList<>();
+                    }
+
+                    listOrders.clear();
+                    listOrders.addAll(response.body());
+
+                    adapter = new OrderManagementItemRecyclerViewAdapter(getActivity(), R.layout.recycler_order_management, listOrders);
+
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    recyclerViewOrder.setLayoutManager(layoutManager);
+                    recyclerViewOrder.setAdapter(adapter);
+
+                    adapter.notifyDataSetChanged();
+                    adapter.setOnRecylerViewItemClickListener(OrdersListFragment.this);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<OrderModel>> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override
@@ -72,7 +121,9 @@ public class OrdersListFragment extends Fragment implements OrderManagementItemR
 
     @Override
     public void onButtonPhoneClickListener(int position) {
-        Log.d("recyclerTest", "Phone clicked at " + position);
+        String phone = "tel:" + listOrders.get(position).getPhone();
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(phone));
+        getActivity().startActivity(intent);
     }
 
     @Override
@@ -82,6 +133,22 @@ public class OrdersListFragment extends Fragment implements OrderManagementItemR
 
     @Override
     public void onButtonDeleteClickListener(int position) {
-        Log.d("recyclerTest", "Delete clicked at " + position);
+        ConfirmDialog confirmDialog = new ConfirmDialog(getActivity());
+        confirmDialog.setTitle("Xác nhận");
+        confirmDialog.setMessage("Dữ liệu đã xoá không thể hoàn tác.\nBạn có muốn tiếp tục không?");
+        confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
+            @Override
+            public void cancel() {
+                confirmDialog.dismiss();
+            }
+
+            @Override
+            public void ok() {
+                deleteUser(listOrders.get(position));
+                confirmDialog.dismiss();
+            }
+        });
+
+        confirmDialog.show();
     }
 }
