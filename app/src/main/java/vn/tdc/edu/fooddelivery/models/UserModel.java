@@ -2,10 +2,6 @@ package vn.tdc.edu.fooddelivery.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
-import vn.tdc.edu.fooddelivery.constant.SystemConstant;
-
 public class UserModel extends BaseModel {
     @SerializedName("full_name")
     private String fullName;
@@ -17,9 +13,6 @@ public class UserModel extends BaseModel {
     private String password;
     @SerializedName("status")
     private Byte status;
-    @SerializedName("roles")
-    private List<Integer> roleIds;
-
 
     public String getFullName() {
         return fullName;
@@ -29,18 +22,13 @@ public class UserModel extends BaseModel {
         this.fullName = fullName;
     }
 
-    public String getImageName() {
+    public String getImage() {
         return image;
     }
 
-    public void setImageName(String image) {
+    public void setImage(String image) {
         this.image = image;
     }
-
-    public String getImageUrl() {
-        return SystemConstant.IMAGES_BASE_URL + image;
-    }
-
 
     public String getEmail() {
         return email;
@@ -64,13 +52,5 @@ public class UserModel extends BaseModel {
 
     public void setStatus(Byte status) {
         this.status = status;
-    }
-
-    public List<Integer> getRoleIds() {
-        return roleIds;
-    }
-
-    public void setRoleIds(List<Integer> roleIds) {
-        this.roleIds = roleIds;
     }
 }

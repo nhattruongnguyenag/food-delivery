@@ -3,9 +3,6 @@ package vn.tdc.edu.fooddelivery.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.sql.Timestamp;
-import java.util.List;
-
-import vn.tdc.edu.fooddelivery.constant.SystemConstant;
 
 public class ProductModel extends BaseModel {
     @SerializedName("name")
@@ -22,9 +19,6 @@ public class ProductModel extends BaseModel {
     @SerializedName("type")
     private String unit;
 
-    @SerializedName("categoryIds")
-    private List<Integer> categoryIds;
-
     public String getName() {
         return name;
     }
@@ -33,15 +27,11 @@ public class ProductModel extends BaseModel {
         this.name = name;
     }
 
-    public String getImageName() {
+    public String getImage() {
         return image;
     }
 
-    public String getImageUrl() {
-        return SystemConstant.IMAGES_BASE_URL + image;
-    }
-
-    public void setImageName(String image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -75,13 +65,5 @@ public class ProductModel extends BaseModel {
 
     public void setUnit(String unit) {
         this.unit = unit;
-    }
-
-    public List<Integer> getCategoryIds() {
-        return categoryIds;
-    }
-
-    public void setCategoryIds(List<Integer> categoryIds) {
-        this.categoryIds = categoryIds;
     }
 }

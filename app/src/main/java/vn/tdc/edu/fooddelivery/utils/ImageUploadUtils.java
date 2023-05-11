@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.preference.MultiSelectListPreference;
 import android.provider.MediaStore;
 import android.widget.ImageView;
 
@@ -27,7 +26,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.api.UploadAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.models.FileModel;
@@ -41,7 +39,6 @@ public class ImageUploadUtils {
     public static final String CANCEL = "Huỷ";
 
     public static final String IMAGE_UPLOAD_DEFAULT = "image_upload_default.png";
-    public static final String USER_IMAGE_UPLOAD_DEFAULT = "user_image_default.png";
     public static final CharSequence[] OPTIONS = {CAMERA, GALLERY, CANCEL};
     private ActivityResultLauncher<Intent> startActivityForResult;
 
@@ -51,10 +48,6 @@ public class ImageUploadUtils {
 
     public String getImageSelected() {
         return imageSelected;
-    }
-
-    public void setImageSelected(String imageSelected) {
-        this.imageSelected = imageSelected;
     }
 
     public void pickImageAction(AppCompatActivity activity) {
@@ -113,7 +106,6 @@ public class ImageUploadUtils {
     public void showChoosingImageOptionsDialog(AppCompatActivity activity, ImageView imageView) {;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Chọn hình ảnh");
-
         builder.setItems(OPTIONS, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -141,7 +133,7 @@ public class ImageUploadUtils {
     // Ham upload file tu dien thoai len server
     public void handleUploadFileToServer(Action action) {
         if (imageSelected == null) {
-            action.onSucess("");
+            action.onSucess(IMAGE_UPLOAD_DEFAULT);
             return;
         }
 
@@ -161,7 +153,7 @@ public class ImageUploadUtils {
 
                 if (action != null) {
                     imageSelected = null;
-                    String fileName = fileModel == null ? IMAGE_UPLOAD_DEFAULT : fileModel.getFileName();
+                    String fileName = fileModel.getFileName() == null ? IMAGE_UPLOAD_DEFAULT : fileModel.getFileName();
                     action.onSucess(fileName);
                 }
             }

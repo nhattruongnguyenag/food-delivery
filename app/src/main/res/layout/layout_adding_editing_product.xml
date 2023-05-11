@@ -37,7 +37,7 @@
     <EditText
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Tên sản phẩm"
+        android:hint="Tên danh mục"
         android:paddingVertical="12dp"
         android:paddingLeft="25dp"
         android:background="@drawable/edit_text_primary_bg"

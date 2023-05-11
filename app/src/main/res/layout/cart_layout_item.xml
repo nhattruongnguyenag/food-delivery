@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:id="@+id/LinearLayoutItem_ID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4">
+            <!--Image-->
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/img_cart_screen"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:scaleType="fitXY"
+                android:src="@drawable/food2"
+                app:riv_corner_radius="5dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2.3"
+                android:orientation="vertical"
+                android:weightSum="3">
+                <!--Name-->
+                <TextView
+                    android:id="@+id/txt_name_cart_Screen"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:text="Cơm chiên dương châu"
+                    android:textColor="@color/green"
+                    android:textStyle="bold" />
+                <!--Price-->
+                <TextView
+                    android:id="@+id/txt_total_cart_screen"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:text="40,000 x 3 = 120,000 VND"
+                    android:textColor="@color/black" />
+                <!--Button -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center|left">
+
+                    <ImageButton
+                        android:id="@+id/btn_plus_cart_screen"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/customize_btn_cart_screen"
+                        android:gravity="center"
+                        android:src="@drawable/ic_baseline_plus_one_24"
+                        android:textColor="@color/green"
+                        android:textStyle="bold"
+                        app:backgroundTint="@null" />
+
+                    <TextView
+                        android:id="@+id/txt_qty_cart_screen"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/customize_btn_cart_screen"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/green"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/btn_sub_cart_screen"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/customize_btn_cart_screen"
+                        android:gravity="center"
+                        android:src="@drawable/ic_baseline_exposure_neg_1_24"
+                        android:textColor="@color/green"
+                        android:textStyle="bold"
+                        app:backgroundTint="@null" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <!--Button delete-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_delete_cart_screen"
+                android:layout_width="65dp"
+                android:layout_height="40dp"
+                android:background="@drawable/customize_delete_btn_cart_screen"
+                android:elevation="10dp"
+                android:gravity="center"
+                android:text="Xóa"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:backgroundTint="@null" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

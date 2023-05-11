@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.ProfileFragment">
+
+    <!--    Image area-->
+
+    <ImageView
+        android:id="@+id/img_detail_screen"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:scaleType="fitXY" />
+    <!--Top area-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:weightSum="2">
+        <!--Top left button-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|left">
+            <!--Back button-->
+
+        </LinearLayout>
+        <!--Top right button-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|right">
+            <!--            Heart button-->
+            <Button
+                android:id="@+id/btn_heart_detail_screen"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:backgroundTint="@color/white"
+                android:drawableLeft="@drawable/heart_2"
+                android:gravity="center" />
+            <!--            Cart button-->
+            <Button
+                android:id="@+id/btn_cart_detail_screen"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/white"
+                android:drawableLeft="@drawable/ic_baseline_shopping_cart_24"
+                android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+    <!--Information area-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="370dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="-1dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/customize_linearlayout_detail_screen"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:weightSum="8">
+
+        <!--     Name and price-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:weightSum="2">
+            <!--            Name area-->
+            <TextView
+                android:id="@+id/txt_name_detail_screen"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|left"
+                android:text="Ga cay"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <!--Price area-->
+            <TextView
+                android:id="@+id/txt_price_detail_screen"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|right"
+                android:text="$20"
+                android:textColor="@color/green"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <!--        Start and Calor and Time-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:weightSum="10">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="9">
+                <!--            Start area-->
+                <LinearLayout
+                    android:id="@+id/linearLayout_start_layout_wrapper_detail_screen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|left"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_start_detail_screen"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.0001"
+                    android:gravity="center|left"
+                    android:text="4.6"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_qty_user_detail_screen"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.001"
+                    android:gravity="center|left"
+                    android:text="(4.6k)"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/imgBtn_rating_detail_screen"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:src="@drawable/ic_baseline_star_24_2" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chi tiết"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
+            <!--                Descriptions area-->
+            <TextView
+                android:id="@+id/txt_description_detail_screen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Chi tiết Cách làm cánh gà chiên nước mắm siêu ngon sẽ góp phần bữa ăn nhà bạn trở nên ngon miệng với hương vị hấp dẫn, đậm đà không thể chối từ." />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Gợi ý sản phẩm"
+                android:textColor="@color/black" />
+        </LinearLayout>
+        <!--         List area-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_detail_screen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

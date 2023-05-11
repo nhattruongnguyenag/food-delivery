@@ -16,8 +16,14 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import vn.tdc.edu.fooddelivery.models.CartModel_Hanh;
+import vn.tdc.edu.fooddelivery.models.NotificationModel_Hanh;
 
 public class FileUtils {
+    public static ArrayList<NotificationModel_Hanh> arrayListNotifications;
+    public static ArrayList<CartModel_Hanh> cartList;
     public static final String AUTHORITY = "com.ianhanniballake.localstorage.documents";
     public static final String MIME_TYPE_AUDIO = "audio/*";
     public static final String MIME_TYPE_TEXT = "text/*";
@@ -38,7 +44,6 @@ public class FileUtils {
      * Gets the extension of a file name, like ".png" or ".jpg".
      *
      * @param uri
-     *
      * @return Extension including the dot("."); "" if there is no extension;
      * null if uri was null.
      */
@@ -87,7 +92,6 @@ public class FileUtils {
 
     /**
      * @param uri The Uri to check.
-     *
      * @return Whether the Uri authority is {AUTHORITY}.
      * @author paulburke
      */
@@ -97,7 +101,6 @@ public class FileUtils {
 
     /**
      * @param uri The Uri to check.
-     *
      * @return Whether the Uri authority is ExternalStorageProvider.
      * @author paulburke
      */
@@ -107,7 +110,6 @@ public class FileUtils {
 
     /**
      * @param uri The Uri to check.
-     *
      * @return Whether the Uri authority is DownloadsProvider.
      * @author paulburke
      */
@@ -117,7 +119,6 @@ public class FileUtils {
 
     /**
      * @param uri The Uri to check.
-     *
      * @return Whether the Uri authority is MediaProvider.
      * @author paulburke
      */
@@ -127,7 +128,6 @@ public class FileUtils {
 
     /**
      * @param uri The Uri to check.
-     *
      * @return Whether the Uri authority is Google Photos.
      */
     public static boolean isGooglePhotosUri(Uri uri) {
@@ -142,7 +142,6 @@ public class FileUtils {
      * @param uri           The Uri to query.
      * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
-     *
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke
      */
@@ -182,7 +181,6 @@ public class FileUtils {
      *
      * @param context The context.
      * @param uri     The Uri to query.
-     *
      * @author paulburke
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -277,7 +275,6 @@ public class FileUtils {
      * @param context
      * @param uri
      * @param mimeType
-     *
      * @return
      * @author paulburke
      */

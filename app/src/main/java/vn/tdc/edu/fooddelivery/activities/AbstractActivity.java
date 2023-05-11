@@ -15,7 +15,6 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -43,7 +42,6 @@ import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
 import vn.tdc.edu.fooddelivery.api.UploadAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.models.FileModel;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 import vn.tdc.edu.fooddelivery.utils.ImageUploadUtils;
@@ -82,17 +80,15 @@ public abstract class AbstractActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public <T> T setFragment(Class<T> tClass, int layout, boolean addCurrentFragmentToBackStack) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        T fragment = (T) fragmentManager.findFragmentByTag("fragment");
+    public <T> T setFragment(Class<T> tClass, int layout, boolean addToBackStack) {
+        T fragment = null;
         try {
-            if (fragment != null) {
-                transaction.remove((Fragment) fragment);
-            }
             fragment = tClass.newInstance();
-            transaction.replace(layout, (Fragment) fragment, "fragment");
-            if (addCurrentFragmentToBackStack) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction()
+                    .replace(layout, (Fragment) fragment)
+                    .setReorderingAllowed(true);
+            if (addToBackStack) {
                 transaction.addToBackStack(null);
             }
 
@@ -139,7 +135,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
             if (requestCode == ImageUploadUtils.REQ_CAMERA) {
                 ImageUploadUtils.getInstance().takePhotoAction(this);
             } else if (requestCode == ImageUploadUtils.REQ_READ_EXTERNAL_STORAGE) {
-                ImageUploadUtils.getInstance().pickImageAction(this);
+                ImageUploadUtils.getInstance().takePhotoAction(this);
             }
         }
     }
