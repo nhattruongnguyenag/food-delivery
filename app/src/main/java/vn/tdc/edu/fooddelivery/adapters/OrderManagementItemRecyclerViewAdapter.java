@@ -15,6 +15,7 @@ import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
+import vn.tdc.edu.fooddelivery.utils.CommonUtils;
 
 public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter<OrderManagementItemRecyclerViewAdapter.OrderManagementItemHolder> {
     private Activity activity;
@@ -59,11 +60,11 @@ public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter
     public void onBindViewHolder(@NonNull OrderManagementItemHolder holder, int position) {
         OrderModel orderModel = listOrders.get(position);
         holder.tvOrderId.setText(String.valueOf(orderModel.getId()));
-        holder.tvCustomerFullName.setText(orderModel.getCustomerFullName());
+        holder.tvCustomerFullName.setText(orderModel.getCustomer().getFullName());
         holder.tvAddress.setText(orderModel.getAddress());
         holder.tvPhone.setText(orderModel.getPhone());
         holder.tvTotal.setText(String.valueOf(orderModel.getTotal()));
-        holder.tvCreatedAt.setText(String.valueOf(orderModel.getCreatedAt()));
+        holder.tvCreatedAt.setText(CommonUtils.convertDateToString(orderModel.getCreatedAt()));
 
         holder.onClickListener = new View.OnClickListener() {
             @Override
