@@ -113,7 +113,7 @@ class UserController extends Controller
         if (isset($request->id)) {
             $user = User::find($request->id);
             if ($user != null) {
-                $resource = new UserResource($result);
+                $resource = new UserResource($user);
                 $result = json_decode($resource->toJson(), true);
                 $user->delete();
                 return response($result[0], 200);

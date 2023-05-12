@@ -92,6 +92,7 @@ Route::delete('carts', [CartController::class,'deleteCartAPI']);
 Route::get('orders', [OrderController::class,'getOrdersAPI']);
 Route::post('orders', [OrderController::class,'addOrderAPI']);
 Route::put('orders', [OrderController::class,'updateOrderAPI']);
+Route::delete('orders', [OrderController::class,'deleteOrderAPI']);
 
 /*
 *Widgets API routes

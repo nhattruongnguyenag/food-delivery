@@ -115,4 +115,20 @@ class OrderController extends Controller
             return response($resource, 201);
         }
     }
+
+    public function deleteOrderAPI(Request $request){
+        $result = null;
+        if (isset($request->id)) {
+            $order = Order::find($request->id);
+            if ($order != null) {
+                $result = $order;
+                $order->delete();
+                return response($result, 200);
+            } else {
+                return response($result, 400);
+            }
+        }
+        return response($result, 400);
+    }
+
 }
