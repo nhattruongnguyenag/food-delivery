@@ -123,7 +123,7 @@ public class UsersListFragment extends Fragment implements UserManagementRecycle
 
     @Override
     public void onButtonEditClickListener(int position) {
-        ((AbstractActivity) getActivity()).setFragment(UserFormFragment.class, R.id.frameLayout, false)
+        ((AbstractActivity) getActivity()).setFragment(UserFormFragment.class, R.id.frameLayout, true)
                 .setUserModel(listUsers.get(position));
     }
 
@@ -140,7 +140,9 @@ public class UsersListFragment extends Fragment implements UserManagementRecycle
 
             @Override
             public void ok() {
-                deleteUser(listUsers.get(position));
+                UserModel userModel = new UserModel();
+                userModel.setId(listUsers.get(position).getId());
+                deleteUser(userModel);
                 confirmDialog.dismiss();
             }
         });
