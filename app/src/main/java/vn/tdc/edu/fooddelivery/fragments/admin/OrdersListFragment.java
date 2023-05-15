@@ -27,6 +27,7 @@ import vn.tdc.edu.fooddelivery.api.OrderAPI;
 import vn.tdc.edu.fooddelivery.api.UserAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
+import vn.tdc.edu.fooddelivery.enums.OrderStatus;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 
@@ -114,6 +115,8 @@ public class OrdersListFragment extends Fragment implements OrderManagementItemR
         });
     }
 
+//    private void
+
     @Override
     public void onButtonOrderDetailClickListener(int position) {
         Log.d("recyclerTest", "Order detais clicked at " + position);
@@ -128,7 +131,10 @@ public class OrdersListFragment extends Fragment implements OrderManagementItemR
 
     @Override
     public void onButtonAcceptClickListener(int position) {
-        Log.d("recyclerTest", "Accept clicked at " + position);
+        OrderModel orderModel = new OrderModel();
+        orderModel.setId(listOrders.get(position).getId());
+        orderModel.setStatus(OrderStatus.DANG_GIAO_HANG.getStatus());
+
     }
 
     @Override

@@ -17,7 +17,7 @@ public class UserModel extends BaseModel {
     private String password;
     @SerializedName("status")
     private Byte status;
-    @SerializedName("roles")
+    @SerializedName("roleIds")
     private List<Integer> roleIds;
 
 
