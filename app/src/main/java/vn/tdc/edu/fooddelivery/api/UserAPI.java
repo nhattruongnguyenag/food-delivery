@@ -16,7 +16,7 @@ import vn.tdc.edu.fooddelivery.models.UserModel;
 
 public interface UserAPI {
     @GET("api/users")
-    Call<List<UserModel>> getAll(@Query("roleId") Integer roleId);
+    Call<List<UserModel>> getAll(@Query("roleCode") String roleCode);
 
     @POST("api/users")
     Call<UserModel> save(@Body UserModel userModel);

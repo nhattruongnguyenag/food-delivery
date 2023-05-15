@@ -70,7 +70,7 @@ public class UserFormFragment extends Fragment implements View.OnClickListener {
         edEmail = view.findViewById(R.id.edEmail);
         edId = view.findViewById(R.id.edId);
         edImage = view.findViewById(R.id.edImage);
-        btnAdd = view.findViewById(R.id.btnAddUser);
+        btnAdd = view.findViewById(R.id.btnAdd);
         btnResetPassword = view.findViewById(R.id.btnResetPassword);
         btnUpdateInfo = view.findViewById(R.id.btnUpdateInfo);
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
@@ -243,7 +243,7 @@ public class UserFormFragment extends Fragment implements View.OnClickListener {
                 call.enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-                        if (response.code() == HttpURLConnection.HTTP_CREATED) {
+                        if (response.code() == HttpURLConnection.HTTP_OK) {
                             ((AbstractActivity) getActivity()).showMessageDialog(finalSuccessMessage);
                             ((AbstractActivity) getActivity()).setFragment(UserRolesTabFragment.class, R.id.frameLayout, false);
                         } else {

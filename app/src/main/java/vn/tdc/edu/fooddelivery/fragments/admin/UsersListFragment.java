@@ -65,7 +65,7 @@ public class UsersListFragment extends Fragment implements UserManagementRecycle
         View view = inflater.inflate(R.layout.fragment_users_list, container, false);
         recyclerViewUser = view.findViewById(R.id.recyclerViewUser);
 
-        getUserListFromAPI(roleModel == null ? null : roleModel.getId());
+        getUserListFromAPI(roleModel == null ? null : roleModel.getCode());
 
         return  view;
     }
@@ -91,8 +91,8 @@ public class UsersListFragment extends Fragment implements UserManagementRecycle
         });
     }
 
-    private void getUserListFromAPI(Integer roleId) {
-        Call<List<UserModel>> call = RetrofitBuilder.getClient().create(UserAPI.class).getAll(roleId);
+    private void getUserListFromAPI(String roleCode) {
+        Call<List<UserModel>> call = RetrofitBuilder.getClient().create(UserAPI.class).getAll(roleCode);
 
         call.enqueue(new Callback<List<UserModel>>() {
             @Override
@@ -123,7 +123,7 @@ public class UsersListFragment extends Fragment implements UserManagementRecycle
 
     @Override
     public void onButtonEditClickListener(int position) {
-        ((AbstractActivity) getActivity()).setFragment(UserFormFragment.class, R.id.frameLayout, false)
+        ((AbstractActivity) getActivity()).setFragment(UserFormFragment.class, R.id.frameLayout, true)
                 .setUserModel(listUsers.get(position));
     }
 
@@ -140,7 +140,9 @@ public class UsersListFragment extends Fragment implements UserManagementRecycle
 
             @Override
             public void ok() {
-                deleteUser(listUsers.get(position));
+                UserModel userModel = new UserModel();
+                userModel.setId(listUsers.get(position).getId());
+                deleteUser(userModel);
                 confirmDialog.dismiss();
             }
         });
