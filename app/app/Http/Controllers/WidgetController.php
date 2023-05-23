@@ -188,7 +188,7 @@ class WidgetController extends Controller
     */
     public static function checkValidateDataCartItem($request)
     {
-        if (!isset($request->user_id) || !isset($request->product_id) || !isset($request->process)) {
+        if (!isset($request->user_id) || !isset($request->product_id)) {
             return null;
         }
 
