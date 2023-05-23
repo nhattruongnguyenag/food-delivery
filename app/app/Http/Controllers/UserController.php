@@ -30,7 +30,7 @@ class UserController extends Controller
                     WidgetController::attachToRoleUserTable($request->roleIds, $user);
                     $resource = new UserResource($user);
                     $result = json_decode($resource->toJson(), true);
-                    return response($result[0], 200);
+                    return response($result[0], 201);
                 }
             } else {
                 if (isset($request->roleIds)) {
@@ -42,7 +42,7 @@ class UserController extends Controller
                         WidgetController::attachToRoleUserTable($request->roleIds, $user);
                         $resource = new UserResource($user);
                         $result = json_decode($resource->toJson(), true);
-                        return response($result[0], 200);
+                        return response($result[0], 201);
                     } else {
                         return response([
                             'msg' => 'email da ton tai , khong the them'
