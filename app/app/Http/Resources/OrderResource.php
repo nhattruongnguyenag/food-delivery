@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +45,7 @@ class OrderResource extends JsonResource
             $price = DB::table('order_product')->where('order_id', '=', $order_id)->where('product_id', '=', $user->ordersByUser()[$i]['id'])->get('price')->first()->price;
             array_push($resource, [
                 'id' => DB::table('order_product')->where('order_id', '=', $order_id)->where('product_id', '=', $user->ordersByUser()[$i]['id'])->get('id')->first()->id,
-                'product' => $user->ordersByUser()[$i],
+                'product' => Product::find($user->ordersByUser()[$i]['id']),
                 'quantity' => $quantity,
                 'price' => $price,
                 'sub_total' => $quantity * $price
