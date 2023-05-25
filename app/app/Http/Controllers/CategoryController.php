@@ -22,6 +22,7 @@ class CategoryController extends Controller
                 foreach ($result as $i){
                     $category = Category::find($i->id);
                     $i->numberOfProduct = $category->products()->count();
+                    $i->products = $category->products();
                 }
                 return response($result, 200);
             }
