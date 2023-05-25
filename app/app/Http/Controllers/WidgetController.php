@@ -168,7 +168,7 @@ class WidgetController extends Controller
     */
     public static function checkValidateDataNotifycation($request)
     {
-        if (!isset($request->image) || !isset($request->content) || !isset($request->user_id)) {
+        if (!isset($request->content) || !isset($request->user_id) || !isset($request->title)) {
             return null;
         }
 
@@ -177,9 +177,21 @@ class WidgetController extends Controller
 
     public static function setDataToNotifycation($request, $notifycation)
     {
-        $notifycation->image = $request['image'];
         $notifycation->content = $request['content'];
         $notifycation->user_id = $request['user_id'];
+        $notifycation->title = $request['title'];
+        if($request['status']){
+            $notifycation->status = $request['status'];
+        }else{
+            $notifycation->status = 0;
+        }
+
+        if($request['image']){
+            $notifycation->image = $request['image'];
+        }
+        else{
+            $notifycation->image = null;
+        }
     }
 
 
