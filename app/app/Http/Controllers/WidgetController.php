@@ -23,6 +23,8 @@ class WidgetController extends Controller
     private static $ORDER_PROCESSING = 1;
     private static $ORDER_SHIPPING = 2;
     private static $ORDER_SUCCESS = 3;
+    public static $READ = 1;
+    public static $NOT_READ = 0;
 
     public function uploadFileAPI(Request $request)
     {
@@ -140,7 +142,6 @@ class WidgetController extends Controller
         } else {
             $user->status = self::$IS_ACTIVE;
         }
-
     }
 
 
@@ -180,16 +181,11 @@ class WidgetController extends Controller
         $notifycation->content = $request['content'];
         $notifycation->user_id = $request['user_id'];
         $notifycation->title = $request['title'];
-        if($request['status']){
-            $notifycation->status = $request['status'];
-        }else{
-            $notifycation->status = 0;
-        }
+        $notifycation->status = self::$NOT_READ;
 
-        if($request['image']){
+        if ($request['image']) {
             $notifycation->image = $request['image'];
-        }
-        else{
+        } else {
             $notifycation->image = null;
         }
     }

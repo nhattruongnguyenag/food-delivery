@@ -69,11 +69,12 @@ Route::delete('roles', [RoleController::class,'deleteRoleAPI']);
 
 
 /*
-*Roles API routes 
+*Notifycations API routes 
 */
 Route::get('notifycations', [NotifycationController::class,'getNotifycationsAPI']);
 Route::get('notifycations/{id}', [NotifycationController::class,'getNotifycationByIdAPI']);
 Route::post('notifycations', [NotifycationController::class,'addOrEditNotifycationAPI']);
+Route::put('notifycations/changeStatus', [NotifycationController::class,'changeStatus']);
 Route::put('notifycations', [NotifycationController::class,'addOrEditNotifycationAPI']);
 Route::delete('notifycations', [NotifycationController::class,'deleteNotifycationAPI']);
 

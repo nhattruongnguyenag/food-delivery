@@ -74,4 +74,17 @@ class NotifycationController extends Controller
         }
         return response($result, 400);
     }
+
+    public function changeStatus(Request $request){
+        if($request->id){
+            $notifycation = Notifycation::find($request->id);
+            $notifycation->status = WidgetController::$READ;
+            $notifycation->save();
+            return response($notifycation, 201);
+        }else{
+            return response([
+                "msg" => "Can not find notification"
+            ], 400);
+        }
+    }
 }
