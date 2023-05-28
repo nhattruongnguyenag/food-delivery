@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
+use App\Models\Cart;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -112,6 +113,8 @@ class OrderController extends Controller
             WidgetController::attachToOrderProductTable($order);
             $resource = new OrderResource(Order::where('id', $order->id)->get());
             $result = json_decode($resource->toJson(), true);
+
+            Cart::where('user_id', '=', $order->user_id)->delete();
             return response($resource, 201);
         }
     }

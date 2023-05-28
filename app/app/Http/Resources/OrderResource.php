@@ -39,13 +39,14 @@ class OrderResource extends JsonResource
     public function items($user, $order_id)
     {
         $resource = [];
-        $count = $user->ordersByUser()->count();
-        for ($i = 0; $i < $count; $i++) {
-            $quantity = DB::table('order_product')->where('order_id', '=', $order_id)->where('product_id', '=', $user->ordersByUser()[$i]['id'])->get('quantity')->first()->quantity;
-            $price = DB::table('order_product')->where('order_id', '=', $order_id)->where('product_id', '=', $user->ordersByUser()[$i]['id'])->get('price')->first()->price;
+        $order = Order::find($order_id);
+        $orderListProduct = $order->products();
+        for ($i = 0; $i < $orderListProduct->count(); $i++) {
+            $quantity = DB::table('order_product')->where('order_id', '=', $order_id)->get('quantity')[$i]->quantity;
+            $price = DB::table('order_product')->where('order_id', '=', $order_id)->get('price')[$i]->price;
             array_push($resource, [
-                'id' => DB::table('order_product')->where('order_id', '=', $order_id)->where('product_id', '=', $user->ordersByUser()[$i]['id'])->get('id')->first()->id,
-                'product' => Product::find($user->ordersByUser()[$i]['id']),
+                'id' => DB::table('order_product')->where('order_id', '=', $order_id)->get('id')[$i]->id,
+                'product' => Product::find(DB::table('order_product')->where('order_id', '=', $order_id)->get('product_id')[$i]->product_id),
                 'quantity' => $quantity,
                 'price' => $price,
                 'sub_total' => $quantity * $price

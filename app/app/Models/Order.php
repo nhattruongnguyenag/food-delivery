@@ -14,4 +14,8 @@ class Order extends Model
     public $incrementing = true;
     public $keyType = 'integer';
     public $timestamps = true;
+
+    public function products(){
+        return $this->belongsToMany(Product::class , 'order_product' , 'order_id' , 'product_id');
+    }
 }
