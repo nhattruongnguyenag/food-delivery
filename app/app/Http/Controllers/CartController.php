@@ -38,10 +38,11 @@ class CartController extends Controller
             $cartItem = Cart::where('user_id', '=', $request->user_id)->where('product_id', '=', $request->product_id)->get()->first();
             if ($cartItem == '') {
                 //neu cart chua ton tai
+                $quantity = isset($result['quantity']) ? $result['quantity'] : 1;
                 DB::table('product_user')->insert([
                     'user_id' => $result['user_id'],
                     'product_id' => $result['product_id'],
-                    'quantity' => 1
+                    'quantity' => $quantity
                 ]);
                 $cartItem = Cart::where('user_id', '=', $result['user_id'])->where('product_id', '=', $result['product_id'])->get()->first();
                 return response($cartItem, 201);

@@ -157,12 +157,10 @@ class UserController extends Controller
                 $user->roleCodes = $roleCodes;
                 if ($check) {
                     return response([
-                        'login' => $check,
                         'user' => $user
                     ], 200);
                 }
                 return response([
-                    'login' => $check,
                     'msg' => "sai passsword"
                 ], 401);
             } else {
