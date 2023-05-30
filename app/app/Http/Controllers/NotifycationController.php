@@ -12,7 +12,7 @@ class NotifycationController extends Controller
     {
         $result = '';
         if ($request->query('userId') == null) {
-            $result = Notifycation::all();
+            $result = Notifycation::orderBy('id', 'desc')->get();
             if ($result != null) {
                 return response($result, 200);
             }

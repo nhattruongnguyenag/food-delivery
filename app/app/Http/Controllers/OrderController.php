@@ -16,14 +16,14 @@ class OrderController extends Controller
         if ($request->query('userId') == null) {
             if ($request->query('shipperId') == null) {
                 if ($request->query('status') == null) {
-                    $resource = new OrderResource(Order::all());
+                    $resource = new OrderResource(Order::all()->sortDesc());
                     $result = json_decode($resource->toJson(), true);
                     if ($result != null) {
                         return response($result, 200);
                     }
                     return response($result, 400);
                 } else {
-                    $resource = new OrderResource(Order::where('status', $request->query('status'))->get());
+                    $resource = new OrderResource(Order::where('status', $request->query('status'))->get()->sortDesc());
                     $result = json_decode($resource->toJson(), true);
                     if ($result != null) {
                         return response($result, 200);
@@ -33,7 +33,7 @@ class OrderController extends Controller
             } else {
                 $user = User::find($request->query('shipperId'));
                 if ($user != null) {
-                    $resource = new OrderResource($user->ordersByShipper());
+                    $resource = new OrderResource($user->ordersByShipper()->sortDesc());
                     $result = json_decode($resource->toJson(), true);
                     if ($result != null) {
                         return response($result, 200);
@@ -44,7 +44,7 @@ class OrderController extends Controller
         } else {
             $user = User::find($request->query('userId'));
             if ($user != null) {
-                $resource = new OrderResource($user->ordersByUser());
+                $resource = new OrderResource($user->ordersByUser()->sortDesc());
                 $result = json_decode($resource->toJson(), true);
                 if ($result != null) {
                     return response($result, 200);
