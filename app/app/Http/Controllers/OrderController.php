@@ -103,13 +103,14 @@ class OrderController extends Controller
         if ($result != null && isset($result)) {
             $order = new Order();
             WidgetController::setDataToOrder($result, $order);
-            $order->save();
             if ($order->total == 0) {
                 $order->delete();
+                Cart::where('user_id', '=', $order->user_id)->delete();
                 return response([
                     "msg" => "gio hang trong"
                 ], 400);
             }
+            $order->save();
             WidgetController::attachToOrderProductTable($order);
             $resource = new OrderResource(Order::where('id', $order->id)->get());
             $result = json_decode($resource->toJson(), true);

@@ -273,14 +273,16 @@ class WidgetController extends Controller
     public static function attachToOrderProductTable($order)
     {
         $resource = new CartResource(User::find($order->user_id));
-        $array = json_decode($resource->toJson(), true);
-        foreach ($array as $item) {
-            DB::table('order_product')->insert([
-                'order_id' => $order->id,
-                'product_id' => $item['product']['id'],
-                'price' => $item['product']['price'],
-                'quantity' => $item['quantity']
-            ]);
+        $cart = json_decode($resource->toJson(), true);
+        foreach ($cart as $cartItem) {
+            if($cartItem['quantity'] != 0){
+                DB::table('order_product')->insert([
+                    'order_id' => $order->id,
+                    'product_id' => $cartItem['product']['id'],
+                    'price' => $cartItem['product']['price'],
+                    'quantity' => $cartItem['quantity']
+                ]);
+            }
         }
     }
 
