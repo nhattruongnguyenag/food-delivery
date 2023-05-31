@@ -7,7 +7,7 @@ import java.util.Date;
 public class CommonUtils {
     public static String convertDateToString(Date date) {
         if (date != null) {
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             return dateFormat.format(date);
         }
         return "";

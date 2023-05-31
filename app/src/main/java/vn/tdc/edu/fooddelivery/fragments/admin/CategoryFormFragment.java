@@ -130,7 +130,7 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
                 call.enqueue(new Callback<CategoryModel>() {
                     @Override
                     public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
-                        if (response.code() == HttpURLConnection.HTTP_CREATED) {
+                        if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Thêm danh mục thành công");
                             ((AbstractActivity) getActivity()).setFragment(CategoriesListFragment.class, R.id.frameLayout, false);
                         } else {
@@ -166,7 +166,7 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
                 call.enqueue(new Callback<CategoryModel>() {
                     @Override
                     public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
-                        if (response.code() == HttpURLConnection.HTTP_CREATED) {
+                        if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Cập nhật danh mục thành công");
                             ((AbstractActivity) getActivity()).setFragment(CategoriesListFragment.class, R.id.frameLayout, false);
                         } else {

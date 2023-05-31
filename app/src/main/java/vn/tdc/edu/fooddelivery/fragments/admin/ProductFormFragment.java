@@ -209,7 +209,7 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
                 call.enqueue(new Callback<ProductModel>() {
                     @Override
                     public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
-                        if (response.code() == HttpURLConnection.HTTP_CREATED) {
+                        if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Thêm sản phẩm thành công");
                             ((AbstractActivity) getActivity()).setFragment(ProductsListFragment.class, R.id.frameLayout, false);
                         } else {
@@ -243,7 +243,7 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
                 call.enqueue(new Callback<ProductModel>() {
                     @Override
                     public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
-                        if (response.code() == HttpURLConnection.HTTP_CREATED) {
+                        if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Cập nhật sản phẩm thành công");
                             ((AbstractActivity) getActivity()).setFragment(ProductsListFragment.class, R.id.frameLayout, false);
                         } else {

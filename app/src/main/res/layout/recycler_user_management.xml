@@ -59,9 +59,9 @@
 
                 <TextView
                     android:gravity="center_vertical"
-                    android:layout_width="100dp"
+                    android:layout_width="25dp"
                     android:layout_height="match_parent"
-                    android:text="Ngày tham gia: "
+                    android:text="NT: "
                     android:textColor="@color/textTitlePrimary"
                     android:textStyle="bold"/>
 
@@ -72,7 +72,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textStyle="italic"
-                    android:text="07/05/2023"
+                    android:text="07/05/2023 00:00:00"
                     android:textColor="@color/textBlack"/>
             </LinearLayout>
         </LinearLayout>

@@ -198,7 +198,7 @@ public class UserFormFragment extends Fragment implements View.OnClickListener {
                 call.enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-                        if (response.code() == HttpURLConnection.HTTP_CREATED) {
+                        if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Thêm người dùng thành công");
                             ((AbstractActivity) getActivity()).setFragment(UserRolesTabFragment.class, R.id.frameLayout, false);
                         } else {
@@ -243,7 +243,7 @@ public class UserFormFragment extends Fragment implements View.OnClickListener {
                 call.enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-                        if (response.code() == HttpURLConnection.HTTP_OK) {
+                        if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog(finalSuccessMessage);
                             ((AbstractActivity) getActivity()).setFragment(UserRolesTabFragment.class, R.id.frameLayout, false);
                         } else {

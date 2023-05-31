@@ -97,7 +97,7 @@ public class UsersListFragment extends Fragment implements UserManagementRecycle
         call.enqueue(new Callback<List<UserModel>>() {
             @Override
             public void onResponse(Call<List<UserModel>> call, Response<List<UserModel>> response) {
-                if (response.code() == 200) {
+                if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                     if (listUsers == null) {
                         listUsers = new ArrayList<>();
                     }
