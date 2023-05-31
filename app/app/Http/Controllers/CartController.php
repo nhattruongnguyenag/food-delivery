@@ -38,7 +38,7 @@ class CartController extends Controller
             $cartItem = Cart::where('user_id', '=', $request->user_id)->where('product_id', '=', $request->product_id)->get()->first();
             if ($cartItem == '') {
                 //neu cart chua ton tai
-                $quantity = isset($result['quantity']) ? $result['quantity'] : 1;
+                $quantity = $result['quantity'];
                 DB::table('product_user')->insert([
                     'user_id' => $result['user_id'],
                     'product_id' => $result['product_id'],
@@ -48,7 +48,7 @@ class CartController extends Controller
                 return response($cartItem, 201);
             } else {
                 //neu cart da ton tai
-                $quantity = isset($result['quantity']) ? $result['quantity'] : $cartItem->quantity + 1;
+                $quantity = $cartItem->quantity + $result['quantity'];
                 DB::table('product_user')->where('id', $cartItem->id)->update(array('quantity' => $quantity));
                 $cartItem = Cart::where('user_id', '=', $request->user_id)->where('product_id', '=', $request->product_id)->get()->first();
                 return response($cartItem, 201);
