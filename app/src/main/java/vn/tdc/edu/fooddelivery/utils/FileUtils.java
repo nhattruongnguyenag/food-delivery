@@ -16,8 +16,20 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import vn.tdc.edu.fooddelivery.models.CategoryModel_Test;
+import vn.tdc.edu.fooddelivery.models.NotificationModel_Test;
+import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 
 public class FileUtils {
+    //---------------------------------------CHU DINH HANH----------------------------
+    public static ArrayList<NotificationModel_Test> arrayListNotifications = new ArrayList<>();
+    public static ArrayList<ProductModel_Test> product = new ArrayList<>();
+
+    public static ArrayList<ProductModel_Test> cartList = new ArrayList<>();
+    public static  ArrayList<CategoryModel_Test> categoryList = new ArrayList<>();
+    //--------------------------------------------------------------------------------
     public static final String AUTHORITY = "com.ianhanniballake.localstorage.documents";
     public static final String MIME_TYPE_AUDIO = "audio/*";
     public static final String MIME_TYPE_TEXT = "text/*";
