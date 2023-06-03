@@ -25,10 +25,11 @@ import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.ProductAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.CategoryModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
-public class ProductsListFragment extends Fragment implements View.OnClickListener {
+public class ProductsListFragment extends AbstractFragment implements View.OnClickListener {
     ProductManagementRecyclerViewAdapter adapter;
     List<ProductModel> productsList;
     private Button btnAdd;
@@ -130,7 +131,7 @@ public class ProductsListFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnAdd) {
-            ((AbstractActivity) getActivity()).setFragment(ProductFormFragment.class, R.id.frameLayout, true);
+            ((AbstractActivity) getActivity()).setFragment(ProductFormFragment.class, R.id.frameLayout, false);
         }
     }
 }

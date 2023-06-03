@@ -9,8 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 
-public class OrderDetailFragment extends Fragment {
+public class OrderDetailFragment extends AbstractFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

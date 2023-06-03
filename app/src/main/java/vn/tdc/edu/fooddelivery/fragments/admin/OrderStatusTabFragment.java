@@ -18,9 +18,10 @@ import java.util.List;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.adapters.OrderFragmentStateAdapter;
 import vn.tdc.edu.fooddelivery.adapters.UserFragmentStateAdapter;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.RoleModel;
 
-public class OrderStatusTabFragment extends Fragment {
+public class OrderStatusTabFragment extends AbstractFragment {
     private TabLayout tabLayout;
     private CharSequence[] listStatus;
     private int LIST_STATUS_LENGTH = 4;

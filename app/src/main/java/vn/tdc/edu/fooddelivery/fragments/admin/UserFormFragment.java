@@ -2,6 +2,7 @@ package vn.tdc.edu.fooddelivery.fragments.admin;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -103,7 +104,7 @@ public class UserFormFragment extends Fragment implements View.OnClickListener {
                 if (response.code() == HttpURLConnection.HTTP_OK) {
                     listRoles = response.body();
 
-                    if (multiSelectDialog == null) {
+                    if (getActivity() != null && multiSelectDialog == null) {
                         multiSelectDialog = new MultiSelectDialog(getActivity(), listRoles, userModel.getRoleIds());
 
                         multiSelectDialog.setTitle("Chọn vai trò");
