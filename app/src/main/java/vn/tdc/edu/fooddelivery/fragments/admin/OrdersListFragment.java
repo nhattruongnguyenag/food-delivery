@@ -28,10 +28,11 @@ import vn.tdc.edu.fooddelivery.api.UserAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.enums.OrderStatus;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 
-public class OrdersListFragment extends Fragment implements OrderManagementItemRecyclerViewAdapter.OnRecylerViewItemClickListener {
+public class OrdersListFragment extends AbstractFragment implements OrderManagementItemRecyclerViewAdapter.OnRecylerViewItemClickListener {
     private OrderManagementItemRecyclerViewAdapter adapter;
     private List<OrderModel> listOrders;
     private Integer status;

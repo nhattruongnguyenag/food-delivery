@@ -1,7 +1,9 @@
 package vn.tdc.edu.fooddelivery.fragments.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -23,15 +25,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
+import vn.tdc.edu.fooddelivery.activities.admin.ProductManagementActivity;
 import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.ProductAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.MultiSelectDialog;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.CategoryModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.utils.ImageUploadUtils;
 
-public class ProductFormFragment extends Fragment implements View.OnClickListener {
+public class ProductFormFragment extends AbstractFragment implements View.OnClickListener {
     private TextView tvCategories;
 
     private ShapeableImageView imgProduct;
@@ -99,9 +103,8 @@ public class ProductFormFragment extends Fragment implements View.OnClickListene
                 if (response.code() == HttpURLConnection.HTTP_OK) {
                     categoriesList = response.body();
 
-                    if (multiSelectDialog == null) {
+                    if (getActivity() != null && multiSelectDialog == null) {
                         multiSelectDialog = new MultiSelectDialog(getActivity(), categoriesList, productModel.getCategoryIds());
-
                         multiSelectDialog.setTitle("Chọn danh mục");
                         multiSelectDialog.setOnActionClickListener(new MultiSelectDialog.Action() {
                             @Override

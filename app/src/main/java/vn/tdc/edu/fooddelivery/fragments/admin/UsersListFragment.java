@@ -33,11 +33,12 @@ import vn.tdc.edu.fooddelivery.api.RoleAPI;
 import vn.tdc.edu.fooddelivery.api.UserAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.models.RoleModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 
-public class UsersListFragment extends Fragment implements UserManagementRecyclerViewAdapter.OnRecylerViewItemClickListener {
+public class UsersListFragment extends AbstractFragment implements UserManagementRecyclerViewAdapter.OnRecylerViewItemClickListener {
     private RecyclerView recyclerViewUser;
     private UserManagementRecyclerViewAdapter adapter;
     private List<UserModel> listUsers;

@@ -23,9 +23,10 @@ import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.adapters.UserFragmentStateAdapter;
 import vn.tdc.edu.fooddelivery.api.RoleAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.RoleModel;
 
-public class UserRolesTabFragment extends Fragment {
+public class UserRolesTabFragment extends AbstractFragment {
     private TabLayout tabLayout;
     private List<RoleModel> listRoles;
     private ViewPager2 viewPager2;
