@@ -2,7 +2,6 @@ package vn.tdc.edu.fooddelivery.fragments.admin;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -29,11 +28,12 @@ import vn.tdc.edu.fooddelivery.api.RoleAPI;
 import vn.tdc.edu.fooddelivery.api.UserAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.MultiSelectDialog;
+import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.RoleModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 import vn.tdc.edu.fooddelivery.utils.ImageUploadUtils;
 
-public class UserFormFragment extends Fragment implements View.OnClickListener {
+public class UserFormFragment extends AbstractFragment implements View.OnClickListener {
     private final String PASSWORD_DEFAULT = "123456";
     private TextView tvRoles;
     private EditText edEmail;
@@ -96,7 +96,7 @@ public class UserFormFragment extends Fragment implements View.OnClickListener {
     }
 
     private void createMuiltiSelectedUserRoleDialog() {
-        Call<List<RoleModel>> call = RetrofitBuilder.getClient().create(RoleAPI.class).getAll();
+        Call<List<RoleModel>> call = RetrofitBuilder.getClient().create(RoleAPI.class).findAll();
 
         call.enqueue(new Callback<List<RoleModel>>() {
             @Override
@@ -135,7 +135,7 @@ public class UserFormFragment extends Fragment implements View.OnClickListener {
             return false;
         }
 
-        if (userModel.getRoleIds() == null || userModel.getRoleIds() .isEmpty()) {
+        if (userModel.getRoleIds() == null || userModel.getRoleIds().isEmpty()) {
             tvRoles.setError("Bạn chưa chọn vai trò");
             return false;
         } else {
@@ -201,7 +201,7 @@ public class UserFormFragment extends Fragment implements View.OnClickListener {
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Thêm người dùng thành công");
-                            ((AbstractActivity) getActivity()).setFragment(UserRolesTabFragment.class, R.id.frameLayout, false);
+                            getActivity().onBackPressed();
                         } else {
                             ((AbstractActivity) getActivity()).showMessageDialog("Thêm người dùng thất bại");
                         }
@@ -246,7 +246,7 @@ public class UserFormFragment extends Fragment implements View.OnClickListener {
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog(finalSuccessMessage);
-                            ((AbstractActivity) getActivity()).setFragment(UserRolesTabFragment.class, R.id.frameLayout, false);
+                            getActivity().onBackPressed();
                         } else {
                             ((AbstractActivity) getActivity()).showMessageDialog(finalFailMessage);
                         }

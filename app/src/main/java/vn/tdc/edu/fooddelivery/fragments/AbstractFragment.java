@@ -51,10 +51,11 @@ public abstract class AbstractFragment extends Fragment {
         AbstractFragment fragment = (AbstractFragment) fragmentManager.findFragmentByTag(tClass.getSimpleName() + "");
         Log.d("fragment-manager", fragmentManager.getFragments().size() + "");
         try {
-            if (fragment == null) {
-                fragment = (AbstractFragment) tClass.newInstance();
+            if (fragment != null) {
+                transaction.remove(fragment).commit();
             }
 
+            fragment = (AbstractFragment) tClass.newInstance();
 
             transaction.replace(layout, fragment, tClass.getSimpleName() + "");
 

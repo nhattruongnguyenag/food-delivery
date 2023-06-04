@@ -16,7 +16,6 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.HttpException;
 import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
@@ -86,7 +85,7 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
     }
 
     private void deleteCategory(CategoryModel categoryModel) {
-        Call<CategoryModel> call = RetrofitBuilder.getClient().create(CategoryAPI.class).deleteCategory(categoryModel);
+        Call<CategoryModel> call = RetrofitBuilder.getClient().create(CategoryAPI.class).delete(categoryModel.getId());
         call.enqueue(new Callback<CategoryModel>() {
             @Override
             public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
@@ -105,7 +104,7 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
     }
 
     private void dropCategoriesToRecyclerView() {
-        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).getCategories(null);
+        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).findAll(null);
 
         call.enqueue(new Callback<List<CategoryModel>>() {
             @Override

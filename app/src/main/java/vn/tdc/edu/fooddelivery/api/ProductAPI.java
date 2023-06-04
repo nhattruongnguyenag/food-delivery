@@ -4,22 +4,23 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
-import vn.tdc.edu.fooddelivery.models.CategoryModel;
+import retrofit2.http.Path;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public interface ProductAPI {
     @GET("api/products")
-    Call<List<ProductModel>> getProducts();
+    Call<List<ProductModel>> findAll();
 
     @POST("api/products")
-    Call<ProductModel> saveProduct(@Body ProductModel productModel);
+    Call<ProductModel> save(@Body ProductModel productModel);
 
     @PUT("api/products")
-    Call<ProductModel> updateProduct(@Body ProductModel productModel);
-    @HTTP(method = "DELETE", path = "api/products", hasBody = true)
-    Call<ProductModel> deleteProduct(@Body ProductModel productModel);
+    Call<ProductModel> update(@Body ProductModel productModel);
+    @DELETE("api/products/{id}")
+    Call<ProductModel> delete(@Path("id") Integer id);
 }

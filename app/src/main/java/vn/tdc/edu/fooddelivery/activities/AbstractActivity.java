@@ -19,7 +19,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.utils.ImageUploadUtils;
 
 public abstract class AbstractActivity extends AppCompatActivity {
@@ -56,11 +55,12 @@ public abstract class AbstractActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public <T> T setFragment(Class<T> tClass, int layout, boolean addToBackStack) {
+    public <T> T setFragment(Class<T> tClass, int layout, boolean addCurrentFragmentToBackStack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         AbstractFragment fragment = (AbstractFragment) fragmentManager.findFragmentByTag(tClass.getSimpleName() + "");
         getSupportFragmentManager().getFragments();
+        Log.d("fragment-manager", fragmentManager.getFragments().size() + "");
         try {
             if (fragment == null) {
                 fragment = (AbstractFragment) tClass.newInstance();
@@ -68,7 +68,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
 
             transaction.replace(layout, fragment, tClass.getSimpleName() + "");
 
-            if (fragmentManager.findFragmentByTag(tClass.getSimpleName() + "") == null && addToBackStack) {
+            if (fragmentManager.findFragmentByTag(tClass.getSimpleName() + "") == null && addCurrentFragmentToBackStack) {
                 transaction.addToBackStack(null);
             }
 

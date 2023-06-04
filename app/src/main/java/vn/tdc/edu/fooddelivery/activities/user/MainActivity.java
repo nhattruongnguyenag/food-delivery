@@ -38,7 +38,7 @@ import vn.tdc.edu.fooddelivery.fragments.user.ProfileFragment;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class MainActivity extends AbstractActivity {
-    //------------------CHU DINH HANH----------------//
+    // ------------------CHU DINH HANH----------------//
     private static BottomNavigationView bottomNavigation;
     private static Activity mainActivitySave;
 
@@ -52,13 +52,14 @@ public class MainActivity extends AbstractActivity {
         MainActivity.mainActivitySave = mainActivitySave;
 
     }
-    //--------------------------End--------------------------//
+
+    // --------------------------End--------------------------//
     NavigationView navigation;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
 
-//    private SearchView searchView;
+    // private SearchView searchView;
 
     private Fragment prevFragment;
 
@@ -67,18 +68,19 @@ public class MainActivity extends AbstractActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-        //-------------------CHU DINH HANH----------------//
+        // -------------------CHU DINH HANH----------------//
         bottomNavigation = findViewById(R.id.bottomNavigation);
         MainActivity.setMainActivitySave(MainActivity.this);
         catchDataCartIconNotify();
         catchDataNotifyIcon();
-        //-------------------------End------------------------//
+        // -------------------------End------------------------//
         navigation = findViewById(R.id.navigation);
-        // Show the navigation view and display the button for navigation view toggle in tool bar
+        // Show the navigation view and display the button for navigation view toggle in
+        // tool bar
         toolbar = findViewById(R.id.toolbar);
-        //---------Search--------------------------//
+        // ---------Search--------------------------//
         searchView = findViewById(R.id.searchView);
-        //---------Search--------------------------//
+        // ---------Search--------------------------//
         setSupportActionBar(toolbar);
 
         setNavigationView();
@@ -113,13 +115,13 @@ public class MainActivity extends AbstractActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_product_management:
-                        switchActivity( ProductManagementActivity.class, "Quản lý hàng hoá");
+                        switchActivity(ProductManagementActivity.class, "Quản lý hàng hoá");
                         break;
                     case R.id.nav_order_management:
                         switchActivity(OrderManagementActivity.class, "Quản lý đơn hàng");
                         break;
                     case R.id.nav_user_management:
-                        switchActivity( UserManagementActivity.class, "Quản lý người dùng");
+                        switchActivity(UserManagementActivity.class, "Quản lý người dùng");
                         break;
                     case R.id.nav_category_management:
                         switchActivity(CategoryManagementActivity.class, "Quản lý danh mục sản phẩm");
@@ -131,13 +133,14 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
-//        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View view, boolean b) {
-//                setToolbarButtonToClearFocusSearchView();
-//                setFragment(SearchFragment.class,R.id.frameLayout,false);
-//            }
-//        });
+        // searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener()
+        // {
+        // @Override
+        // public void onFocusChange(View view, boolean b) {
+        // setToolbarButtonToClearFocusSearchView();
+        // setFragment(SearchFragment.class,R.id.frameLayout,false);
+        // }
+        // });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -159,7 +162,8 @@ public class MainActivity extends AbstractActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         drawerLayout = findViewById(R.id.drawerLayout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawerOpen, R.string.drawerClose);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawerOpen,
+                R.string.drawerClose);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         setToolbarButtonToOpenNavigationView();
@@ -183,15 +187,9 @@ public class MainActivity extends AbstractActivity {
             public void onClick(View view) {
                 searchView.clearFocus();
                 setToolbarButtonToOpenNavigationView();
-                setFragment(prevFragment.getClass(),R.id.frameLayout,false);
+                setFragment(prevFragment.getClass(), R.id.frameLayout, false);
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        navigation.getMenu().getItem(0).setChecked(true);
-        setFragment(HomeFragment.class, R.id.frameLayout, false);
     }
 
     @Override
@@ -208,13 +206,14 @@ public class MainActivity extends AbstractActivity {
         drawerLayout.close();
     }
 
-    //-------------------------------CHU DINH HANH----------------------------------------//
+    // -------------------------------CHU DINH
+    // HANH----------------------------------------//
 
     public void catchDataCartIconNotify() {
         if (FileUtils.cartList == null) {
             FileUtils.cartList = new ArrayList<>();
         }
-        //Them vo o day
+        // Them vo o day
 
         createNum(FileUtils.cartList.size(), 2);
     }
@@ -223,10 +222,9 @@ public class MainActivity extends AbstractActivity {
         if (FileUtils.arrayListNotifications == null) {
             FileUtils.arrayListNotifications = new ArrayList<>();
         }
-        //Them vo o day
+        // Them vo o day
         createNum(FileUtils.arrayListNotifications.size(), 3);
     }
-
 
     public static void CreateNumberBuyButtonEventClick() {
         if (FileUtils.cartList != null) {
@@ -234,19 +232,21 @@ public class MainActivity extends AbstractActivity {
         }
     }
 
-    public  void clearAllSelectNavigation(){
+    public void clearAllSelectNavigation() {
 
     }
 
-    //-------------------------------------Create number notify in navigation bar bottom--------------------------------------------//
+    // -------------------------------------Create number notify in navigation bar
+    // bottom--------------------------------------------//
     public static void createNum(int number, int menu) {
         Context context = MainActivity.getMainActivitySave();
-        bottomNavigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
-            @Override
-            public void onNavigationItemReselected(@NonNull MenuItem item) {
+        bottomNavigation
+                .setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+                    @Override
+                    public void onNavigationItemReselected(@NonNull MenuItem item) {
 
-            }
-        });
+                    }
+                });
         BadgeDrawable badgeExplorer = null;
         switch (menu) {
             case 1:
@@ -266,7 +266,7 @@ public class MainActivity extends AbstractActivity {
             badgeExplorer.setVisible(true);
             badgeExplorer.setVerticalOffset(dpToPx(context, 1));
             badgeExplorer.setNumber(number);
-            //MARK
+            // MARK
             badgeExplorer.setBackgroundColor(getMainActivitySave().getColor(R.color.red));
             badgeExplorer.setBadgeTextColor(getMainActivitySave().getColor(R.color.white));
         } else {
@@ -278,7 +278,8 @@ public class MainActivity extends AbstractActivity {
 
     public static int dpToPx(Context context, int dp) {
         Resources resource = context.getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, ((Resources) resource).getDisplayMetrics()));
+        return Math.round(
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, ((Resources) resource).getDisplayMetrics()));
     }
-    //-----------------------------------------------End--------------------------------------------------------//
+    // -----------------------------------------------End--------------------------------------------------------//
 }

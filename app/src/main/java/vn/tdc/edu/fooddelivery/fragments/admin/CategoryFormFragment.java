@@ -125,14 +125,14 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
                     categoryModel.setImageName(ImageUploadUtils.IMAGE_UPLOAD_DEFAULT);
                 }
 
-                Call<CategoryModel> call = RetrofitBuilder.getClient().create(CategoryAPI.class).saveCategory(categoryModel);
+                Call<CategoryModel> call = RetrofitBuilder.getClient().create(CategoryAPI.class).save(categoryModel);
 
                 call.enqueue(new Callback<CategoryModel>() {
                     @Override
                     public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Thêm danh mục thành công");
-                            ((AbstractActivity) getActivity()).setFragment(CategoriesListFragment.class, R.id.frameLayout, false);
+                            getActivity().onBackPressed();
                         } else {
                             ((AbstractActivity) getActivity()).showMessageDialog("Thêm danh mục thất bại");
                         }
@@ -161,14 +161,14 @@ public class CategoryFormFragment extends AbstractFragment implements View.OnCli
                     categoryModel.setImageName(fileName);
                 }
 
-                Call<CategoryModel> call = RetrofitBuilder.getClient().create(CategoryAPI.class).updateCategory(categoryModel);
+                Call<CategoryModel> call = RetrofitBuilder.getClient().create(CategoryAPI.class).update(categoryModel);
 
                 call.enqueue(new Callback<CategoryModel>() {
                     @Override
                     public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Cập nhật danh mục thành công");
-                            ((AbstractActivity) getActivity()).setFragment(CategoriesListFragment.class, R.id.frameLayout, false);
+                            getActivity().onBackPressed();
                         } else {
                             ((AbstractActivity) getActivity()).showMessageDialog("Cập nhật danh mục thất bại");
                         }

@@ -38,7 +38,6 @@ public class UserManagementActivity extends AbstractActivity {
             disableMenuOptions();
         }
 
-
         return super.onOptionsItemSelected(item);
     }
 

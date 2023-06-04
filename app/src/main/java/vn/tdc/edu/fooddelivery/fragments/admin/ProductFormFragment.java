@@ -1,10 +1,6 @@
 package vn.tdc.edu.fooddelivery.fragments.admin;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +21,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
-import vn.tdc.edu.fooddelivery.activities.admin.ProductManagementActivity;
 import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.ProductAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
@@ -95,7 +90,7 @@ public class ProductFormFragment extends AbstractFragment implements View.OnClic
     }
 
     private void createMultiSelectCategoryDialog() {
-        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).getCategories("name");
+        Call<List<CategoryModel>> call = RetrofitBuilder.getClient().create(CategoryAPI.class).findAll("name");
 
         call.enqueue(new Callback<List<CategoryModel>>() {
             @Override
@@ -110,7 +105,6 @@ public class ProductFormFragment extends AbstractFragment implements View.OnClic
                             @Override
                             public void cancel() {
                             }
-
                             @Override
                             public void ok(List<Integer> listObjectSelected) {
                                 productModel.setCategoryIds(listObjectSelected);
@@ -159,6 +153,7 @@ public class ProductFormFragment extends AbstractFragment implements View.OnClic
             edDescription.setError("Chi tiết sản phẩm không được để trống");
             return false;
         }
+
         return true;
     }
 
@@ -207,14 +202,14 @@ public class ProductFormFragment extends AbstractFragment implements View.OnClic
                     productModel.setImageName(ImageUploadUtils.IMAGE_UPLOAD_DEFAULT);
                 }
 
-                Call<ProductModel> call = RetrofitBuilder.getClient().create(ProductAPI.class).saveProduct(productModel);
+                Call<ProductModel> call = RetrofitBuilder.getClient().create(ProductAPI.class).save(productModel);
 
                 call.enqueue(new Callback<ProductModel>() {
                     @Override
                     public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Thêm sản phẩm thành công");
-                            ((AbstractActivity) getActivity()).setFragment(ProductsListFragment.class, R.id.frameLayout, false);
+                            getActivity().onBackPressed();
                         } else {
                             ((AbstractActivity) getActivity()).showMessageDialog("Thêm sản phẩm thất bại");
                         }
@@ -241,14 +236,14 @@ public class ProductFormFragment extends AbstractFragment implements View.OnClic
                     productModel.setImageName(fileName);
                 }
 
-                Call<ProductModel> call = RetrofitBuilder.getClient().create(ProductAPI.class).updateProduct(productModel);
+                Call<ProductModel> call = RetrofitBuilder.getClient().create(ProductAPI.class).update(productModel);
 
                 call.enqueue(new Callback<ProductModel>() {
                     @Override
                     public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                             ((AbstractActivity) getActivity()).showMessageDialog("Cập nhật sản phẩm thành công");
-                            ((AbstractActivity) getActivity()).setFragment(ProductsListFragment.class, R.id.frameLayout, false);
+                            getActivity().onBackPressed();
                         } else {
                             ((AbstractActivity) getActivity()).showMessageDialog("Cập nhật sản phẩm thất bại");
                         }

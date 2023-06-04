@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,13 +23,11 @@ import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.adapters.OrderManagementItemRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.api.OrderAPI;
-import vn.tdc.edu.fooddelivery.api.UserAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.enums.OrderStatus;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
-import vn.tdc.edu.fooddelivery.models.UserModel;
 
 public class OrdersListFragment extends AbstractFragment implements OrderManagementItemRecyclerViewAdapter.OnRecylerViewItemClickListener {
     private OrderManagementItemRecyclerViewAdapter adapter;
@@ -64,7 +61,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
     }
 
     private void deleteUser(OrderModel orderModel) {
-        Call<OrderModel> call = RetrofitBuilder.getClient().create(OrderAPI.class).delete(orderModel);
+        Call<OrderModel> call = RetrofitBuilder.getClient().create(OrderAPI.class).delete(orderModel.getId());
         call.enqueue(new Callback<OrderModel>() {
             @Override
             public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
@@ -85,7 +82,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
     }
 
     private void getOrderListFromAPI(Integer status) {
-        Call<List<OrderModel>> call = RetrofitBuilder.getClient().create(OrderAPI.class).getAll(status);
+        Call<List<OrderModel>> call = RetrofitBuilder.getClient().create(OrderAPI.class).findAll(status);
         call.enqueue(new Callback<List<OrderModel>>() {
             @Override
             public void onResponse(Call<List<OrderModel>> call, Response<List<OrderModel>> response) {

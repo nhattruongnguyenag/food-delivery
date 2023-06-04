@@ -3,7 +3,6 @@ package vn.tdc.edu.fooddelivery.fragments.admin;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
@@ -46,7 +45,7 @@ public class UserRolesTabFragment extends AbstractFragment {
 
 
     private void createTabLayoutForUserRoles() {
-        Call<List<RoleModel>> call = RetrofitBuilder.getClient().create(RoleAPI.class).getAll();
+        Call<List<RoleModel>> call = RetrofitBuilder.getClient().create(RoleAPI.class).findAll();
 
         call.enqueue(new Callback<List<RoleModel>>() {
             @Override
