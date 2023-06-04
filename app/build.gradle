@@ -56,5 +56,7 @@ dependencies {
     implementation 'com.nex3z:notification-badge:1.0.4'
     //Gif
     implementation 'com.airbnb.android:lottie:5.2.0'
+    //Mood
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     //----------------------------------------------------------------------------------
 }

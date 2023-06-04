@@ -1,16 +1,23 @@
 package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,6 +37,8 @@ public class PaymentFragment extends AbstractFragment {
     private TextView txtPrice;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private View fragmentLayout = null;
+    private EditText edtHours;
+    private EditText edtMinute;
     private CartFragment cartFragment = new CartFragment();
 
     @Override
@@ -40,32 +49,62 @@ public class PaymentFragment extends AbstractFragment {
         anhXa();
         AnhXaDatePicket();
         buyBtnClick();
-        CalculateAndAssign(FileUtils.product);
+        CalculateAndAssign(FileUtils.cartList);
+        hoursPicker();
+        minutePicker();
         //--------------------------------------------
         return fragmentLayout;
+    }
+
+
+    public void hoursPicker() {
+        edtHours.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AnhXaTimePicket();
+            }
+        });
+    }
+
+    public void minutePicker() {
+        edtMinute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AnhXaTimePicket();
+            }
+        });
     }
 
     private void buyBtnClick() {
         buttonBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validateAction();
-                Toast.makeText(fragmentLayout.getContext(), "Mua", Toast.LENGTH_SHORT).show();
+                boolean timeOk = validateTimeAction();
+                boolean dateOk = validateDateAction();
+                if (timeOk && dateOk) {
+                    Toast.makeText(fragmentLayout.getContext(), "Mua", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(fragmentLayout.getContext(), "loi", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
     //--------------------Star validate date field---------------------//
-    private void validateAction() {
+    private boolean validateDateAction() {
         //date
-        boolean date = checkDateCharacter(edt_date.getText() + "");
-        if (date == false) {
+        boolean dateOk = checkDateCharacter(edt_date.getText() + "");
+        if (dateOk == false) {
             if (edt_date.getError() == null) {
                 edt_date.setError("Yêu cần nhập đúng định dạng : d/m/y");
             }
+        } else {
+            edt_date.setError(null);
         }
+        return dateOk;
     }
 
+    //---------------------validate date-------------------------//
     private boolean checkDateCharacter(String date) {
 
         ArrayList<String> arrayList = new ArrayList<>();
@@ -73,42 +112,46 @@ public class PaymentFragment extends AbstractFragment {
         String parts = null;
         boolean ok = false;
         int count = 0;
-        if (date.contains("/")) {
-            for (int i = 0; i < date.length(); i++) {
-                if (date.charAt(i) == '/') {
-                    count++;
-                    //lay ngay va thang!
-                    try {
-                        arrayList.add(date.substring(index, i));
-                        index = i + 1;
-                        //lay nam!
-                        if (count == 2) {
-                            arrayList.add(date.substring(index));
+        if (date.trim().isEmpty()) {
+            edt_date.setError("Vui lòng không để trống");
+            return ok;
+        } else {
+            if (date.contains("/")) {
+                for (int i = 0; i < date.length(); i++) {
+                    if (date.charAt(i) == '/') {
+                        count++;
+                        //lay ngay va thang!
+                        try {
+                            arrayList.add(date.substring(index, i));
+                            index = i + 1;
+                            //lay nam!
+                            if (count == 2) {
+                                arrayList.add(date.substring(index));
+                            }
+                        } catch (Exception exception) {
+                            return ok;
                         }
-                    } catch (Exception exception) {
+                    } else if (date.charAt(i) == ' ') {
+                        edt_date.setError("yeu cau khong nhap khoang trong");
                         return ok;
-                    }
-                } else if (date.charAt(i) == ' ') {
-                    edt_date.setError("yeu cau khong nhap khoang trong");
-                    return ok;
-                } else {
-                    if (!isNumber(date.charAt(i) + "")) {
-                        edt_date.setError("yeu cau khong nhap cac ky tu dac biet");
-                        return ok;
+                    } else {
+                        if (!isNumber(date.charAt(i) + "")) {
+                            edt_date.setError("yeu cau khong nhap cac ky tu dac biet");
+                            return ok;
+                        }
                     }
                 }
-            }
-            if (count == 2 && arrayList.size() == 3) {
-                if (validateDateTime(arrayList)) {
-                    ok = true;
+                if (count == 2 && arrayList.size() == 3) {
+                    if (validateDate(arrayList)) {
+                        ok = true;
+                    }
                 }
             }
         }
         return ok;
     }
 
-
-    public boolean validateDateTime(ArrayList<String> arrayList) {
+    public boolean validateDate(ArrayList<String> arrayList) {
         boolean ok = false;
         for (int i = 0; i < arrayList.size(); i++) {
             if (arrayList.get(i).trim().isEmpty()) {
@@ -162,15 +205,73 @@ public class PaymentFragment extends AbstractFragment {
     }
 
     public static boolean isNumber(String str) {
-        return str.matches("-?\\d+(\\.\\d+)?");
+        return str.matches("-?\\d+(\\d+)?");
     }
 //---------------------------End-------------------------------------//
+
+    public boolean validateTimeAction() {
+        boolean timeIsOke = validateTime();
+        if (timeIsOke) {
+            edtHours.setError(null);
+            edtMinute.setError(null);
+        }
+        return timeIsOke;
+    }
+
+    public boolean validateTime() {
+        boolean ok = false;
+        String strHours = edtHours.getText().toString();
+        String strMinute = edtMinute.getText().toString();
+        boolean hoursIsNumber = false;
+        boolean minuteIsNumber = false;
+        hoursIsNumber = isNumber(strHours);
+        minuteIsNumber = isNumber(strMinute);
+        if (strHours.trim().isEmpty() || strMinute.trim().isEmpty()) {
+            if (strHours.trim().isEmpty()) {
+                edtHours.setError("Vui lòng không để trống giờ");
+            }
+            if (strMinute.trim().isEmpty()) {
+                edtMinute.setError("Vui lòng không để trống phút");
+            }
+            return ok;
+        } else {
+            if (hoursIsNumber && minuteIsNumber) {
+                int hoursInt = Integer.parseInt(edtHours.getText().toString());
+                int minuteInt = Integer.parseInt(edtMinute.getText().toString());
+                if (hoursInt < 0 || hoursInt > 23) {
+                    edtHours.setError("Không tồn tại " + hoursInt + " giờ");
+                    return ok;
+                }
+                if (minuteInt < 0 || minuteInt > 59) {
+                    edtMinute.setError("Không tồn tại " + minuteInt + " phút");
+                    return ok;
+                }
+                ok = true;
+            } else {
+                if (hoursIsNumber == false) {
+                    if (strHours.contains(" ")) {
+                        edtHours.setError("Vui lòng không nhập khoảng trắng");
+                    } else {
+                        edtHours.setError("Vui lòng nhập số và không chứa các ký tự đặt biệt");
+                    }
+                }
+                if (minuteIsNumber == false) {
+                    if (strMinute.contains(" ")) {
+                        edtMinute.setError("Vui lòng không nhập khoảng trắng");
+                    } else {
+                        edtMinute.setError("Vui lòng nhập số và không chứa các ký tự đặt biệt");
+                    }
+                }
+            }
+        }
+        return ok;
+    }
 
     //-----------------------Star date picket-----------------------------//
     public void AnhXaDatePicket() {
         edt_date.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
                 final int year = calendar.get(Calendar.YEAR);
                 final int month = calendar.get(Calendar.MONTH);
@@ -179,6 +280,8 @@ public class PaymentFragment extends AbstractFragment {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(fragmentLayout.getContext(),
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         mDateSetListener, year, month, day);
+                datePickerDialog.setIcon(R.drawable.bien_canh_bao_vang);
+                datePickerDialog.setTitle("Hãy nhập ngày nhập hàng");
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 datePickerDialog.show();
             }
@@ -192,6 +295,7 @@ public class PaymentFragment extends AbstractFragment {
             }
         };
     }
+
     //-----------------------End date picket-----------------------------//
     public void anhXa() {
         //Action
@@ -199,8 +303,31 @@ public class PaymentFragment extends AbstractFragment {
         deliveryAddress = fragmentLayout.findViewById(R.id.edt_address_receive_item_address_payment_screen);
         txtPrice = fragmentLayout.findViewById(R.id.txt_price_paymetn_screen);
         edt_date = fragmentLayout.findViewById(R.id.edt_date_receive_item_payment_screen);
+        edtHours = fragmentLayout.findViewById(R.id.spinner_hours_payment_screen);
+        edtMinute = fragmentLayout.findViewById(R.id.spinner_minute_payment_screen);
         //layout
         buttonBuy = fragmentLayout.findViewById(R.id.btn_buy_payment_screen);
+    }
+
+    //-----------------------Picker hours-------------------------//
+    public void AnhXaTimePicket() {
+
+        int hoursOfDay = 23;
+        int minute = 55;
+        boolean is24HoursView = true;
+        TimePickerDialog timePickerDialog = new TimePickerDialog(fragmentLayout.getContext(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        edtHours.setText(hourOfDay + "");
+                        edtMinute.setText(minute + "");
+                    }
+                }, hoursOfDay, minute, is24HoursView);
+        timePickerDialog.setIcon(R.drawable.bien_canh_bao_vang);
+        timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        timePickerDialog.setTitle("Hãy chọn thời gian giao hàng");
+        timePickerDialog.show();
+
     }
 
     //------------------------Total---------------------------//
@@ -215,4 +342,6 @@ public class PaymentFragment extends AbstractFragment {
         }
         txtPrice.setText(value + " đồng ");
     }
+
+
 }

@@ -105,12 +105,12 @@
             android:background="@drawable/customize_edt_payment_screen"
             android:weightSum="4">
             <!--           Spinner to Choose hours area-->
-            <Spinner
+            <EditText
+                android:background="#00000000"
                 android:id="@+id/spinner_hours_payment_screen"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
-                android:entries="@array/spinnerDefault_hours"
                 android:paddingLeft="16dp" />
 
             <TextView
@@ -122,12 +122,12 @@
                 android:text="Hours"
                 android:textColor="@color/white" />
             <!--            Choose minute area-->
-            <Spinner
-                android:id="@+id/spinner_second_payment_screen"
+            <EditText
+                android:background="#00000000"
+                android:id="@+id/spinner_minute_payment_screen"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
-                android:entries="@array/spinnerDefault_second"
                 android:paddingLeft="16dp" />
 
             <TextView

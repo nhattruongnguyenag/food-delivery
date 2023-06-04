@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -42,6 +44,8 @@ public class HomeFragment extends AbstractFragment {
     private View fragmentLayout = null;
     private SearchView searchView;
     private TextView txtMenu;
+    private NestedScrollView nestedScrollView;
+    private FloatingActionButton fab;
     private CategoryModel_Test categoryHasChoose;
     private int selectedRow = -1;
     private TextView previousCartViewItemClicked;
@@ -56,12 +60,55 @@ public class HomeFragment extends AbstractFragment {
         fakeDataForMenu();
         //---------------------------------------------------------
         anhXa();
+        setInvisibleFab();
         ActionViewFlipper();
         ClickEventMenu();
         ClickEventCategory();
+        //Event scroll up
+        ClickEventFab();
+        catchEventScrollNestedScrollView();
+
         //--------------------------------End---------------------------//
         return fragmentLayout;
     }
+
+    public void catchEventScrollNestedScrollView(){
+        nestedScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY >= 5) {
+                    setVisibleFab();
+                } else {
+                    setInvisibleFab();
+                }
+            }
+        });
+    }
+
+    //-----------------------------Set disable for fab-----------------//
+    public void setInvisibleFab() {
+        fab.setVisibility(View.INVISIBLE);
+    }
+
+    public void setVisibleFab() {
+        fab.setVisibility(View.VISIBLE);
+    }
+    //-----------------------------Set disable for fab-----------------//
+
+    private void ClickEventFab() {
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nestedScrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        nestedScrollView.smoothScrollTo(0, 0); // Cuộn lên trên
+                    }
+                });
+            }
+        });
+    }
+
 
     public void setUpSystem() {
         recyclerView_menu.setFocusable(false);
@@ -79,19 +126,21 @@ public class HomeFragment extends AbstractFragment {
 
     public void fakeDataForMenu() {
         if (FileUtils.product.size() == 0) {
-            FileUtils.product.add(new ProductModel_Test(1,1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(2,2, "menu_2", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(3,1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(4,3, "menu_3", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(5,1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(6,2, "menu_2", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(7,1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(8,1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(9,1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
+            FileUtils.product.add(new ProductModel_Test(1, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
+            FileUtils.product.add(new ProductModel_Test(2, 2, "menu_2", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
+            FileUtils.product.add(new ProductModel_Test(3, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
+            FileUtils.product.add(new ProductModel_Test(4, 3, "menu_3", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
+            FileUtils.product.add(new ProductModel_Test(5, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
+            FileUtils.product.add(new ProductModel_Test(6, 2, "menu_2", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
+            FileUtils.product.add(new ProductModel_Test(7, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
+            FileUtils.product.add(new ProductModel_Test(8, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
+            FileUtils.product.add(new ProductModel_Test(9, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
         }
     }
 
     public void anhXa() {
+        nestedScrollView = fragmentLayout.findViewById(R.id.nestedScrollView);
+        fab = fragmentLayout.findViewById(R.id.fab_btn);
         txtMenu = fragmentLayout.findViewById(R.id.txt_menu_home_screen);
         recyclerView_menu = fragmentLayout.findViewById(R.id.recyclerView_menu_home_screen);
         recyclerView_category = fragmentLayout.findViewById(R.id.recyclerView_category_home_screen);
