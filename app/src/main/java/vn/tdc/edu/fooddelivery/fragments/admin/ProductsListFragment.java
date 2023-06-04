@@ -1,13 +1,13 @@
 package vn.tdc.edu.fooddelivery.fragments.admin;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,12 +21,11 @@ import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.adapters.ProductManagementRecyclerViewAdapter;
-import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.ProductAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.models.CategoryModel;
+import vn.tdc.edu.fooddelivery.models.BaseModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class ProductsListFragment extends AbstractFragment implements View.OnClickListener {
@@ -56,24 +55,6 @@ public class ProductsListFragment extends AbstractFragment implements View.OnCli
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewProduct.setLayoutManager(layoutManager);
         recyclerViewProduct.setAdapter(adapter);
-
-        Call<List<ProductModel>> call = RetrofitBuilder.getClient().create(ProductAPI.class).getProducts();
-
-        call.enqueue(new Callback<List<ProductModel>>() {
-            @Override
-            public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
-                if (response.body() != null) {
-                    productsList.clear();
-                    productsList.addAll(response.body());
-                    adapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<ProductModel>> call, Throwable t) {
-
-            }
-        });
 
         adapter.setRecylerViewItemClickListener(new ProductManagementRecyclerViewAdapter.OnRecylerViewItemClickListener() {
             @Override
@@ -107,11 +88,35 @@ public class ProductsListFragment extends AbstractFragment implements View.OnCli
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Call<List<ProductModel>> call = RetrofitBuilder.getClient().create(ProductAPI.class).findAll();
+
+        call.enqueue(new Callback<List<ProductModel>>() {
+            @Override
+            public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
+                if (response.body() != null) {
+                    productsList.clear();
+                    productsList.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                    Log.d("api-call", "Fetch product data successfully");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProductModel>> call, Throwable t) {
+                Log.d("api-call", "Fetch product data fail");
+            }
+        });
+    }
+
     private void deleteProduct(ProductModel productModel) {
-        Call<ProductModel> call = RetrofitBuilder.getClient().create(ProductAPI.class).deleteProduct(productModel);
+        Call<ProductModel> call = RetrofitBuilder.getClient().create(ProductAPI.class).delete(productModel.getId());
         call.enqueue(new Callback<ProductModel>() {
             @Override
             public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
+                Log.d("Response API", "Status code " + response.code());
                 if (response.code() == HttpURLConnection.HTTP_OK) {
                     ((AbstractActivity) getActivity()).showMessageDialog("Xoá sản phẩm thành công");
                     productsList.remove(productModel);
@@ -131,7 +136,7 @@ public class ProductsListFragment extends AbstractFragment implements View.OnCli
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnAdd) {
-            ((AbstractActivity) getActivity()).setFragment(ProductFormFragment.class, R.id.frameLayout, false);
+            ((AbstractActivity) getActivity()).setFragment(ProductFormFragment.class, R.id.frameLayout, true);
         }
     }
 }

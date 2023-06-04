@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.adapter.FragmentViewHolder;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import vn.tdc.edu.fooddelivery.models.RoleModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 
 public class UserFragmentStateAdapter extends FragmentStateAdapter {
-    private Fragment fragment;
+    private UsersListFragment fragment;
     private List<RoleModel> listRoles;
     public void setListRoles(List<RoleModel> listRoles) {
         this.listRoles = listRoles;
@@ -41,12 +42,13 @@ public class UserFragmentStateAdapter extends FragmentStateAdapter {
         fragment = new UsersListFragment();
 
         if (position > 0) {
-            ((UsersListFragment) fragment).setRoleModel(listRoles.get(position - 1));
+            fragment.setRoleModel(listRoles.get(position - 1));
         }
+
+        fragment.fragmentStateAdapter = this;
 
         return fragment;
     }
-
 
     @Override
     public int getItemCount() {

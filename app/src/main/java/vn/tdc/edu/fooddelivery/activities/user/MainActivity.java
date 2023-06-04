@@ -1,6 +1,5 @@
 package vn.tdc.edu.fooddelivery.activities.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -158,12 +157,6 @@ public class MainActivity extends AbstractActivity {
                 setFragment(prevFragment.getClass(),R.id.frameLayout,false);
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        navigation.getMenu().getItem(0).setChecked(true);
-        setFragment(HomeFragment.class, R.id.frameLayout, false);
     }
 
     @Override
