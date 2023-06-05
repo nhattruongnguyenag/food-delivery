@@ -2,6 +2,7 @@ package vn.tdc.edu.fooddelivery.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -20,12 +22,14 @@ import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.components.CreateStart;
 import vn.tdc.edu.fooddelivery.components.SendDataAndGotoDetailScreen;
+import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRecyclerViewAdapter.MyViewHolder> {
 
     private Activity activity;
+    private HomeFragment homeFragment;
     private int layout_ID;
     private ArrayList<ProductModel_Test> arrayList;
     private onRecyclerViewOnClickListener _onRecyclerViewOnClickListener;
@@ -63,7 +67,7 @@ public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRe
             public void onClick(View view) {
                 if (_onRecyclerViewOnClickListener != null) {
                     flag = 2;
-                    _onRecyclerViewOnClickListener.onItemRecyclerViewOnClickListener(position, holder.itemView);
+                    //MARK
                     SendDataAndGotoDetailScreen.send(activity, cart, arrayList);
                 }
             }
@@ -76,37 +80,18 @@ public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRe
                 }
             });
         }
-        //----------------------------End event click to detail screen-------------------//
         //------------------------------Start catch click event---------------------------//
         buttonBuyEventClick(holder, cart);
-        //------------------------------End catch click event---------------------------//
     }
 
     public void buttonBuyEventClick(MyViewHolder holder, ProductModel_Test cart) {
         //Btn buy event
         holder.btn_buy.setOnClickListener(new View.OnClickListener() {
-            int index = -1;
 
             @Override
             public void onClick(View v) {
-                if (FileUtils.cartList == null) {
-                    FileUtils.cartList = new ArrayList<>();
-                } else {
-                    for (int i = 0; i < FileUtils.cartList.size(); i++) {
-                        if (FileUtils.cartList.get(i).get_id() == (cart.get_id())) {
-                            index = i;
-                        }
-                    }
-                }
-                if (index != -1) {
-                    ProductModel_Test cartOld = FileUtils.cartList.get(index);
-                    FileUtils.cartList.get(index).setQty(cartOld.getQty() + 1);
-                } else {
-                    cart.setQty(1);
-                    FileUtils.cartList.add(cart);
-                }
-                //-----------------Create notify cart number--------------------//
-                MainActivity.CreateNumberBuyButtonEventClick();
+                homeFragment = new HomeFragment();
+                homeFragment.addToCardAndNotify(cart);
             }
         });
     }
