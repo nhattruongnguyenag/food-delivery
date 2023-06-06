@@ -65,10 +65,6 @@ class OrderController extends Controller
                     $shipper = User::find($request->shipper_id);
                     if ($shipper != null) {
                         $order->shipper_id = $request->shipper_id;
-                        $order->save();
-                        $resource = new OrderResource($order);
-                        $result = json_decode($resource->toJson(), true);
-                        return response($result, 200);
                     } else {
                         return response([
                             "msg" => "Khong tim thay thong tin shipper"
@@ -79,11 +75,12 @@ class OrderController extends Controller
                 //update status
                 if (isset($request->status)) {
                     $order->status = $request->status;
-                    $order->save();
-                    $resource = new OrderResource($order);
-                    $result = json_decode($resource->toJson(), true);
-                    return response($result, 200);
                 }
+
+                $order->save();
+                $resource = new OrderResource($order);
+                $result = json_decode($resource->toJson(), true);
+                return response($result[0], 200);
             } else {
                 return response([
                     "msg" => "Khong ton tai order"
@@ -120,7 +117,8 @@ class OrderController extends Controller
         }
     }
 
-    public function deleteOrderAPI(Request $request){
+    public function deleteOrderAPI(Request $request)
+    {
         $result = null;
         if (isset($request->id)) {
             $order = Order::find($request->id);
@@ -134,5 +132,4 @@ class OrderController extends Controller
         }
         return response($result, 400);
     }
-
 }
