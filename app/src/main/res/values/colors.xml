@@ -24,6 +24,7 @@
     <color name="drawer_menu_item_inactive">#000</color>
     <!--   Start Chu dinh hanh-->
     <color name="green">#008000</color>
+    <color name="notify_success">#8ec391</color>
     <color name="yellow">#f1c602</color>
     <color name="blue">#55b6ee</color>#bcbbbb
     <color name="shadow">#bcbbbb</color>

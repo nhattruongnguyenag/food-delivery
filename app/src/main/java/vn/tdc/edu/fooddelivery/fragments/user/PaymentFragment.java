@@ -1,24 +1,27 @@
 package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RatingBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -83,11 +86,16 @@ public class PaymentFragment extends AbstractFragment {
                 boolean dateOk = validateDateAction();
                 if (timeOk && dateOk) {
                     Toast.makeText(fragmentLayout.getContext(), "Mua", Toast.LENGTH_SHORT).show();
+                    sendNotification();
                 } else {
                     Toast.makeText(fragmentLayout.getContext(), "loi", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    //-------------------------------------Sen notification when order -----------------//
+    public void sendNotification() {
     }
 
     //--------------------Star validate date field---------------------//

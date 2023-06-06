@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import androidx.appcompat.widget.SearchView;
@@ -27,8 +28,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.adapters.HomeMenuRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.adapters.HomeCategoryRecyclerViewAdapter;
+import vn.tdc.edu.fooddelivery.components.ToaslCustomize;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.CategoryModel_Test;
 import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
@@ -36,12 +39,14 @@ import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class HomeFragment extends AbstractFragment {
 
+    private static LayoutInflater layoutInflater = null;
+    private static View fragmentLayout = null;
+    private ToaslCustomize toaslCustomize;
     private ViewFlipper viewFlipper;
     private RecyclerView recyclerView_category;
     private RecyclerView recyclerView_menu;
     private HomeMenuRecyclerViewAdapter myAdapterMenu;
     private HomeCategoryRecyclerViewAdapter categoryAdapter;
-    private View fragmentLayout = null;
     private SearchView searchView;
     private TextView txtMenu;
     private NestedScrollView nestedScrollView;
@@ -55,6 +60,7 @@ public class HomeFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentLayout = inflater.inflate(R.layout.fragment_home, container, false);
+        layoutInflater = getLayoutInflater();
         //----------------------------Processing---------------------//
         fakeDataCartegory();
         fakeDataForMenu();
@@ -72,7 +78,7 @@ public class HomeFragment extends AbstractFragment {
         return fragmentLayout;
     }
 
-    public void catchEventScrollNestedScrollView(){
+    public void catchEventScrollNestedScrollView() {
         nestedScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -207,6 +213,34 @@ public class HomeFragment extends AbstractFragment {
     }
 
 
+    public void addToCardAndNotify(ProductModel_Test cart) {
+        toaslCustomize = new ToaslCustomize();
+        toaslCustomize.customeToasl(fragmentLayout, layoutInflater);
+        int index = -1;
+        if (FileUtils.cartList == null) {
+            FileUtils.cartList = new ArrayList<>();
+        } else {
+            for (int i = 0; i < FileUtils.cartList.size(); i++) {
+                if (FileUtils.cartList.get(i).get_id() == (cart.get_id())) {
+                    index = i;
+                }
+            }
+        }
+        if (index != -1) {
+            ProductModel_Test cartOld = FileUtils.cartList.get(index);
+            FileUtils.cartList.get(index).setQty(cartOld.getQty() + 1);
+        } else {
+            cart.setQty(1);
+            FileUtils.cartList.add(cart);
+        }
+        //------------------Toasl--------------------------------------//
+
+        //-----------------Create notify cart number--------------------//
+        MainActivity.CreateNumberBuyButtonEventClick();
+        //--------------------Toasl----------------------------------------//
+    }
+
+
     //-------------------------------Chuyen man hinh---------------------------------//
     public <T> T setFragment(Class<T> tClass, int layout, boolean addToBackStack) {
         T fragment = null;
@@ -240,7 +274,6 @@ public class HomeFragment extends AbstractFragment {
                 categoryHasChoose = FileUtils.categoryList.get(p);
                 for (int i = 0; i < FileUtils.product.size(); i++) {
                     if (FileUtils.product.get(i).getCategory_id() == categoryHasChoose.getIdCategory()) {
-                        Log.d("TAG", "onItemRecyclerViewOnClickListener: " + i + "----" + categoryHasChoose.getIdCategory());
                         arrayFilter.add(FileUtils.product.get(i));
                     }
                 }

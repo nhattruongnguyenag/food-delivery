@@ -2,6 +2,7 @@ package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,6 +73,8 @@ public class CartFragment extends AbstractFragment {
         }
     }
 
+
+
     //-----------------------Calculate total and assign to TextViewTotal------------------------//
     public void CalculateAndAssign(ArrayList<ProductModel_Test> cartArrayList) {
         int sum = 0;
@@ -116,6 +120,7 @@ public class CartFragment extends AbstractFragment {
             @Override
             public void onItemRecyclerViewOnClickListener(int p, View CardView) {
                 //MARK actions
+                Toast.makeText(fragmentLayout.getContext(), "click", Toast.LENGTH_SHORT).show();
             }
         });
     }

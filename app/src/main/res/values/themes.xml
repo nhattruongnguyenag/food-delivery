@@ -15,7 +15,8 @@
     </style>
 
     <style name="Theme.FoodDelivery.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/laucher</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
     </style>
 
     <style name="Theme.FoodDelivery.SearchView" parent="Widget.AppCompat.SearchView">
