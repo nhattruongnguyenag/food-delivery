@@ -1,7 +1,12 @@
 package vn.tdc.edu.fooddelivery.fragments.user;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -23,6 +28,10 @@ import vn.tdc.edu.fooddelivery.utils.FormartCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
+
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.NotificationCompat;
+
 
 public class PaymentFragment extends AbstractFragment {
     private EditText note;
@@ -78,7 +87,8 @@ public class PaymentFragment extends AbstractFragment {
                 boolean dateOk = validateDateAction();
                 if (timeOk && dateOk) {
                     Toast.makeText(fragmentLayout.getContext(), "Mua", Toast.LENGTH_SHORT).show();
-                    sendNotification();
+                    showNotification(fragmentLayout.getContext(), "THÔNG BÁO TỪ HỆ THỐNG", "Ấn vào biểu tượng để xem thêm..", "Đơn hàng của bạn đã đặt thành công chúng tôi sẽ sơm giao" +
+                            " đến sớm nhất, vui lòng để điện thoai ở trạng thái chờ chúng tôi sẽ gọi điện cho ban sớm");
                 } else {
                     Toast.makeText(fragmentLayout.getContext(), "loi", Toast.LENGTH_SHORT).show();
                 }
@@ -86,9 +96,6 @@ public class PaymentFragment extends AbstractFragment {
         });
     }
 
-    //-------------------------------------Sen notification when order -----------------//
-    public void sendNotification() {
-    }
 
     //--------------------Star validate date field---------------------//
     private boolean validateDateAction() {
@@ -342,6 +349,15 @@ public class PaymentFragment extends AbstractFragment {
         }
         txtPrice.setText(value + " đồng ");
     }
+
+    //-----------------------------Notifications----------------------------//
+    @SuppressLint("MissingPermission")
+    public static void showNotification(Context context, String title, String _short, String _length) {
+        // Hiển thị thông báo
+        vn.tdc.edu.fooddelivery.components.Notification.showNotificationUpgrade(context, title, _short, _length);
+    }
+
+    //---------------------------------Get location---------------------------------//
 
 
 }

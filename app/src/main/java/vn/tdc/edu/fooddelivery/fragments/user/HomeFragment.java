@@ -2,7 +2,6 @@ package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import androidx.appcompat.widget.SearchView;
@@ -31,7 +29,7 @@ import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.adapters.HomeMenuRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.adapters.HomeCategoryRecyclerViewAdapter;
-import vn.tdc.edu.fooddelivery.components.ToaslCustomize;
+import vn.tdc.edu.fooddelivery.components.ToastCustome;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.CategoryModel_Test;
 import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
@@ -41,7 +39,7 @@ public class HomeFragment extends AbstractFragment {
 
     private static LayoutInflater layoutInflater = null;
     private static View fragmentLayout = null;
-    private ToaslCustomize toaslCustomize;
+    private ToastCustome toaslCustomize;
     private ViewFlipper viewFlipper;
     private RecyclerView recyclerView_category;
     private RecyclerView recyclerView_menu;
@@ -214,7 +212,7 @@ public class HomeFragment extends AbstractFragment {
 
 
     public void addToCardAndNotify(ProductModel_Test cart) {
-        toaslCustomize = new ToaslCustomize();
+        toaslCustomize = new ToastCustome();
         toaslCustomize.customeToasl(fragmentLayout, layoutInflater);
         int index = -1;
         if (FileUtils.cartList == null) {
