@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import vn.tdc.edu.fooddelivery.R;
 
-public class ToaslCustomize {
+public class ToastCustome {
     //Success
     public void customeToasl(View activityToasl, LayoutInflater layoutInflater) {
         Toast toast = new Toast(activityToasl.getContext());
