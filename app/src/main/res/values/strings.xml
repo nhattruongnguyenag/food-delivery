@@ -12,7 +12,7 @@
     <string name="menu_order_management">Quản lý đơn hàng</string>
     <string name="menu_user_management">Quản lý người dùng</string>
     <string name="menu_category_management">Quản lý danh mục sản phẩm</string>
-    <string name="menu_role_management">Quản lý vai tro</string>
+    <string name="menu_role_management">Quản lý vai trò</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="btn_add_category">Thêm danh mục</string>
