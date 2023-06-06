@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class UsersListFragment extends AbstractFragment implements UserManagemen
     private UserManagementRecyclerViewAdapter adapter;
     private List<UserModel> listUsers;
     private RoleModel roleModel;
+    private ConfirmDialog confirmDialog;
 
     public FragmentStateAdapter fragmentStateAdapter;
 
@@ -67,7 +69,8 @@ public class UsersListFragment extends AbstractFragment implements UserManagemen
         getUserListFromAPI(roleModel == null ? null : roleModel.getCode());
     }
 
-    private void deleteUser(UserModel userModel) {
+    private void deleteUser(int position) {
+        UserModel userModel = listUsers.get(position);
         Call<UserModel> call = RetrofitBuilder.getClient().create(UserAPI.class).delete(userModel.getId());
         call.enqueue(new Callback<UserModel>() {
             @Override
@@ -75,6 +78,9 @@ public class UsersListFragment extends AbstractFragment implements UserManagemen
                 if (response.code() == HttpURLConnection.HTTP_OK) {
                     ((AbstractActivity) getActivity()).showMessageDialog("Xoá người dùng thành công");
                     getUserListFromAPI(roleModel == null ? null : roleModel.getCode());
+                    adapter.notifyItemRemoved(position);
+                    confirmDialog.dismiss();
+
                 } else {
                     ((AbstractActivity) getActivity()).showMessageDialog("Xoá người dùng thất bại");
                 }
@@ -125,7 +131,7 @@ public class UsersListFragment extends AbstractFragment implements UserManagemen
 
     @Override
     public void onButtonDeleteClickListener(int position) {
-        ConfirmDialog confirmDialog = new ConfirmDialog(getActivity());
+        confirmDialog = new ConfirmDialog(getActivity());
         confirmDialog.setTitle("Xác nhận");
         confirmDialog.setMessage("Dữ liệu đã xoá không thể hoàn tác.\nBạn có muốn tiếp tục không?");
         confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
@@ -136,10 +142,7 @@ public class UsersListFragment extends AbstractFragment implements UserManagemen
 
             @Override
             public void ok() {
-                UserModel userModel = new UserModel();
-                userModel.setId(listUsers.get(position).getId());
-                deleteUser(userModel);
-                confirmDialog.dismiss();
+                deleteUser(position);
             }
         });
 
