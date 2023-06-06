@@ -48,6 +48,10 @@ class UserController extends Controller
                             'msg' => 'email da ton tai , khong the them'
                         ], 400);
                     }
+                }else{
+                    return response([
+                        'msg' => 'chua cap quyen cho user nay'
+                    ], 400);
                 }
             }
         }
