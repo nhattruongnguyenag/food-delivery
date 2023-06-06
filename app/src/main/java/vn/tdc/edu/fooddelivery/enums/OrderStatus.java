@@ -1,10 +1,10 @@
 package vn.tdc.edu.fooddelivery.enums;
 
 public enum OrderStatus {
-    CHUA_XU_LY(0),
-    DANG_GIAO_HANG(1),
-    THANH_CONG(2),
-    THAT_BAI(3);
+    CHUA_XU_LY(1),
+    DANG_GIAO_HANG(2),
+    THANH_CONG(3),
+    THAT_BAI(4);
 
     private int status;
 

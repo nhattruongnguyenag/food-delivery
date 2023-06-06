@@ -22,17 +22,24 @@ import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.adapters.OrderManagementItemRecyclerViewAdapter;
+import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.OrderAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.components.AssigntOrderPopupToStaff;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.enums.OrderStatus;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
+import vn.tdc.edu.fooddelivery.models.AssignmentOrderRequest;
+import vn.tdc.edu.fooddelivery.models.CategoryModel;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
+import vn.tdc.edu.fooddelivery.models.UserModel;
 
 public class OrdersListFragment extends AbstractFragment implements OrderManagementItemRecyclerViewAdapter.OnRecylerViewItemClickListener {
     private OrderManagementItemRecyclerViewAdapter adapter;
     private List<OrderModel> listOrders;
     private Integer status;
+    private  AssigntOrderPopupToStaff assign;
+    private RecyclerView recyclerViewOrder;
 
     public List<OrderModel> getListOrders() {
         return listOrders;
@@ -45,8 +52,6 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
     public void setStatus(Integer status) {
         this.status = status;
     }
-
-    private RecyclerView recyclerViewOrder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,8 +118,6 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
         });
     }
 
-//    private void
-
     @Override
     public void onButtonOrderDetailClickListener(int position) {
         Log.d("recyclerTest", "Order detais clicked at " + position);
@@ -129,10 +132,26 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
 
     @Override
     public void onButtonAcceptClickListener(int position) {
-        OrderModel orderModel = new OrderModel();
-        orderModel.setId(listOrders.get(position).getId());
-        orderModel.setStatus(OrderStatus.DANG_GIAO_HANG.getStatus());
+        if (getActivity() != null) {
+            assign = new AssigntOrderPopupToStaff(getActivity());
+            assign.setOnAssignmentDialogAction(new AssigntOrderPopupToStaff.DialogAssignDialogAction() {
+                @Override
+                public void cancel() {
+                    assign.dismiss();
+                }
 
+                @Override
+                public void ok(UserModel shipper) {
+                    AssignmentOrderRequest orderRequest = new AssignmentOrderRequest();
+                    orderRequest.setId(listOrders.get(position).getId());
+                    orderRequest.setStatus(OrderStatus.DANG_GIAO_HANG.getStatus());
+                    orderRequest.setShipperId(shipper.getId());
+                    assignmentOrderToShipper(orderRequest);
+                }
+            });
+
+            assign.show();
+        }
     }
 
     @Override
@@ -154,5 +173,26 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
         });
 
         confirmDialog.show();
+    }
+
+    private void assignmentOrderToShipper(AssignmentOrderRequest orderRequest) {
+        Call<OrderModel> call = RetrofitBuilder.getClient().create(OrderAPI.class).update(orderRequest);
+
+        call.enqueue(new Callback<OrderModel>() {
+            @Override
+            public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
+                if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Hoá đơn đã được bàn giao cho nhân viên giao hàng");
+                    assign.dismiss();
+                } else {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderModel> call, Throwable t) {
+                ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
+            }
+        });
     }
 }

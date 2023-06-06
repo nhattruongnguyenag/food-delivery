@@ -1,12 +1,7 @@
 package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -20,14 +15,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import vn.tdc.edu.fooddelivery.R;
-import vn.tdc.edu.fooddelivery.components.FormartCurentcy;
+import vn.tdc.edu.fooddelivery.utils.FormartCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;

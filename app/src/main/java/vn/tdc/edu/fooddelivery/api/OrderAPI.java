@@ -11,6 +11,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import vn.tdc.edu.fooddelivery.models.AssignmentOrderRequest;
 import vn.tdc.edu.fooddelivery.models.CategoryModel;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
 
@@ -23,6 +24,9 @@ public interface OrderAPI {
 
     @PUT("api/orders")
     Call<OrderModel> update(@Body OrderModel orderModel);
+
+    @PUT("api/orders")
+    Call<OrderModel> update(@Body AssignmentOrderRequest orderRequest);
 
     @DELETE("api/orders/{id}")
     Call<OrderModel> delete(@Path("id") Integer id);

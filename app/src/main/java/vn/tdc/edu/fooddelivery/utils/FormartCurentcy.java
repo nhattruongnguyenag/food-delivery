@@ -1,4 +1,4 @@
-package vn.tdc.edu.fooddelivery.components;
+package vn.tdc.edu.fooddelivery.utils;
 
 public class FormartCurentcy {
     public static String format(String value) {
