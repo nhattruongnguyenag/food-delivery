@@ -3,8 +3,10 @@ package vn.tdc.edu.fooddelivery.fragments.admin;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,7 @@ import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.RoleModel;
 
-public class UserRolesTabFragment extends AbstractFragment {
+public class UserManagementFragment extends AbstractFragment {
     private TabLayout tabLayout;
     private List<RoleModel> listRoles;
     private ViewPager2 viewPager2;
@@ -37,12 +39,15 @@ public class UserRolesTabFragment extends AbstractFragment {
         View view = inflater.inflate(R.layout.fragment_user_role_tab, container, false);
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager2 = view.findViewById(R.id.page);
-
-        createTabLayoutForUserRoles();
-
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        createTabLayoutForUserRoles();
+        Log.d("fragment-life-cycler", "onViewCreated: user management fragment");
+    }
 
     private void createTabLayoutForUserRoles() {
         Call<List<RoleModel>> call = RetrofitBuilder.getClient().create(RoleAPI.class).findAll();
@@ -57,7 +62,7 @@ public class UserRolesTabFragment extends AbstractFragment {
                     listRoles.clear();
                     listRoles.addAll(response.body());
 
-                    adapter = new UserFragmentStateAdapter(UserRolesTabFragment.this);
+                    adapter = new UserFragmentStateAdapter(UserManagementFragment.this);
                     adapter.setListRoles(listRoles);
                     viewPager2.setAdapter(adapter);
 

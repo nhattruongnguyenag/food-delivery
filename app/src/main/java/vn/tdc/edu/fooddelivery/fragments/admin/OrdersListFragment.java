@@ -22,7 +22,6 @@ import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.adapters.OrderManagementItemRecyclerViewAdapter;
-import vn.tdc.edu.fooddelivery.api.CategoryAPI;
 import vn.tdc.edu.fooddelivery.api.OrderAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.AssigntOrderPopupToStaff;
@@ -30,7 +29,6 @@ import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.enums.OrderStatus;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.AssignmentOrderRequest;
-import vn.tdc.edu.fooddelivery.models.CategoryModel;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 
@@ -40,6 +38,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
     private Integer status;
     private  AssigntOrderPopupToStaff assign;
     private RecyclerView recyclerViewOrder;
+    private ConfirmDialog confirmDialog;
 
     public List<OrderModel> getListOrders() {
         return listOrders;
@@ -60,62 +59,14 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
 
         recyclerViewOrder = view.findViewById(R.id.recyclerViewOrder);
 
-        getOrderListFromAPI(status);
-
         return view;
     }
 
-    private void deleteUser(OrderModel orderModel) {
-        Call<OrderModel> call = RetrofitBuilder.getClient().create(OrderAPI.class).delete(orderModel.getId());
-        call.enqueue(new Callback<OrderModel>() {
-            @Override
-            public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
-                if (response.code() == HttpURLConnection.HTTP_OK) {
-                    ((AbstractActivity) getActivity()).showMessageDialog("Xoá đơn hàng thành công");
-                    listOrders.remove(orderModel);
-                    adapter.notifyDataSetChanged();
-                } else {
-                    ((AbstractActivity) getActivity()).showMessageDialog("Xoá đơn hàng thất bại");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<OrderModel> call, Throwable t) {
-                ((AbstractActivity) getActivity()).showMessageDialog("Xoá đơn hàng thất bại");
-            }
-        });
-    }
-
-    private void getOrderListFromAPI(Integer status) {
-        Call<List<OrderModel>> call = RetrofitBuilder.getClient().create(OrderAPI.class).findAll(status);
-        call.enqueue(new Callback<List<OrderModel>>() {
-            @Override
-            public void onResponse(Call<List<OrderModel>> call, Response<List<OrderModel>> response) {
-                if (response.code() == HttpURLConnection.HTTP_OK) {
-                    if (listOrders == null) {
-                        listOrders = new ArrayList<>();
-                    }
-
-                    listOrders.clear();
-                    listOrders.addAll(response.body());
-
-                    adapter = new OrderManagementItemRecyclerViewAdapter(getActivity(), R.layout.recycler_order_management, listOrders);
-
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                    recyclerViewOrder.setLayoutManager(layoutManager);
-                    recyclerViewOrder.setAdapter(adapter);
-
-                    adapter.notifyDataSetChanged();
-                    adapter.setOnRecylerViewItemClickListener(OrdersListFragment.this);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<OrderModel>> call, Throwable t) {
-
-            }
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
+        getOrderListFromAPI(status);
+        Log.d("fragment-life-cycler", "on resume order list");
     }
 
     @Override
@@ -156,7 +107,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
 
     @Override
     public void onButtonDeleteClickListener(int position) {
-        ConfirmDialog confirmDialog = new ConfirmDialog(getActivity());
+        confirmDialog = new ConfirmDialog(getActivity());
         confirmDialog.setTitle("Xác nhận");
         confirmDialog.setMessage("Dữ liệu đã xoá không thể hoàn tác.\nBạn có muốn tiếp tục không?");
         confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
@@ -167,7 +118,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
 
             @Override
             public void ok() {
-                deleteUser(listOrders.get(position));
+                deleteOrder(position);
                 confirmDialog.dismiss();
             }
         });
@@ -192,6 +143,60 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
             @Override
             public void onFailure(Call<OrderModel> call, Throwable t) {
                 ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
+            }
+        });
+    }
+
+    private void deleteOrder(int position) {
+        OrderModel orderModel = listOrders.get(position);
+        Call<OrderModel> call = RetrofitBuilder.getClient().create(OrderAPI.class).delete(orderModel.getId());
+        call.enqueue(new Callback<OrderModel>() {
+            @Override
+            public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
+                if (response.code() == HttpURLConnection.HTTP_OK) {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Xoá đơn hàng thành công");
+                    listOrders.remove(orderModel);
+                    adapter.notifyItemRemoved(position);
+                } else {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Xoá đơn hàng thất bại");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderModel> call, Throwable t) {
+                ((AbstractActivity) getActivity()).showMessageDialog("Xoá đơn hàng thất bại");
+            }
+        });
+    }
+
+    private void getOrderListFromAPI(Integer status) {
+        Call<List<OrderModel>> call = RetrofitBuilder.getClient().create(OrderAPI.class).findAll(status);
+        call.enqueue(new Callback<List<OrderModel>>() {
+            @Override
+            public void onResponse(Call<List<OrderModel>> call, Response<List<OrderModel>> response) {
+                if (response.code() == HttpURLConnection.HTTP_OK) {
+                    if (listOrders == null) {
+                        listOrders = new ArrayList<>();
+                    }
+
+                    listOrders.clear();
+                    listOrders.addAll(response.body());
+
+                    adapter = new OrderManagementItemRecyclerViewAdapter(getActivity(), R.layout.recycler_order_management, listOrders);
+
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    recyclerViewOrder.setLayoutManager(layoutManager);
+                    recyclerViewOrder.setAdapter(adapter);
+
+                    adapter.notifyDataSetChanged();
+                    adapter.setOnRecylerViewItemClickListener(OrdersListFragment.this);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<OrderModel>> call, Throwable t) {
+
             }
         });
     }

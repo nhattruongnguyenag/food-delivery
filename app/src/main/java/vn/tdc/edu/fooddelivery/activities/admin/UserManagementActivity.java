@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.fragments.admin.UserFormFragment;
-import vn.tdc.edu.fooddelivery.fragments.admin.UserRolesTabFragment;
+import vn.tdc.edu.fooddelivery.fragments.admin.UserManagementFragment;
 
 public class UserManagementActivity extends AbstractActivity {
     private MenuItem menuItemSelected;
@@ -20,7 +20,7 @@ public class UserManagementActivity extends AbstractActivity {
         setContentView(R.layout.layout_order_management);
         createActionBar();
 
-        setFragment(UserRolesTabFragment.class, R.id.frameLayout, false);
+        setFragment(UserManagementFragment.class, R.id.frameLayout, false);
     }
 
     @Override

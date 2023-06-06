@@ -17,6 +17,7 @@
     <style name="Theme.FoodDelivery.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon">@drawable/laucher</item>
         <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="Theme.FoodDelivery.SearchView" parent="Widget.AppCompat.SearchView">
