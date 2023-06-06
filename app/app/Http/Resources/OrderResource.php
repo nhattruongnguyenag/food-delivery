@@ -20,7 +20,22 @@ class OrderResource extends JsonResource
     {
         $resource = [];
         foreach ($this->all() as $item) {
-            if($item["id"] == $this->id){
+            if(isset($this->id)){
+                if($item["id"] == $this->id){
+                    array_push($resource, [
+                        "id" => $item["id"],
+                        "user" => User::select('id', 'full_name', 'image', 'email')->where('id', $item['user_id'])->first(),
+                        "total" => $item['total'],
+                        "shipper" => User::select('id', 'full_name', 'image', 'email')->where('id', $item['shipper_id'])->first(),
+                        "customer_phone" => $item["customer_phone"],
+                        "delivery_address" => $item["delivery_address"],
+                        "status" => $item["status"],
+                        "created_at" => $item["created_at"],
+                        "updated_at" => $item["updated_at"],
+                        "items" => $this->items(User::find($item['user_id']),$item["id"])
+                    ]);
+                }
+            }else{
                 array_push($resource, [
                     "id" => $item["id"],
                     "user" => User::select('id', 'full_name', 'image', 'email')->where('id', $item['user_id'])->first(),
@@ -34,6 +49,7 @@ class OrderResource extends JsonResource
                     "items" => $this->items(User::find($item['user_id']),$item["id"])
                 ]);
             }
+            
         }
         return $resource;
     }
