@@ -2,11 +2,8 @@ package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -24,13 +21,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import vn.tdc.edu.fooddelivery.R;
-import vn.tdc.edu.fooddelivery.utils.FormartCurentcy;
+import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
-
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.app.NotificationCompat;
 
 
 public class PaymentFragment extends AbstractFragment {
@@ -343,7 +337,7 @@ public class PaymentFragment extends AbstractFragment {
         for (int i = 0; i < cartArrayList.size(); i++) {
             sum += cartArrayList.get(i).getPrice() * cartArrayList.get(i).getQty();
         }
-        String value = FormartCurentcy.format(sum + "");
+        String value = FormatCurentcy.format(sum + "");
         if (txtPrice == null) {
             txtPrice = fragmentLayout.findViewById(R.id.total_cart_screen);
         }

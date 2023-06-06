@@ -21,10 +21,10 @@ import java.util.ArrayList;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
-import vn.tdc.edu.fooddelivery.adapters.DetailRecyclerViewAdapter;
+import vn.tdc.edu.fooddelivery.adapters.ProductDetailRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.components.CreateStart;
-import vn.tdc.edu.fooddelivery.utils.FormartCurentcy;
-import vn.tdc.edu.fooddelivery.components.ToaslCustomize;
+import vn.tdc.edu.fooddelivery.components.ToastCustome;
+import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
@@ -32,7 +32,7 @@ import vn.tdc.edu.fooddelivery.utils.FileUtils;
 public class ProductDetailFragment extends AbstractFragment {
     private ToastCustome _customeToasl;
     private RecyclerView recyclerView;
-    private DetailRecyclerViewAdapter myRecycleViewAdapter;
+    private ProductDetailRecyclerViewAdapter myRecycleViewAdapter;
     private ArrayList<ProductModel_Test> arrayList = new ArrayList<>();
     private ProductModel_Test DetailProduct;
     private ImageButton buttonHeart;
@@ -189,7 +189,7 @@ public class ProductDetailFragment extends AbstractFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentLayout.getContext());
         layoutManager.setOrientation(layoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
-        myRecycleViewAdapter = new DetailRecyclerViewAdapter((Activity) fragmentLayout.getContext(),
+        myRecycleViewAdapter = new ProductDetailRecyclerViewAdapter((Activity) fragmentLayout.getContext(),
                 R.layout.detail_layout_item, arrayList);
         recyclerView.setAdapter(myRecycleViewAdapter);
     }
@@ -205,7 +205,7 @@ public class ProductDetailFragment extends AbstractFragment {
             txt_DescriptionProductMain.setText(DetailProduct.getDescription());
         }
         txt_NameProductMain.setText(DetailProduct.getName());
-        txt_PriceProductMain.setText((FormartCurentcy.format(String.valueOf(DetailProduct.getPrice()))) + " đồng");
+        txt_PriceProductMain.setText((FormatCurentcy.format(String.valueOf(DetailProduct.getPrice()))) + " đồng");
         txt_start.setText(String.valueOf(DetailProduct.getRate()));
         // ----------------------Star Start printf-----------------//
         // for (int i = 0; i < DetailProduct.getRate(); i++) {
@@ -220,7 +220,7 @@ public class ProductDetailFragment extends AbstractFragment {
     // ----------------------------Catch event click-----------------//
     public void ClickEvent() {
         myRecycleViewAdapter
-                .set_OnRecyclerViewOnClickListener(new DetailRecyclerViewAdapter.onRecyclerViewOnClickListener() {
+                .set_OnRecyclerViewOnClickListener(new ProductDetailRecyclerViewAdapter.onRecyclerViewOnClickListener() {
                     @Override
                     public void onItemRecyclerViewOnClickListener(int p, View CardView) {
                         // MARK actions

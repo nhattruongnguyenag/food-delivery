@@ -19,8 +19,7 @@ public class Notification {
     // Notifications var
     private static final String CHANNEL_ID = "my_channel";
     private static final int NOTIFICATION_ID = 1;
-
-
+    
     @SuppressLint("MissingPermission")
     public void showNotificationBasic(Context context, String title, String content) {
 //         Tạo kênh thông báo (chỉ cần thực hiện trên Android 8.0 trở lên)
@@ -60,59 +59,6 @@ public class Notification {
         // Hiển thị thông báo
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(NOTIFICATION_ID, notification);
-    }
-
-
-    @SuppressLint("MissingPermission")
-    public static void showNotificationUseLayout(Context context, String title, String content) {
-//        // Tạo kênh thông báo (chỉ cần thực hiện trên Android 8.0 trở lên)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "My Channel", NotificationManager.IMPORTANCE_DEFAULT);
-//            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-//            notificationManager.createNotificationChannel(channel);
-//        }
-//        // Tạo biểu tượng lớn từ tệp ảnh
-//        Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo);
-//
-//        // Tạo thông báo
-//        @SuppressLint("ResourceAsColor") NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-//                .setLargeIcon(largeIcon)
-//                .setSmallIcon(R.drawable.ic_notification)
-//                .setContentTitle(title)
-//                .setContentText(content)
-//                .setColor(R.color.green_light)
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-//
-//        // Hiển thị thông báo
-//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-//        notificationManager.notify(NOTIFICATION_ID, builder.build());
-//
-////         Tạo kênh thông báo (chỉ cần thực hiện trên Android 8.0 trở lên)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "My Channel", NotificationManager.IMPORTANCE_DEFAULT);
-//            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-//            notificationManager.createNotificationChannel(channel);
-//        }
-//
-//// Tạo biểu tượng lớn từ tệp ảnh
-//        Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo);
-//
-//// Tạo thông báo
-//        @SuppressLint("ResourceAsColor") NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-//                .setLargeIcon(largeIcon)
-//                .setSmallIcon(R.drawable.ic_notification)
-//                .setContentTitle(title)
-//                .setContentText(content)
-//                .setColor(R.color.green_light)
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-// Tạo RemoteViews cho nội dung thông báo mở rộng
-//        @SuppressLint("RemoteViewLayout") RemoteViews expandedView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
-//        expandedView.setTextViewText(R.id.notification_title, title);
-//        expandedView.setTextViewText(R.id.notification_content, content);
-//
-//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-//        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 }
 

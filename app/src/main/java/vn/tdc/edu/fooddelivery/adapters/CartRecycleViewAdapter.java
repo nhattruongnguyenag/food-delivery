@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
-import vn.tdc.edu.fooddelivery.utils.FormartCurentcy;
+import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
@@ -56,7 +56,7 @@ public class CartRecycleViewAdapter extends RecyclerView.Adapter<CartRecycleView
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         ProductModel_Test cart = arrayList.get(position);
         holder.txt_name.setText(String.valueOf(cart.getName()));
-        holder.txt_total.setText(FormartCurentcy.format(cart.getPrice() + "") + " x " + FormartCurentcy.format(cart.getQty() + "") + " = " +  FormartCurentcy.format((cart.getQty() * cart.getPrice()) + "") + " VND ");
+        holder.txt_total.setText(FormatCurentcy.format(cart.getPrice() + "") + " x " + FormatCurentcy.format(cart.getQty() + "") + " = " +  FormatCurentcy.format((cart.getQty() * cart.getPrice()) + "") + " VND ");
         holder.txt_qty.setText(String.valueOf(cart.getQty()));
         holder.img.setImageDrawable(activity.getResources().getDrawable(cart.getImg(), activity.getTheme()));
         //B3: Event click

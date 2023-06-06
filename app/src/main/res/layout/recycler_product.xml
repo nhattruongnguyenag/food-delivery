@@ -46,12 +46,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:gravity="center_vertical"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Giá bán:"
+                    android:gravity="center_vertical"
+                    android:text="Giá bán: "
                     android:textColor="@color/textTitlePrimary"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvPrice"
@@ -71,9 +71,9 @@
 
                 <TextView
                     android:gravity="center_vertical"
-                    android:layout_width="55dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Còn lại:"
+                    android:text="Còn lại: "
                     android:textColor="@color/textTitlePrimary"
                     android:textStyle="bold"/>
 

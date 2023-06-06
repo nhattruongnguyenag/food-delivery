@@ -2,9 +2,10 @@ package vn.tdc.edu.fooddelivery.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class BaseModel {
+public class BaseModel implements Serializable {
     @SerializedName("id")
     private Integer id;
     @SerializedName("created_at")

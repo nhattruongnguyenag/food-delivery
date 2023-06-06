@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +29,17 @@ import vn.tdc.edu.fooddelivery.components.AssigntOrderPopupToStaff;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.enums.OrderStatus;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.OrderDetailsFragment;
 import vn.tdc.edu.fooddelivery.models.AssignmentOrderRequest;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 
 public class OrdersListFragment extends AbstractFragment implements OrderManagementItemRecyclerViewAdapter.OnRecylerViewItemClickListener {
+    public final static String ORDER_MODEL = "ordermodel";
     private OrderManagementItemRecyclerViewAdapter adapter;
     private List<OrderModel> listOrders;
     private Integer status;
-    private  AssigntOrderPopupToStaff assign;
+    private AssigntOrderPopupToStaff assign;
     private RecyclerView recyclerViewOrder;
     private ConfirmDialog confirmDialog;
 
@@ -72,6 +75,10 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
     @Override
     public void onButtonOrderDetailClickListener(int position) {
         Log.d("recyclerTest", "Order detais clicked at " + position);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ORDER_MODEL, listOrders.get(position));
+        ((AbstractActivity) getActivity()).setFragment(OrderDetailsFragment.class, R.id.frameLayout,true)
+                .setArguments(bundle);
     }
 
     @Override

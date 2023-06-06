@@ -55,10 +55,10 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="105dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="Người đặt hàng:"
+                    android:text="Người đặt hàng: "
                     android:textColor="@color/textTitlePrimary"
                     android:textStyle="bold" />
 
@@ -72,30 +72,28 @@
                     android:textColor="@color/textBlack"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:gravity="top"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:gravity="top"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:text="Địa chỉ:"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Địa chỉ: "
                     android:textColor="@color/textTitlePrimary"
+                    app:contentInsetStart="20dp"
                     android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/tvAddress"
-                    android:gravity="top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="3"
-                    android:layout_weight="1"
-                    android:text="@string/address"
-                    android:textColor="@color/textBlack"/>
-            </LinearLayout>
+                    android:gravity="center_vertical"
+                    android:text="\t\t\t\t\t\t\t53 Võ Văn Ngân, P. Linh Chiểu, Tp. Thủ Đức, Tp. HCM"
+                    android:textColor="@color/textBlack" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,9 +103,9 @@
 
                 <TextView
                     android:gravity="center_vertical"
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Số điện thoại:"
+                    android:text="Số điện thoại: "
                     android:textColor="@color/textTitlePrimary"
                     android:textStyle="bold"/>
 
@@ -128,9 +126,9 @@
 
                 <TextView
                     android:gravity="center_vertical"
-                    android:layout_width="110dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Tổng thành tiền:"
+                    android:text="Tổng thành tiền: "
                     android:textColor="@color/textTitlePrimary"
                     android:textStyle="bold"/>
 
@@ -152,7 +150,7 @@
 
                 <TextView
                     android:gravity="center_vertical"
-                    android:layout_width="95dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Thời gian đặt: "
                     android:textColor="@color/textTitlePrimary"

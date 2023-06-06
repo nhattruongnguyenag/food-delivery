@@ -55,5 +55,6 @@
     <dimen name="home_layout_item_btn_add_cart_height">32dp</dimen>
     <dimen name="home_layout_item_btn_add_cart_elevation">20dp</dimen>
     <dimen name="home_layout_item_btn_add_cart_txt_size">11sp</dimen>
+    <dimen name="text_field_padding">4dp</dimen>
     //-----------------------------Chu dinh hanh--------------------------------//
 </resources>

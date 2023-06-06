@@ -1,5 +1,6 @@
 package vn.tdc.edu.fooddelivery.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,14 +58,21 @@ public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderManagementItemHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OrderManagementItemHolder holder, @SuppressLint("RecyclerView") int position) {
         OrderModel orderModel = listOrders.get(position);
         holder.tvOrderId.setText(String.valueOf(orderModel.getId()));
         holder.tvCustomerFullName.setText(orderModel.getCustomer().getFullName());
-        holder.tvAddress.setText(orderModel.getAddress());
+        holder.tvAddress.setText(CommonUtils.createIndentedText(orderModel.getAddress(),90,0));
         holder.tvPhone.setText(orderModel.getPhone());
         holder.tvTotal.setText(String.valueOf(orderModel.getTotal()));
         holder.tvCreatedAt.setText(CommonUtils.convertDateToString(orderModel.getCreatedAt()));
+
+        if (orderModel.getStatus() == 2 || orderModel.getStatus() == 3) {
+            holder.btnAccept.setEnabled(false);
+            holder.btnDelete.setEnabled(false);
+        } else if (orderModel.getStatus() == 4) {
+            holder.btnAccept.setEnabled(false);
+        }
 
         holder.onClickListener = new View.OnClickListener() {
             @Override
