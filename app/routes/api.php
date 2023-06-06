@@ -33,7 +33,7 @@ Route::get('products', [ProductController::class,'getProductsAPI']);
 Route::get('products/{id}', [ProductController::class,'getProductByIdAPI']);
 Route::post('products', [ProductController::class,'addOrEditProductAPI']);
 Route::put('products', [ProductController::class,'addOrEditProductAPI']);
-Route::delete('products', [ProductController::class,'deleteProductAPI']);
+Route::delete('products/{id}', [ProductController::class,'deleteProductAPI']);
 
 
 /*
@@ -43,7 +43,7 @@ Route::get('categories', [CategoryController::class,'getCategoriesAPI']);
 Route::get('categories/{id}', [CategoryController::class,'getCategoryByIdAPI']);
 Route::post('categories', [CategoryController::class,'addOrEditCategoryAPI']);
 Route::put('categories', [CategoryController::class,'addOrEditCategoryAPI']);
-Route::delete('categories', [CategoryController::class,'deleteCategoryAPI']);
+Route::delete('categories/{id}', [CategoryController::class,'deleteCategoryAPI']);
 
 
 /*
@@ -53,7 +53,7 @@ Route::get('users', [UserController::class,'getUsersAPI']);
 Route::get('users/{id}', [UserController::class,'getUserByIdAPI']);
 Route::post('users', [UserController::class,'addOrEditUserAPI']);
 Route::put('users', [UserController::class,'addOrEditUserAPI']);
-Route::delete('users', [UserController::class,'deleteUserAPI']);
+Route::delete('users/{id}', [UserController::class,'deleteUserAPI']);
 Route::put('users/changePassword', [UserController::class,'changePasswordAPI']);
 Route::post('users/login', [UserController::class,'loginAPI']);
 
@@ -65,7 +65,7 @@ Route::get('roles', [RoleController::class,'getRolesAPI']);
 Route::get('roles/{id}', [RoleController::class,'getRoleByIdAPI']);
 Route::post('roles', [RoleController::class,'addOrEditRoleAPI']);
 Route::put('roles', [RoleController::class,'addOrEditRoleAPI']);
-Route::delete('roles', [RoleController::class,'deleteRoleAPI']);
+Route::delete('roles/{id}', [RoleController::class,'deleteRoleAPI']);
 
 
 /*
@@ -76,7 +76,7 @@ Route::get('notifycations/{id}', [NotifycationController::class,'getNotifycation
 Route::post('notifycations', [NotifycationController::class,'addOrEditNotifycationAPI']);
 Route::put('notifycations/changeStatus', [NotifycationController::class,'changeStatus']);
 Route::put('notifycations', [NotifycationController::class,'addOrEditNotifycationAPI']);
-Route::delete('notifycations', [NotifycationController::class,'deleteNotifycationAPI']);
+Route::delete('notifycations/{id}', [NotifycationController::class,'deleteNotifycationAPI']);
 
 
 /*
@@ -84,7 +84,7 @@ Route::delete('notifycations', [NotifycationController::class,'deleteNotifycatio
 */
 Route::get('carts', [CartController::class,'getCartItemAPI']);
 Route::post('carts', [CartController::class,'addOrEditCartAPI']);
-Route::delete('carts', [CartController::class,'deleteCartAPI']);
+Route::delete('carts/{id}', [CartController::class,'deleteCartAPI']);
 
 
 /*
@@ -93,7 +93,7 @@ Route::delete('carts', [CartController::class,'deleteCartAPI']);
 Route::get('orders', [OrderController::class,'getOrdersAPI']);
 Route::post('orders', [OrderController::class,'addOrderAPI']);
 Route::put('orders', [OrderController::class,'updateOrderAPI']);
-Route::delete('orders', [OrderController::class,'deleteOrderAPI']);
+Route::delete('orders/{id}', [OrderController::class,'deleteOrderAPI']);
 
 /*
 *Widgets API routes
