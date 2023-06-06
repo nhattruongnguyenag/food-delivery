@@ -1,2 +1,4 @@
-package vn.tdc.edu.fooddelivery.fragments.admin;public class RoleFormFragment {
+package vn.tdc.edu.fooddelivery.fragments.admin;
+
+public class RoleFormFragment {
 }
