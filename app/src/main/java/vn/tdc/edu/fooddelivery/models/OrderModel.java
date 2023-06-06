@@ -11,6 +11,9 @@ public class OrderModel extends BaseModel {
     @SerializedName("shipper")
     private UserModel shipper;
 
+    @SerializedName("shipper_id")
+    private Integer shipperId;
+
     @SerializedName("total")
     private Long total;
 
@@ -80,5 +83,13 @@ public class OrderModel extends BaseModel {
 
     public void setItems(List<OrderItemModel> items) {
         this.items = items;
+    }
+
+    public Integer getShipperId() {
+        return shipperId;
+    }
+
+    public void setShipperId(Integer shipperId) {
+        this.shipperId = shipperId;
     }
 }

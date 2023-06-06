@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
-import vn.tdc.edu.fooddelivery.components.FormartCurentcy;
+import vn.tdc.edu.fooddelivery.utils.FormartCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
