@@ -29,6 +29,7 @@ import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.CategoryManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.OrderManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.ProductManagementActivity;
+import vn.tdc.edu.fooddelivery.activities.admin.RoleManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
 import vn.tdc.edu.fooddelivery.fragments.SearchFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
@@ -125,6 +126,9 @@ public class MainActivity extends AbstractActivity {
                         break;
                     case R.id.nav_category_management:
                         switchActivity(CategoryManagementActivity.class, "Quản lý danh mục sản phẩm");
+                        break;
+                    case R.id.nav_role_management:
+                        switchActivity(RoleManagementActivity.class, "Quản lý vai trò");
                         break;
                     default:
                         break;

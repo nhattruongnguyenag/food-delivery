@@ -49,7 +49,7 @@ public class RoleManagementRecyclerViewAdapter extends RecyclerView.Adapter<Role
     public void onBindViewHolder(@NonNull RoleManagementRecyclerViewAdapter.RoleItemHolder holder, int position) {
         RoleModel roleModel = listRoles.get(position);
         //Glide.with(activity).load(roleModel.getImageUrl()).into(holder.imgProduct);
-        holder.tvCode.setText(roleModel.getName());
+        holder.tvCode.setText(roleModel.getCode());
         holder.tvName.setText(roleModel.getName());
 
         holder.onClickListener = new View.OnClickListener() {
@@ -92,8 +92,8 @@ public class RoleManagementRecyclerViewAdapter extends RecyclerView.Adapter<Role
 
         public RoleItemHolder(@NonNull View itemView) {
             super(itemView);
-            this.tvCode = itemView.findViewById(R.id.tvName);
-            this.tvName = itemView.findViewById(R.id.tvName);
+            this.tvCode = itemView.findViewById(R.id.tvCode);
+            this.tvName = itemView.findViewById(R.id.tvNameRole);
             this.btnEdit = itemView.findViewById(R.id.btnEdit);
             this.btnDelete = itemView.findViewById(R.id.btnDelete);
 

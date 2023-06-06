@@ -43,6 +43,9 @@
         <activity
             android:name=".activities.user.MainActivity"
             android:exported="false"/>
+        <activity
+            android:name=".activities.admin.RoleManagementActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

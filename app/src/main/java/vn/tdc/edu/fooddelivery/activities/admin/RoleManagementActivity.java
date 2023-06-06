@@ -12,7 +12,7 @@ import vn.tdc.edu.fooddelivery.fragments.admin.RoleListFragment;
 import vn.tdc.edu.fooddelivery.models.RoleModel;
 
 public class RoleManagementActivity extends AbstractActivity {
-    private List<RoleModel> listProducts;
+    private List<RoleModel> listRoles;
 
     private RecyclerView recyclerViewRole;
 
