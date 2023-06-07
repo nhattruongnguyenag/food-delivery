@@ -13,9 +13,15 @@ import android.view.ViewGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.adapters.OrderFragmentStateAdapter;
+import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
+import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 
 public class OrderManagementFragment extends AbstractFragment {
     private TabLayout tabLayout;
@@ -35,18 +41,18 @@ public class OrderManagementFragment extends AbstractFragment {
             listStatus[1] = "Đang giao hàng";
             listStatus[2] = "Thành công";
             listStatus[3] = "Thất bại";
+
+            if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+                listStatus = Arrays.copyOfRange(listStatus, 1, listStatus.length, CharSequence[].class);
+            }
         }
 
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager2 = view.findViewById(R.id.page);
 
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         createTabLayoutForOrderStatus();
+
+        return view;
     }
 
     private void createTabLayoutForOrderStatus() {

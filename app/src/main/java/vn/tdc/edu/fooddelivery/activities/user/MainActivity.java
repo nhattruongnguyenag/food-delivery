@@ -2,14 +2,15 @@ package vn.tdc.edu.fooddelivery.activities.user;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -17,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -31,18 +33,19 @@ import vn.tdc.edu.fooddelivery.activities.admin.OrderManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.ProductManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.RoleManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
-import vn.tdc.edu.fooddelivery.fragments.SearchFragment;
+import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.NotificationFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.ProfileFragment;
+import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class MainActivity extends AbstractActivity {
     // ------------------CHU DINH HANH----------------//
     private static BottomNavigationView bottomNavigation;
     private static Activity mainActivitySave;
-
     public static SearchView searchView;
 
     public static Activity getMainActivitySave() {
@@ -55,13 +58,14 @@ public class MainActivity extends AbstractActivity {
     }
 
     // --------------------------End--------------------------//
-    NavigationView navigation;
+    private NavigationView navigation;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
-
-    // private SearchView searchView;
-
+    private View navigationHeader;
+    private ImageView userImage;
+    private TextView tvUserName;
+    private TextView tvUserEmail;
     private Fragment prevFragment;
 
     @Override
@@ -69,22 +73,26 @@ public class MainActivity extends AbstractActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
+
+        navigation = findViewById(R.id.navigation);
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.drawerLayout);
+        searchView = findViewById(R.id.searchView);
+        navigationHeader = navigation.getHeaderView(0);
+        userImage = navigationHeader.findViewById(R.id.userImage);
+        tvUserName = navigationHeader.findViewById(R.id.tvUserName);
+        tvUserEmail = navigationHeader.findViewById(R.id.tvUserEmail);
+        setSupportActionBar(toolbar);
+        setToggleActionNavigationView();
+        setUserLoginInfo();
+        setMenuByUserRole();
+
         // -------------------CHU DINH HANH----------------//
         bottomNavigation = findViewById(R.id.bottomNavigation);
         MainActivity.setMainActivitySave(MainActivity.this);
         catchDataCartIconNotify();
         catchDataNotifyIcon();
         // -------------------------End------------------------//
-        navigation = findViewById(R.id.navigation);
-        // Show the navigation view and display the button for navigation view toggle in
-        // tool bar
-        toolbar = findViewById(R.id.toolbar);
-        // ---------Search--------------------------//
-        searchView = findViewById(R.id.searchView);
-        // ---------Search--------------------------//
-        setSupportActionBar(toolbar);
-
-        setNavigationView();
 
         prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -154,10 +162,27 @@ public class MainActivity extends AbstractActivity {
         });
     }
 
-    private void setNavigationView() {
+    private void setUserLoginInfo() {
+        Glide.with(this).load(Authentication.getUserLogin().getImageUrl())
+                .into(userImage);
+        tvUserName.setText(Authentication.getUserLogin().getFullName());
+        tvUserEmail.setText(Authentication.getUserLogin().getEmail());
+    }
+
+    private void setMenuByUserRole() {
+        navigation.getMenu().clear();
+        if (Authentication.getUserLogin().getRoleCodes().contains(Role.ADMIN.getName())) {
+            navigation.inflateMenu(R.menu.navigation_menu_admin);
+        } else if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+            navigation.inflateMenu(R.menu.navigation_menu_shipper);
+        } else {
+            navigation.inflateMenu(R.menu.navigation_menu_customer);
+        }
+    }
+
+    private void setToggleActionNavigationView() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        drawerLayout = findViewById(R.id.drawerLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawerOpen,
                 R.string.drawerClose);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
