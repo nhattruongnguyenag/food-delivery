@@ -13,45 +13,56 @@ class OrderController extends Controller
     public function getOrdersAPI(Request $request)
     {
         $result = '';
-        if ($request->query('userId') == null) {
-            if ($request->query('shipperId') == null) {
-                if ($request->query('status') == null) {
-                    $resource = new OrderResource(Order::all()->sortDesc());
-                    $result = json_decode($resource->toJson(), true);
-                    if ($result != null) {
-                        return response($result, 200);
-                    }
-                    return response($result, 400);
-                } else {
-                    $resource = new OrderResource(Order::where('status', $request->query('status'))->get()->sortDesc());
-                    $result = json_decode($resource->toJson(), true);
-                    if ($result != null) {
-                        return response($result, 200);
-                    }
-                    return response($result, 400);
+        $queryNames = [];
+        $queryValues = [];
+        foreach ($request->query() as $queryName => $queryValue) {
+            if ($queryName == "userId") {
+                $user = User::find($request->query('userId'));
+                if ($user == null) {
+                    return response(["msg" => "Không tìm thấy thông tin user"], 400);
                 }
-            } else {
+                array_push($queryNames, "user_id");
+                array_push($queryValues, $queryValue);
+                continue;
+            }
+
+            if ($queryName == "shipperId") {
                 $user = User::find($request->query('shipperId'));
-                if ($user != null) {
-                    $resource = new OrderResource($user->ordersByShipper()->sortDesc());
-                    $result = json_decode($resource->toJson(), true);
-                    if ($result != null) {
-                        return response($result, 200);
-                    }
+                if ($user == null) {
+                    return response(["msg" => "Không tìm thấy thông tin shipper"], 400);
                 }
-                return response($result, 400);
+                array_push($queryNames, "shipper_id");
+                array_push($queryValues, $queryValue);
+                continue;
             }
-        } else {
-            $user = User::find($request->query('userId'));
-            if ($user != null) {
-                $resource = new OrderResource($user->ordersByUser()->sortDesc());
-                $result = json_decode($resource->toJson(), true);
-                if ($result != null) {
-                    return response($result, 200);
-                }
-            }
-            return response($result, 400);
+
+            array_push($queryNames, $queryName);
+            array_push($queryValues, $queryValue);
         }
+
+        switch (count($queryNames)) {
+            case 0:
+                $resource = new OrderResource(Order::all()->sortDesc());
+                break;
+            case 1:
+                $resource = new OrderResource(Order::where($queryNames[0], $queryValues[0])->get()->sortDesc());
+                break;
+            case 2:
+                $resource = new OrderResource(Order::where($queryNames[0], $queryValues[0])->where($queryNames[1], $queryValues[1])->get()->sortDesc());
+                break;
+            case 3:
+                $resource = new OrderResource(Order::where($queryNames[0], $queryValues[0])->where($queryNames[1], $queryValues[1])->where($queryNames[2], $queryValues[2])->get()->sortDesc());
+                break;
+            default:
+                return response(["msg" => "Query lỗi"], 400);
+                break;
+        }
+
+        $result = json_decode($resource->toJson(), true);
+        if ($result != null) {
+            return response($result, 200);
+        }
+        return response(["msg" => "Không tìm thấy thông tin giỏ hàng"], 400);
     }
 
     public function updateOrderAPI(Request $request)
