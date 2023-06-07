@@ -114,7 +114,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
                 assign.show();
             }
         } else if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
-            orderRequest.setStatus(OrderStatus.THANH_CONG.getStatus());
+            orderRequest.setStatus(OrderStatus.DA_GIAO.getStatus());
             updateOrderStatus(orderRequest, position);
         }
     }
@@ -142,7 +142,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
 
             confirmDialog.show();
         } else if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
-            orderRequest.setStatus(OrderStatus.THAT_BAI.getStatus());
+            orderRequest.setStatus(OrderStatus.DA_HUY.getStatus());
             updateOrderStatus(orderRequest, position);
         }
     }
@@ -174,9 +174,9 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
             @Override
             public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
                 if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
-                    if (response.body().getStatus() == OrderStatus.THANH_CONG.getStatus()) {
+                    if (response.body().getStatus() == OrderStatus.DA_GIAO.getStatus()) {
                         ((AbstractActivity) getActivity()).showMessageDialog("Đơn hàng đã giao thành công");
-                    } else if (response.body().getStatus() == OrderStatus.THAT_BAI.getStatus()) {
+                    } else if (response.body().getStatus() == OrderStatus.DA_HUY.getStatus()) {
                         ((AbstractActivity) getActivity()).showMessageDialog("Huỷ đơn hàng thành công");
                     }
                     adapter.notifyItemRemoved(position);
@@ -247,7 +247,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
 
             @Override
             public void onFailure(Call<List<OrderModel>> call, Throwable t) {
-
+                Log.d("api-error", t.getCause().getMessage());
             }
         });
     }

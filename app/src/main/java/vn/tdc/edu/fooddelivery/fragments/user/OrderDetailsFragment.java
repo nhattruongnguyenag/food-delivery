@@ -15,8 +15,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.airbnb.lottie.parser.ColorParser;
-
 import java.net.HttpURLConnection;
 
 import retrofit2.Call;
@@ -84,7 +82,8 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
             tvAddress.setText(CommonUtils.createIndentedText(orderModel.getAddress(), 105, 0));
             tvTotal.setText(FormatCurentcy.formatVietnamCurrency(orderModel.getTotal()));
 
-            if (orderModel.getStatus() != OrderStatus.DANG_GIAO_HANG.getStatus()) {
+            if (orderModel.getStatus() != OrderStatus.DANG_GIAO_HANG.getStatus()
+                    || Authentication.getUserLogin().getRoleCodes().contains(Role.ADMIN.getName())) {
                 layoutBtnAction.setVisibility(View.GONE);
             }
 
@@ -104,11 +103,11 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
             } else if (orderModel.getStatus() == OrderStatus.DANG_GIAO_HANG.getStatus()) {
                 tvOrderStatus.setText(OrderStatus.DANG_GIAO_HANG.getName());
                 tvOrderStatus.setTextColor(Color.parseColor("#FF00B0FF"));
-            } else if (orderModel.getStatus() == OrderStatus.THANH_CONG.getStatus()) {
-                tvOrderStatus.setText(OrderStatus.THANH_CONG.getName());
+            } else if (orderModel.getStatus() == OrderStatus.DA_GIAO.getStatus()) {
+                tvOrderStatus.setText(OrderStatus.DA_GIAO.getName());
                 tvOrderStatus.setTextColor(Color.parseColor("#008132"));
-            } else if (orderModel.getStatus() == OrderStatus.THAT_BAI.getStatus()) {
-                tvOrderStatus.setText(OrderStatus.THAT_BAI.getName());
+            } else if (orderModel.getStatus() == OrderStatus.DA_HUY.getStatus()) {
+                tvOrderStatus.setText(OrderStatus.DA_HUY.getName());
                 tvOrderStatus.setTextColor(Color.parseColor("#EB4A3E"));
             }
 
@@ -130,9 +129,9 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
             OrderRequest orderRequest = new OrderRequest();
             orderRequest.setId(orderModel.getId());
             if (view.getId() == R.id.btnSuccess) {
-                orderRequest.setStatus(OrderStatus.THANH_CONG.getStatus());
+                orderRequest.setStatus(OrderStatus.DA_GIAO.getStatus());
             } else {
-                orderRequest.setStatus(OrderStatus.THAT_BAI.getStatus());
+                orderRequest.setStatus(OrderStatus.DA_HUY.getStatus());
             }
 
             updateOrderStatus(orderRequest);
@@ -145,9 +144,9 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
             @Override
             public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
                 if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
-                    if (response.body().getStatus() == OrderStatus.THANH_CONG.getStatus()) {
+                    if (response.body().getStatus() == OrderStatus.DA_GIAO.getStatus()) {
                         ((AbstractActivity) getActivity()).showMessageDialog("Đơn hàng đã giao thành công");
-                    } else if (response.body().getStatus() == OrderStatus.THAT_BAI.getStatus()) {
+                    } else if (response.body().getStatus() == OrderStatus.DA_HUY.getStatus()) {
                         ((AbstractActivity) getActivity()).showMessageDialog("Huỷ đơn hàng thành công");
                     }
                     getActivity().onBackPressed();

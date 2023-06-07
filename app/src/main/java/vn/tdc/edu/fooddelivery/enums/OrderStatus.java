@@ -3,8 +3,8 @@ package vn.tdc.edu.fooddelivery.enums;
 public enum OrderStatus {
     CHUA_XU_LY(1, "Chưa xử lý"),
     DANG_GIAO_HANG(2,"Đang giao hàng"),
-    THANH_CONG(3, "Giao thành công"),
-    THAT_BAI(4, "Huỷ");
+    DA_GIAO(3, "Giao thành công"),
+    DA_HUY(4, "Đã huỷ");
 
     private int status;
 

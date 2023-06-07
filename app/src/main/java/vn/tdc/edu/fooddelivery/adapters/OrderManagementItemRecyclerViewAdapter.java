@@ -70,14 +70,20 @@ public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter
         holder.tvTotal.setText(String.valueOf(orderModel.getTotal()));
         holder.tvCreatedAt.setText(CommonUtils.convertDateToString(orderModel.getCreatedAt()));
 
+        if (orderModel.getStatus() != OrderStatus.CHUA_XU_LY.getStatus()) {
+            if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())
+            && orderModel.getStatus() == OrderStatus.DANG_GIAO_HANG.getStatus()) {
+                holder.btnAccept.setEnabled(true);
+                holder.btnDelete.setEnabled(true);
+            } else {
+                holder.btnAccept.setEnabled(false);
+                holder.btnDelete.setEnabled(false);
+            }
+        }
+
         if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
             holder.btnAccept.setText("Giao");
             holder.btnDelete.setText("Huỷ");
-        }
-
-        if (orderModel.getStatus() == OrderStatus.THANH_CONG.getStatus() || orderModel.getStatus() == OrderStatus.THAT_BAI.getStatus()) {
-            holder.btnAccept.setEnabled(false);
-            holder.btnDelete.setEnabled(false);
         }
 
         holder.onClickListener = new View.OnClickListener() {
