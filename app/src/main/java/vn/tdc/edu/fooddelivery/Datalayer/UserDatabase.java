@@ -64,9 +64,8 @@ public class UserDatabase extends SQLiteOpenHelper {
             // Execute the SQL Statement
             try {
                 db.execSQL(sql);
-                Toast.makeText(context, "Tao bang thanh cong!", Toast.LENGTH_SHORT).show();
             } catch (Exception exception) {
-                Toast.makeText(context, "Tao bang khong thanh cong!", Toast.LENGTH_SHORT).show();
+                Log.d("TAG", "onCreate: Tao bang khong thanh cong!");
             }
             db.close();
         }
@@ -82,7 +81,8 @@ public class UserDatabase extends SQLiteOpenHelper {
     //// 2. Person Database save
     ///////////////////////////////////////////////////////////////////////////////////////////
     // 1. Save persons to Person Database
-    public void savePerson(UserModel person) {
+    public boolean savePerson(UserModel person) {
+        boolean ok = false;
         SQLiteDatabase database = getWritableDatabase();
         if (database != null) {
             ContentValues values = new ContentValues();
@@ -92,12 +92,13 @@ public class UserDatabase extends SQLiteOpenHelper {
             values.put(USER_IMAGE, person.getImageName());
             try {
                 database.insert(USER_TABLE_NAME, null, values);
-                Toast.makeText(context, "luu doi tuong thanh cong!", Toast.LENGTH_SHORT).show();
+                ok = true;
             } catch (Exception exception) {
-                Toast.makeText(context, "luu doi tuong khong thanh cong!", Toast.LENGTH_SHORT).show();
+                ok = false;
             }
             database.close();
         }
+        return ok;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -128,18 +129,14 @@ public class UserDatabase extends SQLiteOpenHelper {
             }
             database.close();
         }
-        if (person.getId() != null) {
-            Toast.makeText(context, "khong co user nao", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "doc thanh cong", Toast.LENGTH_SHORT).show();
-        }
         return person;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //// 4. Update user
     ///////////////////////////////////////////////////////////////////////////////////////////
-    public void updatePerson(UserModel newPerson) {
+    public boolean updatePerson(UserModel newPerson) {
+        boolean ok = false;
         SQLiteDatabase database = getWritableDatabase();
         if (database != null) {
             //value để chứa cái giá trị mới để đưa vào database
@@ -154,18 +151,20 @@ public class UserDatabase extends SQLiteOpenHelper {
             int bool_Update = database.update(USER_TABLE_NAME, values, where, whereArgs);
 
             if (bool_Update == 1) {
-                Toast.makeText(context, "Update successfull", Toast.LENGTH_SHORT).show();
+                ok = true;
             } else {
-                Toast.makeText(context, "Update fail!", Toast.LENGTH_SHORT).show();
+                ok = false;
             }
             database.close();
         }
+        return ok;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //// 5. Delete Person
     ///////////////////////////////////////////////////////////////////////////////////////////
-    public void deletePerson(UserModel person) {
+    public boolean deletePerson(UserModel person) {
+        boolean ok = false;
         SQLiteDatabase database = getWritableDatabase();
         if (database != null) {
 
@@ -174,33 +173,33 @@ public class UserDatabase extends SQLiteOpenHelper {
             String[] whereArgs = new String[]{String.valueOf(person.getId())};
             int bool_delete = database.delete(USER_TABLE_NAME, where, whereArgs);
 
-
             // TODO Show dialog to user
             if (bool_delete > 0) {
-                Toast.makeText(context, "xoa thanh cong!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(context, "xoa khong thanh cong!", Toast.LENGTH_SHORT).show();
+                ok = true;
             }
             database.close();
         }
+        return ok;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //// 6 . Delete table
     ///////////////////////////////////////////////////////////////////////////////////////////
-    public void deleteTable() {
+    public boolean deleteTable() {
+        boolean ok = false;
         SQLiteDatabase database = getWritableDatabase();
         if (database != null) {
             String sql = "DROP TABLE IF EXISTS " + USER_TABLE_NAME;
             // Execute the SQL Statement
             try {
                 database.execSQL(sql);
-                Toast.makeText(context, "xoa database thanh cong!", Toast.LENGTH_SHORT).show();
+                ok = true;
             } catch (Exception exception) {
-                Toast.makeText(context, "xoa database that bai!", Toast.LENGTH_SHORT).show();
+                ok = false;
             }
             database.close();
         }
+        return ok;
     }
 
 }
