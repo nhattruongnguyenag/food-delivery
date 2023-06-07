@@ -190,36 +190,39 @@
 
     <LinearLayout
         android:id="@+id/layoutBtnAction"
-        android:layout_marginTop="@dimen/btn_order_margin_top"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:orientation="horizontal"
         android:background="@color/white"
-        android:paddingVertical="15dp"
         android:elevation="10dp"
         android:layout_alignParentBottom="true">
 
         <Button
             android:id="@+id/btnSuccess"
-            android:textSize="@dimen/textSmall"
+            android:textSize="@dimen/textNormal"
             android:layout_marginRight="20dp"
-            android:text="Thành công"
+            android:text="Giao"
             android:textStyle="bold"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
+            android:background="@drawable/btn_order_accept_bg"
             app:backgroundTint="#3DABEC" />
 
         <Button
             android:id="@+id/btnCancel"
             android:text="Huỷ"
-            android:textSize="@dimen/textSmall"
+            android:paddingVertical="5dp"
+            android:textSize="@dimen/textNormal"
             android:textStyle="bold"
-            android:layout_marginLeft="20dp"
+            android:paddingHorizontal="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
+            android:background="@drawable/btn_order_delete_bg"
             app:backgroundTint="#e23342" />
     </LinearLayout>
 </RelativeLayout>
