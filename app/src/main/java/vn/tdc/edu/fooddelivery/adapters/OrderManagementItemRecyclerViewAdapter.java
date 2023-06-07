@@ -1,5 +1,6 @@
 package vn.tdc.edu.fooddelivery.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.enums.OrderStatus;
+import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.CommonUtils;
 
 public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter<OrderManagementItemRecyclerViewAdapter.OrderManagementItemHolder> {
@@ -57,14 +61,24 @@ public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderManagementItemHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OrderManagementItemHolder holder, @SuppressLint("RecyclerView") int position) {
         OrderModel orderModel = listOrders.get(position);
         holder.tvOrderId.setText(String.valueOf(orderModel.getId()));
         holder.tvCustomerFullName.setText(orderModel.getCustomer().getFullName());
-        holder.tvAddress.setText(orderModel.getAddress());
+        holder.tvAddress.setText(CommonUtils.createIndentedText(orderModel.getAddress(),90,0));
         holder.tvPhone.setText(orderModel.getPhone());
         holder.tvTotal.setText(String.valueOf(orderModel.getTotal()));
         holder.tvCreatedAt.setText(CommonUtils.convertDateToString(orderModel.getCreatedAt()));
+
+        if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+            holder.btnAccept.setText("Giao");
+            holder.btnDelete.setText("Huỷ");
+        }
+
+        if (orderModel.getStatus() == OrderStatus.THANH_CONG.getStatus() || orderModel.getStatus() == OrderStatus.THAT_BAI.getStatus()) {
+            holder.btnAccept.setEnabled(false);
+            holder.btnDelete.setEnabled(false);
+        }
 
         holder.onClickListener = new View.OnClickListener() {
             @Override

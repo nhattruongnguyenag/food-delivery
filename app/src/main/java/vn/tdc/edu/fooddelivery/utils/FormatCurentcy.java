@@ -1,6 +1,12 @@
-package vn.tdc.edu.fooddelivery.components;
+package vn.tdc.edu.fooddelivery.utils;
 
-public class FormartCurentcy {
+import java.text.DecimalFormat;
+
+public class FormatCurentcy {
+    public static String formatVietnamCurrency(Long value) {
+        return new DecimalFormat("#,###.##").format(value);
+    }
+
     public static String format(String value) {
         int count = (value.length()) / 3;
         double flag = ((value.length()) / (3 * 1.0));

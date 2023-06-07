@@ -3,7 +3,7 @@ package vn.tdc.edu.fooddelivery.fragments.admin;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
@@ -13,15 +13,17 @@ import android.view.ViewGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.adapters.OrderFragmentStateAdapter;
-import vn.tdc.edu.fooddelivery.adapters.UserFragmentStateAdapter;
+import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.models.RoleModel;
+import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 
-public class OrderStatusTabFragment extends AbstractFragment {
+public class OrderManagementFragment extends AbstractFragment {
     private TabLayout tabLayout;
     private CharSequence[] listStatus;
     private int LIST_STATUS_LENGTH = 4;
@@ -39,12 +41,22 @@ public class OrderStatusTabFragment extends AbstractFragment {
             listStatus[1] = "Đang giao hàng";
             listStatus[2] = "Thành công";
             listStatus[3] = "Thất bại";
+
+            if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+                listStatus = Arrays.copyOfRange(listStatus, 1, listStatus.length, CharSequence[].class);
+            }
         }
 
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager2 = view.findViewById(R.id.page);
 
-        adapter = new OrderFragmentStateAdapter(OrderStatusTabFragment.this);
+        createTabLayoutForOrderStatus();
+
+        return view;
+    }
+
+    private void createTabLayoutForOrderStatus() {
+        adapter = new OrderFragmentStateAdapter(OrderManagementFragment.this);
         adapter.setListStatus(listStatus);
         viewPager2.setAdapter(adapter);
 
@@ -55,7 +67,5 @@ public class OrderStatusTabFragment extends AbstractFragment {
                 tab.setText(listStatus[position]);
             }
         }).attach();
-
-        return view;
     }
 }

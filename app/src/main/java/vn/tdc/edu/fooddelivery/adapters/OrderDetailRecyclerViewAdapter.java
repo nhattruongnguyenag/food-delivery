@@ -1,6 +1,5 @@
 package vn.tdc.edu.fooddelivery.adapters;
 
-import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,8 +16,7 @@ import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.models.OrderItemModel;
-import vn.tdc.edu.fooddelivery.models.OrderModel;
-import vn.tdc.edu.fooddelivery.models.ProductModel;
+import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 
 public class OrderDetailRecyclerViewAdapter extends RecyclerView.Adapter<OrderDetailRecyclerViewAdapter.OrderDetailItemHolder>{
     private AppCompatActivity activity;
@@ -43,7 +41,9 @@ public class OrderDetailRecyclerViewAdapter extends RecyclerView.Adapter<OrderDe
         OrderItemModel orderItemModel = listOrderItems.get(position);
         Glide.with(activity).load(orderItemModel.getProductModel().getImageUrl())
                 .into(holder.imgProduct);
-        String detail = orderItemModel.getPrice() + " x " + orderItemModel.getQuantity() + " = " + orderItemModel.getSubTotal();
+        String detail = FormatCurentcy.formatVietnamCurrency(orderItemModel.getPrice()) + " x "
+                + orderItemModel.getQuantity()
+                + " = " + FormatCurentcy.formatVietnamCurrency( orderItemModel.getSubTotal());
         holder.tvDetail.setText(detail);
     }
 

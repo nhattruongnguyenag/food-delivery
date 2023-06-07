@@ -18,14 +18,14 @@ import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.fragments.user.ProductDetailFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 
-public class DetailRecyclerViewAdapter extends RecyclerView.Adapter<DetailRecyclerViewAdapter.MyViewHolder> {
+public class ProductDetailRecyclerViewAdapter extends RecyclerView.Adapter<ProductDetailRecyclerViewAdapter.MyViewHolder> {
     private Activity activity;
     private int layout_ID;
     private ArrayList<ProductModel_Test> arrayList;
     private onRecyclerViewOnClickListener _onRecyclerViewOnClickListener;
     //Doi tuong do du lieu vao
 
-    public DetailRecyclerViewAdapter(Activity activity, int layout_ID, ArrayList<ProductModel_Test> arrayList) {
+    public ProductDetailRecyclerViewAdapter(Activity activity, int layout_ID, ArrayList<ProductModel_Test> arrayList) {
         this.activity = activity;
         this.layout_ID = layout_ID;
         this.arrayList = arrayList;

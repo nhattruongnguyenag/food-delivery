@@ -2,7 +2,6 @@ package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.adapters.CartRecycleViewAdapter;
-import vn.tdc.edu.fooddelivery.components.FormartCurentcy;
+import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
@@ -81,7 +80,7 @@ public class CartFragment extends AbstractFragment {
         for (int i = 0; i < cartArrayList.size(); i++) {
             sum += cartArrayList.get(i).getPrice() * cartArrayList.get(i).getQty();
         }
-        String value = FormartCurentcy.format(sum + "");
+        String value = FormatCurentcy.format(sum + "");
         if (total_cart_screen == null) {
             total_cart_screen = activityCart.findViewById(R.id.total_cart_screen);
         }

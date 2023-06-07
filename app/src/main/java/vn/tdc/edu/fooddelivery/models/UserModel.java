@@ -1,5 +1,7 @@
 package vn.tdc.edu.fooddelivery.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -20,6 +22,8 @@ public class UserModel extends BaseModel {
     @SerializedName("roleIds")
     private List<Integer> roleIds;
 
+    @SerializedName("roleCodes")
+    private List<String> roleCodes;
 
     public String getFullName() {
         return fullName;
@@ -33,6 +37,8 @@ public class UserModel extends BaseModel {
         return image;
     }
 
+    public void setImageUrl(String image) {this.image = image;}
+
     public void setImageName(String image) {
         this.image = image;
     }
@@ -40,7 +46,6 @@ public class UserModel extends BaseModel {
     public String getImageUrl() {
         return SystemConstant.IMAGES_BASE_URL + image;
     }
-
 
     public String getEmail() {
         return email;
@@ -72,5 +77,19 @@ public class UserModel extends BaseModel {
 
     public void setRoleIds(List<Integer> roleIds) {
         this.roleIds = roleIds;
+    }
+
+    public List<String> getRoleCodes() {
+        return roleCodes;
+    }
+
+    public void setRoleCodes(List<String> roleCodes) {
+        this.roleCodes = roleCodes;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return fullName;
     }
 }

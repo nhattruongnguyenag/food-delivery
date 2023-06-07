@@ -55,20 +55,18 @@ public abstract class AbstractActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public <T> T setFragment(Class<T> tClass, int layout, boolean addCurrentFragmentToBackStack) {
+    public <T> T setFragment(Class<T> tClass, int layout, boolean addToBackStack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         AbstractFragment fragment = (AbstractFragment) fragmentManager.findFragmentByTag(tClass.getSimpleName() + "");
-        getSupportFragmentManager().getFragments();
-        Log.d("fragment-manager", fragmentManager.getFragments().size() + "");
         try {
             if (fragment == null) {
                 fragment = (AbstractFragment) tClass.newInstance();
             }
 
-            transaction.replace(layout, fragment, tClass.getSimpleName() + "");
+            transaction.replace(layout, fragment, tClass.getSimpleName());
 
-            if (fragmentManager.findFragmentByTag(tClass.getSimpleName() + "") == null && addCurrentFragmentToBackStack) {
+            if (fragmentManager.findFragmentByTag(tClass.getSimpleName()) == null && addToBackStack) {
                 transaction.addToBackStack(null);
             }
 

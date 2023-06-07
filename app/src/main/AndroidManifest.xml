@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.NOTIFICATION" />
 
     <application
         android:allowBackup="true"
@@ -20,9 +22,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.LaucherActivity"
-            android:theme="@style/Theme.FoodDelivery.Starting"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.FoodDelivery.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -42,7 +47,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.user.MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".activities.admin.RoleManagementActivity"
             android:exported="false" />

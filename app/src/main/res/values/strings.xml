@@ -12,7 +12,7 @@
     <string name="menu_order_management">Quản lý đơn hàng</string>
     <string name="menu_user_management">Quản lý người dùng</string>
     <string name="menu_category_management">Quản lý danh mục sản phẩm</string>
-    <string name="menu_role_management">Quản lý vai tro</string>
+    <string name="menu_role_management">Quản lý vai trò</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="btn_add_category">Thêm danh mục</string>
@@ -36,6 +36,15 @@
         <item>Thành công</item>
         <item>Thất bại</item>
     </string-array>
+
+    <string-array name="staffs">
+        <item>Nguyễn Văn A</item>
+        <item>Nguyễn Văn B</item>
+        <item>Nguyễn Văn C</item>
+        <item>Nguyễn Văn D</item>
+        <item>Nguyễn Văn E</item>
+    </string-array>
+
     <string name="title_activity_launcher">LauncherActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
@@ -138,6 +147,7 @@
     <string name="fragment_product_txt_content_size_price">$20</string>
     <string name="fragment_product_txt_descriptions">Chi tiết</string>
     <string name="fragment_product_txt_product_suggestive">Gợi ý sản phẩm</string>
+    <string name="nav_logout">Đăng xuất</string>
     <!--   End Chu dinh hanh-->
 
 </resources>

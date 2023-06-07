@@ -69,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/navigation_menu"
+        app:menu="@menu/navigation_menu_admin"
         app:itemIconTint="@drawable/navigation_bar_menu_item_color"
         app:itemTextColor="@drawable/navigation_bar_menu_item_color"
         app:itemBackground="@drawable/navigation_bar_menu_item_background"

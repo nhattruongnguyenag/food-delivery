@@ -7,11 +7,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import java.util.Arrays;
 import java.util.List;
 
+import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.admin.OrdersListFragment;
 import vn.tdc.edu.fooddelivery.fragments.admin.UsersListFragment;
 import vn.tdc.edu.fooddelivery.models.RoleModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 
 public class OrderFragmentStateAdapter extends FragmentStateAdapter {
     private Fragment fragment;
@@ -42,7 +45,11 @@ public class OrderFragmentStateAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         fragment = new OrdersListFragment();
 
-        ((OrdersListFragment) fragment).setStatus(position + 1);
+        if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+            ((OrdersListFragment) fragment).setStatus(position + 2);
+        } else {
+            ((OrdersListFragment) fragment).setStatus(position + 1);
+        }
         return fragment;
     }
 
