@@ -13,9 +13,11 @@ import androidx.viewpager2.adapter.FragmentViewHolder;
 import java.util.List;
 
 import retrofit2.Callback;
+import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.admin.UsersListFragment;
 import vn.tdc.edu.fooddelivery.models.RoleModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 
 public class UserFragmentStateAdapter extends FragmentStateAdapter {
     private UsersListFragment fragment;
@@ -41,8 +43,12 @@ public class UserFragmentStateAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         fragment = new UsersListFragment();
 
-        if (position > 0) {
-            fragment.setRoleModel(listRoles.get(position - 1));
+        if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+            fragment.setRoleModel(listRoles.get(position));
+        } else {
+            if (position > 0) {
+                fragment.setRoleModel(listRoles.get(position - 1));
+            }
         }
 
         fragment.fragmentStateAdapter = this;

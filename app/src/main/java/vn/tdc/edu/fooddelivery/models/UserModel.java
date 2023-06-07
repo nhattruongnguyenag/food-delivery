@@ -37,6 +37,8 @@ public class UserModel extends BaseModel {
         return image;
     }
 
+    public void setImageUrl(String image) {this.image = image;}
+
     public void setImageName(String image) {
         this.image = image;
     }
