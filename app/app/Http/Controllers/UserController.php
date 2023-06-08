@@ -47,8 +47,10 @@ class UserController extends Controller
                     if ($checkEmail == null) {
                         $user->save();
                         WidgetController::attachToRoleUserTable($request->roleIds, $user);
-                        $resource = new UserResource($user);
-                        $result = json_decode($resource->toJson(), true);
+                        foreach ($user->roles() as $item) {
+                            array_push($roleCodes, $item->code);
+                        }
+                        $user->roleCodes = $roleCodes;
                         return response($user, 201);
                     } else {
                         return response([
