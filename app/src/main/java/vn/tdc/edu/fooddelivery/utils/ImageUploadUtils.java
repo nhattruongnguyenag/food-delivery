@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.DrawableContainer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.ImageView;
@@ -52,7 +51,7 @@ public class ImageUploadUtils {
     }
 
     public interface OnResultUpload {
-        void doAction();
+        void onUploadImageResultAction();
     }
 
     public static ImageUploadUtils getInstance() {
@@ -110,7 +109,7 @@ public class ImageUploadUtils {
                             }
 
                             if (onResultUpload != null) {
-                                onResultUpload.doAction();
+                                onResultUpload.onUploadImageResultAction();
                             }
                         }
                     }

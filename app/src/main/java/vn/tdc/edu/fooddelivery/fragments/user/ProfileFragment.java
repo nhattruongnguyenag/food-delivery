@@ -88,7 +88,7 @@ public class ProfileFragment extends AbstractFragment implements View.OnClickLis
 
 
     @Override
-    public void doAction() {
+    public void onUploadImageResultAction() {
         btnSave.setEnabled(true);
     }
 
