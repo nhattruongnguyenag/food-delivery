@@ -47,6 +47,7 @@ class UserController extends Controller
                     if ($checkEmail == null) {
                         $user->save();
                         WidgetController::attachToRoleUserTable($request->roleIds, $user);
+                        $roleCodes = [];
                         foreach ($user->roles() as $item) {
                             array_push($roleCodes, $item->code);
                         }
