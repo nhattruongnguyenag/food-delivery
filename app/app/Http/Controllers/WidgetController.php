@@ -109,7 +109,7 @@ class WidgetController extends Controller
     */
     public static function checkValidateDataUser($request)
     {
-        if (!isset($request->full_name) || !isset($request->email) || !isset($request->roleIds) || !isset($request->password) || !isset($request->image)) {
+        if (!isset($request->full_name) || !isset($request->roleIds) || !isset($request->image)) {
             return null;
         }
         if (count($request->roleIds) < 1) {

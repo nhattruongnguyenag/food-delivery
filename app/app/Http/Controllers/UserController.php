@@ -130,10 +130,10 @@ class UserController extends Controller
 
     public function changePasswordAPI(Request $request)
     {
-        if (isset($request->user_id) && isset($request->new_password)) {
+        if (isset($request->user_id) && isset($request->password)) {
             $user = User::find($request->user_id);
             if ($user != null) {
-                $user->password = Crypt::encrypt($request->new_password);
+                $user->password = Crypt::encrypt($request->password);
                 return response([
                     "change" => true
                 ], 200);
