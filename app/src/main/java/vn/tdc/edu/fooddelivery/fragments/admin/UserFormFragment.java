@@ -49,8 +49,6 @@ public class UserFormFragment extends AbstractFragment implements View.OnClickLi
     private List<RoleModel> listRoles;
 
     private UserModel userModel;
-
-    private boolean isResetPassword = false;
     MultiSelectDialog<RoleModel> multiSelectDialog;
 
     public UserModel getUserModel() {
@@ -229,38 +227,46 @@ public class UserFormFragment extends AbstractFragment implements View.OnClickLi
                 }
 
                 Call<UserModel> call = RetrofitBuilder.getClient().create(UserAPI.class).update(userModel);
-
-                String successMessage = "Cập nhật thông tin người dùng thành công";
-                String failMessage = "Cập nhật thông tin người dùng thất bại";
-                if (isResetPassword) {
-                    successMessage = "Reset mật khẩu thành công";
-                    failMessage = "Reset mật khẩu thất bại";
-                    isResetPassword = false;
-                }
-
-                String finalSuccessMessage = successMessage;
-                String finalFailMessage = failMessage;
-
                 call.enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
-                            ((AbstractActivity) getActivity()).showMessageDialog(finalSuccessMessage);
+                            ((AbstractActivity) getActivity()).showMessageDialog("Cập nhật thông tin người dùng thành công");
                             getActivity().onBackPressed();
                         } else {
-                            ((AbstractActivity) getActivity()).showMessageDialog(finalFailMessage);
+                            ((AbstractActivity) getActivity()).showMessageDialog("Cập nhật thông tin người dùng thất bại");
                         }
                     }
 
                     @Override
                     public void onFailure(Call<UserModel> call, Throwable t) {
-                        ((AbstractActivity) getActivity()).showMessageDialog(finalFailMessage);
+                        ((AbstractActivity) getActivity()).showMessageDialog("Hệ thống đang bảo trì");
                     }
                 });
             }
 
             @Override
             public void onFailed() {
+                ((AbstractActivity) getActivity()).showMessageDialog("Hệ thống đang bảo trì");
+            }
+        });
+    }
+
+    private void resetPassword() {
+        Call<UserModel> call = RetrofitBuilder.getClient().create(UserAPI.class).changPassword(userModel);
+        call.enqueue(new Callback<UserModel>() {
+            @Override
+            public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Reset password thành công");
+                } else {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Reset password thất bại");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserModel> call, Throwable t) {
+                ((AbstractActivity) getActivity()).showMessageDialog("Hệ thống đang bảo trì");
             }
         });
     }
@@ -284,17 +290,9 @@ public class UserFormFragment extends AbstractFragment implements View.OnClickLi
         } else if (view.getId() == R.id.btnUploadImage) {
             ImageUploadUtils.getInstance().showChoosingImageOptionsDialog((AbstractActivity) getActivity(), imgUser);
         } else if (view.getId() == R.id.btnResetPassword) {
-            isResetPassword = true;
-            if (userModel != null && userModel.getId() != null) {
-                if (!validateData()) {
-                    return;
-                }
-
-                getUserFromUserInput();
-
-                userModel.setPassword(PASSWORD_DEFAULT);
-                updateUser();
-            }
+            userModel.setId(Integer.valueOf(String.valueOf(edId.getText())));
+            userModel.setPassword(PASSWORD_DEFAULT);
+            resetPassword();
         } else if (view.getId() == R.id.btnUpdateInfo) {
             if (!validateData()) {
                 return;

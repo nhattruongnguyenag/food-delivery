@@ -122,7 +122,6 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
         return view;
     }
 
-
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnSuccess || view.getId() == R.id.btnCancel) {
@@ -151,13 +150,13 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
                     }
                     getActivity().onBackPressed();
                 } else {
-                    ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
+                    ((AbstractActivity) getActivity()).showMessageDialog("Hệ thống đang bảo trì");
                 }
             }
 
             @Override
             public void onFailure(Call<OrderModel> call, Throwable t) {
-                ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
+                ((AbstractActivity) getActivity()).showMessageDialog("Hệ thống đang bảo trì");
             }
         });
     }

@@ -58,7 +58,7 @@
             android:layout_height="60dp"
             app:compatShadowEnabled="true"
             app:itemIconSize="30sp"
-            app:labelVisibilityMode="labeled"
+            app:labelVisibilityMode="auto"
             app:itemIconTint="@drawable/bottomnavigation_menu_item_foreground"
             app:itemTextColor="@drawable/bottomnavigation_menu_item_foreground"
             app:menu="@menu/bottom_navigation_menu" />
