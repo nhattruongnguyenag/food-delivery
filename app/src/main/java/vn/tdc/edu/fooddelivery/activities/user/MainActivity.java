@@ -40,6 +40,7 @@ import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.NotificationFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.OrderFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.ProfileFragment;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 import vn.tdc.edu.fooddelivery.utils.Authentication;
@@ -87,8 +88,8 @@ public class MainActivity extends AbstractActivity {
         tvUserEmail = navigationHeader.findViewById(R.id.tvUserEmail);
         setSupportActionBar(toolbar);
         setToggleActionNavigationView();
-        setUserLoginInfo();
         setMenuByUserRole();
+        setUserLoginInfo();
 
         // -------------------CHU DINH HANH----------------//
         bottomNavigation = findViewById(R.id.bottomNavigation);
@@ -101,12 +102,16 @@ public class MainActivity extends AbstractActivity {
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                navigation.setCheckedItem(item.getItemId());
                 switch (item.getItemId()) {
                     case R.id.menu_home:
                         prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_cart:
                         prevFragment = setFragment(CartFragment.class, R.id.frameLayout, false);
+                        break;
+                    case R.id.menu_order:
+                        prevFragment = setFragment(OrderFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_notification:
                         prevFragment = setFragment(NotificationFragment.class, R.id.frameLayout, false);
@@ -125,7 +130,28 @@ public class MainActivity extends AbstractActivity {
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                bottomNavigation.setSelectedItemId(item.getItemId());
                 switch (item.getItemId()) {
+                    case R.id.menu_home:
+                        prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_cart:
+                        prevFragment = setFragment(CartFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_order:
+                        prevFragment = setFragment(OrderFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_notification:
+                        prevFragment = setFragment(NotificationFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_profile:
+                        prevFragment = setFragment(ProfileFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
                     case R.id.nav_product_management:
                         switchActivity(ProductManagementActivity.class, "Quản lý hàng hoá");
                         break;
@@ -185,6 +211,21 @@ public class MainActivity extends AbstractActivity {
                 return true;
             }
         });
+
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+               if (Authentication.isUpdated) {
+                   setUserLoginInfo();
+                   Authentication.isUpdated = false;
+               }
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void setUserLoginInfo() {
@@ -202,6 +243,7 @@ public class MainActivity extends AbstractActivity {
             navigation.inflateMenu(R.menu.navigation_menu_shipper);
         } else {
             navigation.inflateMenu(R.menu.navigation_menu_customer);
+            navigation.setCheckedItem(R.id.menu_home);
         }
     }
 

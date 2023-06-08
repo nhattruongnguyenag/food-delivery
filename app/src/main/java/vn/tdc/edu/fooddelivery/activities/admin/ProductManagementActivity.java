@@ -9,6 +9,7 @@ import java.util.List;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.fragments.admin.ProductsListFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.OrderDetailsFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class ProductManagementActivity extends AbstractActivity {

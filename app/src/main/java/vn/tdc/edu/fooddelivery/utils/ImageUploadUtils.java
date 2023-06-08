@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.ImageView;
@@ -37,11 +39,21 @@ public class ImageUploadUtils {
     public static final String GALLERY = "Thư viện";
     public static final String CAMERA = "Máy ảnh";
     public static final String CANCEL = "Huỷ";
-
     public static final String IMAGE_UPLOAD_DEFAULT = "image_upload_default.png";
     public static final String USER_IMAGE_UPLOAD_DEFAULT = "user_image_default.png";
     public static final CharSequence[] OPTIONS = {CAMERA, GALLERY, CANCEL};
     private ActivityResultLauncher<Intent> startActivityForResult;
+    private Drawable oldImagaViewDrawable;
+
+    private static OnResultUpload onResultUpload;
+
+    public static void setOnResultUpload(OnResultUpload onResultUpload) {
+        ImageUploadUtils.onResultUpload = onResultUpload;
+    }
+
+    public interface OnResultUpload {
+        void doAction();
+    }
 
     public static ImageUploadUtils getInstance() {
         return Helper.INSTANCE;
@@ -79,6 +91,7 @@ public class ImageUploadUtils {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
+                        oldImagaViewDrawable = imageView.getDrawable();
                         Intent data = result.getData();
                         if (result.getResultCode() == AppCompatActivity.RESULT_OK && data != null) {
                             switch (fragment.getActivity().getIntent().getStringExtra("req")) {
@@ -95,6 +108,10 @@ public class ImageUploadUtils {
                                 default:
                                     break;
                             }
+
+                            if (onResultUpload != null) {
+                                onResultUpload.doAction();
+                            }
                         }
                     }
                 }
@@ -108,7 +125,7 @@ public class ImageUploadUtils {
         return check == PackageManager.PERMISSION_GRANTED;
     }
 
-    public void showChoosingImageOptionsDialog(AppCompatActivity activity, ImageView imageView) {;
+    public void showChoosingImageOptionsDialog(AppCompatActivity activity, ImageView imageView) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Chọn hình ảnh");
 
@@ -143,10 +160,10 @@ public class ImageUploadUtils {
             return;
         }
 
-        File file = new File(Uri.parse((imageSelected)).getPath());
+        File fileUpload = new File(Uri.parse((imageSelected)).getPath());
 
-        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), fileUpload);
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("image", fileUpload.getName(), requestBody);
 
         UploadAPI uploadAPI = RetrofitBuilder.getClient().create(UploadAPI.class);
 
