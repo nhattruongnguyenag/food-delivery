@@ -25,6 +25,8 @@ public class UserModel extends BaseModel {
     @SerializedName("roleCodes")
     private List<String> roleCodes;
 
+    private String rolesString;
+
     public String getFullName() {
         return fullName;
     }
@@ -85,6 +87,14 @@ public class UserModel extends BaseModel {
 
     public void setRoleCodes(List<String> roleCodes) {
         this.roleCodes = roleCodes;
+    }
+
+    public String getRolesString() {
+        return rolesString;
+    }
+
+    public void setRolesString(String rolesString) {
+        this.rolesString = rolesString;
     }
 
     @NonNull

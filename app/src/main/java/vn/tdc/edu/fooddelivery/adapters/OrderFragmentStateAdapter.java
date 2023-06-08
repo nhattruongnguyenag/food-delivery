@@ -45,7 +45,7 @@ public class OrderFragmentStateAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         fragment = new OrdersListFragment();
 
-        if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+        if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
             ((OrdersListFragment) fragment).setStatus(position + 2);
         } else {
             ((OrdersListFragment) fragment).setStatus(position + 1);

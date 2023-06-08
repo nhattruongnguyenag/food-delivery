@@ -43,7 +43,7 @@ public class UserFragmentStateAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         fragment = new UsersListFragment();
 
-        if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+        if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
             fragment.setRoleModel(listRoles.get(position));
         } else {
             if (position > 0) {

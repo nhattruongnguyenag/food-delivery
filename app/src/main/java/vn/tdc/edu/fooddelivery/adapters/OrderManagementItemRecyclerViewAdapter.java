@@ -71,7 +71,7 @@ public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter
         holder.tvCreatedAt.setText(CommonUtils.convertDateToString(orderModel.getCreatedAt()));
 
         if (orderModel.getStatus() != OrderStatus.CHUA_XU_LY.getStatus()) {
-            if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())
+            if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())
             && orderModel.getStatus() == OrderStatus.DANG_GIAO_HANG.getStatus()) {
                 holder.btnAccept.setEnabled(true);
                 holder.btnDelete.setEnabled(true);
@@ -81,7 +81,7 @@ public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter
             }
         }
 
-        if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+        if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
             holder.btnAccept.setText("Giao");
             holder.btnDelete.setText("Huỷ");
         }

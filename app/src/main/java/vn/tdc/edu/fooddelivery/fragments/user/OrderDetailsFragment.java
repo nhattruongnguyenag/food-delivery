@@ -83,7 +83,7 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
             tvTotal.setText(FormatCurentcy.formatVietnamCurrency(orderModel.getTotal()));
 
             if (orderModel.getStatus() != OrderStatus.DANG_GIAO_HANG.getStatus()
-                    || Authentication.getUserLogin().getRoleCodes().contains(Role.ADMIN.getName())) {
+                    || Authentication.getUserLogin().getRolesString().contains(Role.ADMIN.getName())) {
                 layoutBtnAction.setVisibility(View.GONE);
             }
 
