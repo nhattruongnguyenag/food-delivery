@@ -27,7 +27,7 @@ class UserResource extends JsonResource
                     "status" => $this[$i]->status,
                     "created_at" => $this[$i]->created_at,
                     "updated_at" => $this[$i]->updated_at,
-                    "roleIds"=>$this->roles($this[$i]->id)
+                    "roleIds"=> $this->roles($this[$i]->id) ?? null
                 ]);
             }
         }
@@ -40,7 +40,7 @@ class UserResource extends JsonResource
                 "status" => $this->status,
                 "created_at" => $this->created_at,
                 "updated_at" => $this->updated_at,
-                "roleIds"=> $this->roles($this->id)
+                "roleIds"=> $this->roles($this->id) ?? null
             ]);
         }
         return $resource;

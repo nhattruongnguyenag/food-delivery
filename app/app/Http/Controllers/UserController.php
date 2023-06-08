@@ -23,19 +23,26 @@ class UserController extends Controller
         $result = WidgetController::checkValidateDataUser($request);
         if ($result != null && isset($result)) {
             if (isset($request->id)) {
-                if (isset($request->roleIds)) {
-                    $user = User::find($request->id);
-                    WidgetController::setDataToUser($result, $user, false);
+                $user = User::find($request->id);
+                WidgetController::setDataToUser($request->all(), $user);
+                $checkEmail = User::whereEmail($request->email)->first();
+                if ($checkEmail == null) {
                     $user->save();
-                    WidgetController::attachToRoleUserTable($request->roleIds, $user);
+                    if (isset($request->roleIds)) {
+                        WidgetController::attachToRoleUserTable($request->roleIds, $user);
+                    }
                     $resource = new UserResource($user);
                     $result = json_decode($resource->toJson(), true);
                     return response($result[0], 201);
+                } else {
+                    return response([
+                        'msg' => 'email da ton tai , khong the sua'
+                    ], 400);
                 }
             } else {
                 if (isset($request->roleIds)) {
                     $user = new User();
-                    WidgetController::setDataToUser($result, $user, true);
+                    WidgetController::setDataToUser($result, $user);
                     $checkEmail = User::whereEmail($request->email)->first();
                     if ($checkEmail == null) {
                         $user->save();
@@ -48,7 +55,7 @@ class UserController extends Controller
                             'msg' => 'email da ton tai , khong the them'
                         ], 400);
                     }
-                }else{
+                } else {
                     return response([
                         'msg' => 'chua cap quyen cho user nay'
                     ], 400);
@@ -155,8 +162,8 @@ class UserController extends Controller
             if (isset($request->password) && $request->password != '') {
                 $check = strcmp(Crypt::decrypt($user->password), $request->password) == 0;
                 $roleCodes = [];
-                foreach($user->roles() as $item){
-                    array_push($roleCodes,$item->code); 
+                foreach ($user->roles() as $item) {
+                    array_push($roleCodes, $item->code);
                 }
                 $user->roleCodes = $roleCodes;
                 if ($check) {

@@ -109,23 +109,22 @@ class WidgetController extends Controller
     */
     public static function checkValidateDataUser($request)
     {
-        if (!isset($request->full_name) || !isset($request->roleIds) || !isset($request->image)) {
-            return null;
-        }
-        if (count($request->roleIds) < 1) {
+        if (!isset($request->full_name)) {
             return null;
         }
         return $request->all();
     }
 
-    public static function setDataToUser($request, $user, $canSet)
+    public static function setDataToUser($request, $user)
     {
         $user->full_name = $request['full_name'];
-        $user->image = $request['image'];
-        if ($canSet == true) {
+        if (isset($request['image'])) {
+            $user->image = $request['image'];
+        }
+        if (isset($request['email'])) {
             $user->email = $request['email'];
         }
-        if ($canSet == true) {
+        if (isset($request['password'])) {
             $user->password = Crypt::encrypt($request['password']);
         }
         if (isset($request->status)) {
@@ -275,7 +274,7 @@ class WidgetController extends Controller
         $resource = new CartResource(User::find($order->user_id));
         $cart = json_decode($resource->toJson(), true);
         foreach ($cart as $cartItem) {
-            if($cartItem['quantity'] != 0){
+            if ($cartItem['quantity'] != 0) {
                 DB::table('order_product')->insert([
                     'order_id' => $order->id,
                     'product_id' => $cartItem['product']['id'],
