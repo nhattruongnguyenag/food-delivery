@@ -30,7 +30,7 @@
         android:text="@string/confirm_dialog_content"
         android:padding="30dp"
         android:textStyle="bold"
-        android:textSize="@dimen/textMedium"
+        android:textSize="@dimen/textNormal"
         app:backgroundTint="@null"/>
 
     <LinearLayout

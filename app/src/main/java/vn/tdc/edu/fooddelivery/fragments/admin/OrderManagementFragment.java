@@ -42,7 +42,7 @@ public class OrderManagementFragment extends AbstractFragment {
             listStatus[2] = "Giao thành công";
             listStatus[3] = "Đơn hàng đã huỷ";
 
-            if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+            if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
                 listStatus = Arrays.copyOfRange(listStatus, 1, listStatus.length, CharSequence[].class);
             }
         }

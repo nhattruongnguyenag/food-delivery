@@ -3,6 +3,7 @@ package vn.tdc.edu.fooddelivery.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,7 @@ public class LaucherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_laucher);
+        Authentication.setContext(this);
 
         Intent intent = null;
 

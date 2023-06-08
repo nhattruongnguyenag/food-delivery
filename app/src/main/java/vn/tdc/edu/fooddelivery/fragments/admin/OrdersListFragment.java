@@ -94,7 +94,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
     public void onButtonAcceptClickListener(int position) {
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.setId(listOrders.get(position).getId());
-        if (Authentication.getUserLogin().getRoleCodes().contains(Role.ADMIN.getName())) {
+        if (Authentication.getUserLogin().getRolesString().contains(Role.ADMIN.getName())) {
             if (getActivity() != null) {
                 assign = new AssigntOrderPopupToStaff(getActivity());
                 assign.setOnAssignmentDialogAction(new AssigntOrderPopupToStaff.DialogAssignDialogAction() {
@@ -107,13 +107,13 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
                     public void ok(UserModel shipper) {
                         orderRequest.setStatus(OrderStatus.DANG_GIAO_HANG.getStatus());
                         orderRequest.setShipperId(shipper.getId());
-                        assignmentOrderToShipper(orderRequest);
+                        assignmentOrderToShipper(orderRequest, position);
                     }
                 });
 
                 assign.show();
             }
-        } else if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+        } else if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
             orderRequest.setStatus(OrderStatus.DA_GIAO.getStatus());
             updateOrderStatus(orderRequest, position);
         }
@@ -123,7 +123,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
     public void onButtonDeleteClickListener(int position) {
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.setId(listOrders.get(position).getId());
-        if (Authentication.getUserLogin().getRoleCodes().contains(Role.ADMIN.getName())) {
+        if (Authentication.getUserLogin().getRolesString().contains(Role.ADMIN.getName())) {
             confirmDialog = new ConfirmDialog(getActivity());
             confirmDialog.setTitle("Xác nhận");
             confirmDialog.setMessage("Dữ liệu đã xoá không thể hoàn tác.\nBạn có muốn tiếp tục không?");
@@ -141,20 +141,21 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
             });
 
             confirmDialog.show();
-        } else if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+        } else if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
             orderRequest.setStatus(OrderStatus.DA_HUY.getStatus());
             updateOrderStatus(orderRequest, position);
         }
     }
 
-    private void assignmentOrderToShipper(OrderRequest orderRequest) {
+    private void assignmentOrderToShipper(OrderRequest orderRequest, int position) {
         Call<OrderModel> call = RetrofitBuilder.getClient().create(OrderAPI.class).update(orderRequest);
 
         call.enqueue(new Callback<OrderModel>() {
             @Override
             public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
                 if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
-                    ((AbstractActivity) getActivity()).showMessageDialog("Đơn hàng đã được bàn giao cho nhân viên giao hàng");
+                    ((AbstractActivity) getActivity()).showMessageDialog("Đơn hàng đã bàn giao cho nhân viên giao hàng thành công");
+                    adapter.notifyItemRemoved(position);
                     assign.dismiss();
                 } else {
                     ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
@@ -216,7 +217,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
 
     private void getOrderListFromAPI(Integer status) {
         Call<List<OrderModel>> call = null;
-        if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+        if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
             call = RetrofitBuilder.getClient().create(OrderAPI.class).findAll(status, Authentication.getUserLogin().getId());
         } else {
             call = RetrofitBuilder.getClient().create(OrderAPI.class).findAll(status);
