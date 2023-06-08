@@ -49,7 +49,7 @@ class UserController extends Controller
                         WidgetController::attachToRoleUserTable($request->roleIds, $user);
                         $resource = new UserResource($user);
                         $result = json_decode($resource->toJson(), true);
-                        return response($result[0], 201);
+                        return response($user, 201);
                     } else {
                         return response([
                             'msg' => 'email da ton tai , khong the them'
