@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -28,11 +29,13 @@ import java.util.ArrayList;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
+import vn.tdc.edu.fooddelivery.activities.LoginActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.CategoryManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.OrderManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.ProductManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.RoleManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
+import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
@@ -63,7 +66,7 @@ public class MainActivity extends AbstractActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
     private View navigationHeader;
-    private ImageView userImage;
+    private ShapeableImageView userImage;
     private TextView tvUserName;
     private TextView tvUserEmail;
     private Fragment prevFragment;
@@ -138,6 +141,28 @@ public class MainActivity extends AbstractActivity {
                     case R.id.nav_role_management:
                         switchActivity(RoleManagementActivity.class, "Quản lý vai trò");
                         break;
+                    case R.id.nav_logout:
+                        ConfirmDialog confirmDialog = new ConfirmDialog(MainActivity.this);
+                        confirmDialog.setTitle("Đăng xuất");
+                        confirmDialog.setMessage("Đăng xuất khỏi tài khoản của bạn ?");
+                        confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
+                            @Override
+                            public void cancel() {
+                                confirmDialog.dismiss();
+                            }
+
+                            @Override
+                            public void ok() {
+                                confirmDialog.dismiss();
+                                if (Authentication.logout()) {
+                                    switchActivity(LoginActivity.class, "Logout");
+                                    finish();
+                                };
+                            }
+                        });
+
+                        confirmDialog.show();
+                        break;
                     default:
                         break;
                 }
@@ -171,9 +196,9 @@ public class MainActivity extends AbstractActivity {
 
     private void setMenuByUserRole() {
         navigation.getMenu().clear();
-        if (Authentication.getUserLogin().getRoleCodes().contains(Role.ADMIN.getName())) {
+        if (Authentication.getUserLogin().getRolesString().contains(Role.ADMIN.getName())) {
             navigation.inflateMenu(R.menu.navigation_menu_admin);
-        } else if (Authentication.getUserLogin().getRoleCodes().contains(Role.SHIPPER.getName())) {
+        } else if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
             navigation.inflateMenu(R.menu.navigation_menu_shipper);
         } else {
             navigation.inflateMenu(R.menu.navigation_menu_customer);

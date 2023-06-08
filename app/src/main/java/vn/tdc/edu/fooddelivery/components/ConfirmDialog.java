@@ -16,17 +16,18 @@ import androidx.annotation.Nullable;
 import vn.tdc.edu.fooddelivery.R;
 
 public class ConfirmDialog extends Dialog {
+    private TextView tvTitle, tvMessage;
     private String title;
     private String message;
     private DialogComfirmAction dialogComfirmAction;
 
     public ConfirmDialog setTitle(String title) {
-        this.title = title;
+        tvTitle.setText(title);
         return this;
     }
 
     public ConfirmDialog setMessage(String message) {
-        this.message = message;
+        tvMessage.setText(message);
         return this;
     }
 
@@ -37,6 +38,13 @@ public class ConfirmDialog extends Dialog {
 
     public ConfirmDialog(@NonNull Context context) {
         super(context);
+        init();
+    }
+
+    public ConfirmDialog(@NonNull Context context, String title, String message) {
+        super(context);
+        this.title = title;
+        this.message = message;
         init();
     }
 
@@ -66,8 +74,8 @@ public class ConfirmDialog extends Dialog {
 
             setCancelable(false);
 
-            TextView tvTitle = findViewById(R.id.tvTitle);
-            TextView tvMessage = findViewById(R.id.tvMessage);
+            tvTitle = findViewById(R.id.tvTitle);
+            tvMessage = findViewById(R.id.tvMessage);
             Button btnCancel = findViewById(R.id.btnCancel);
             Button btnOk = findViewById(R.id.btnOk);
 
