@@ -109,7 +109,7 @@ class WidgetController extends Controller
     */
     public static function checkValidateDataUser($request)
     {
-        if (!isset($request->full_name) || !isset($request->email) || !isset($request->roleIds) || !isset($request->password)) {
+        if (!isset($request->full_name) || !isset($request->email) || !isset($request->roleIds) || !isset($request->password) || !isset($request->image)) {
             return null;
         }
         if (count($request->roleIds) < 1) {
@@ -121,6 +121,7 @@ class WidgetController extends Controller
     public static function setDataToUser($request, $user, $canSet)
     {
         $user->full_name = $request['full_name'];
+        $user->image = $request['image'];
         if ($canSet == true) {
             $user->email = $request['email'];
         }
