@@ -52,7 +52,8 @@
                     android:layout_height="match_parent"
                     android:drawableLeft="@drawable/user_icon"
                     android:hint=" Nhập tên của bạn"
-                    android:background="@drawable/boder_edit_text"></EditText>
+                    android:background="@drawable/boder_edit_text"
+                    android:id="@+id/edNameRegister"></EditText>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -80,7 +81,8 @@
                     android:layout_height="match_parent"
                     android:drawableLeft="@drawable/baseline_email_24"
                     android:hint=" Nhập email của bạn"
-                    android:background="@drawable/boder_edit_text"></EditText>
+                    android:background="@drawable/boder_edit_text"
+                    android:id="@+id/edEmailRegister"></EditText>
             </LinearLayout>
         </LinearLayout>
 
@@ -109,7 +111,9 @@
                     android:layout_height="match_parent"
                     android:drawableLeft="@drawable/baseline_lock_24"
                     android:hint=" Nhập mật khẩu của bạn"
-                    android:background="@drawable/boder_edit_text"></EditText>
+                    android:background="@drawable/boder_edit_text"
+                    android:id="@+id/edPasswordRegister"
+                    android:inputType="textPassword"></EditText>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -137,7 +141,9 @@
                     android:layout_height="match_parent"
                     android:drawableLeft="@drawable/baseline_lock_24"
                     android:hint=" Nhập lại mật khẩu của bạn"
-                    android:background="@drawable/boder_edit_text"></EditText>
+                    android:background="@drawable/boder_edit_text"
+                    android:id="@+id/edRePasswordRegister"
+                    android:inputType="textPassword"></EditText>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -154,7 +160,8 @@
             android:layout_marginBottom="20dp"
             android:backgroundTint="@color/textTitlePrimary"
             android:text="Đăng Kí"
-            android:textStyle="bold"></Button>
+            android:textStyle="bold"
+            android:id="@+id/btnRegister"></Button>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

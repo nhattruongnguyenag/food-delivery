@@ -10,6 +10,7 @@ public enum Role {
 
     Role(int id, String name) {
         this.role = name;
+        this.id = id;
     }
 
     public String getName() {
@@ -17,3 +18,4 @@ public enum Role {
     }
     public int getId() {return id;}
 }
+
