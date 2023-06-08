@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -65,7 +66,7 @@ public class MainActivity extends AbstractActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
     private View navigationHeader;
-    private ImageView userImage;
+    private ShapeableImageView userImage;
     private TextView tvUserName;
     private TextView tvUserEmail;
     private Fragment prevFragment;

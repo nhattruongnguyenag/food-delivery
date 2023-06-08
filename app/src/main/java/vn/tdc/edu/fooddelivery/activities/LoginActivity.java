@@ -1,16 +1,32 @@
 package vn.tdc.edu.fooddelivery.activities;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
+import vn.tdc.edu.fooddelivery.api.CategoryAPI;
+import vn.tdc.edu.fooddelivery.api.UserAPI;
+import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.constant.SystemConstant;
 import vn.tdc.edu.fooddelivery.enums.Role;
+import vn.tdc.edu.fooddelivery.models.CategoryModel;
+import vn.tdc.edu.fooddelivery.models.ErrorModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 import vn.tdc.edu.fooddelivery.utils.Authentication;
 
@@ -37,14 +53,6 @@ public class LoginActivity extends AbstractActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view.getId() == R.id.btnLogin) {
             UserModel userLoginRequest = new UserModel();
-            userLoginRequest.setId(1);
-            userLoginRequest.setImageName("user_image_default.png");
-            userLoginRequest.setFullName("Nguyen Van A (NV)");
-            ArrayList<String> role = new ArrayList<>();
-//            role.add(Role.ADMIN.getName());
-            role.add(Role.SHIPPER.getName());
-            role.add(Role.CUSTOMER.getName());
-            userLoginRequest.setRoleCodes(role);
             userLoginRequest.setEmail(edEmail.getText().toString());
             userLoginRequest.setPassword(edPassword.getText().toString());
             login(userLoginRequest);
@@ -54,11 +62,36 @@ public class LoginActivity extends AbstractActivity implements View.OnClickListe
     }
 
     private void login(UserModel userModel) {
-        if (userModel.getEmail().equalsIgnoreCase("nhattruongnguyenag@gmail.com") && userModel.getPassword().equals("123456")) {
-            ((AbstractActivity) this).switchActivity(MainActivity.class,"");
-            Authentication.login(userModel);
-        } else {
+        Call<UserModel> call = RetrofitBuilder.getClient().create(UserAPI.class).login(userModel);
 
-        }
+        call.enqueue(new Callback<UserModel>() {
+            @Override
+            public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                UserModel userResponse = response.body();
+                if (response.code() == HttpURLConnection.HTTP_OK) {
+                    Authentication.login(userResponse);
+                    switchActivity(MainActivity.class,"Login success");
+                } else {
+                    ResponseBody error = response.errorBody();
+                    try {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        ErrorModel errorModel = objectMapper.readValue(error.string(), ErrorModel.class);
+
+                        if (errorModel.getMsg().equals(SystemConstant.MSG_USER_NOT_EXISTS)) {
+                            edEmail.setError("Tài khoản không tồn tại");
+                        } else if (errorModel.getMsg().equals(SystemConstant.MSG_WRONG_PASSWORD)){
+                            edPassword.setError("Sai mật khẩu");
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserModel> call, Throwable t) {
+
+            }
+        });
     }
 }
