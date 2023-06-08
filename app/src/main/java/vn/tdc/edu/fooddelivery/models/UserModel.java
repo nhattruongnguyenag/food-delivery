@@ -1,6 +1,7 @@
 package vn.tdc.edu.fooddelivery.models;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,19 +11,26 @@ import vn.tdc.edu.fooddelivery.constant.SystemConstant;
 
 public class UserModel extends BaseModel {
     @SerializedName("full_name")
+    @Nullable
     private String fullName;
     @SerializedName("image")
+    @Nullable
     private String image;
     @SerializedName("email")
+    @Nullable
     private String email;
     @SerializedName("password")
+    @Nullable
     private String password;
     @SerializedName("status")
+    @Nullable
     private Byte status;
     @SerializedName("roleIds")
+    @Nullable
     private List<Integer> roleIds;
 
     @SerializedName("roleCodes")
+    @Nullable
     private List<String> roleCodes;
 
     private String rolesString;
