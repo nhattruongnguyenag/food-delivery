@@ -141,6 +141,7 @@ class UserController extends Controller
             $user = User::find($request->id);
             if ($user != null) {
                 $user->password = Crypt::encrypt($request->password);
+                $user->save();
                 return response([
                     "change" => true
                 ], 200);
