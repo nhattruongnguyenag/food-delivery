@@ -192,7 +192,7 @@
         android:id="@+id/layoutBtnAction"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:orientation="horizontal"
         android:background="@color/white"
         android:elevation="10dp"

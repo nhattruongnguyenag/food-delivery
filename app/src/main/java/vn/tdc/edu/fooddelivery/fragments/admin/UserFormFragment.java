@@ -218,7 +218,7 @@ public class UserFormFragment extends AbstractFragment implements View.OnClickLi
         });
     }
 
-    private void updateUser() {
+    private void updateUser(UserModel userModel) {
         ImageUploadUtils.getInstance().handleUploadFileToServer(new ImageUploadUtils.Action() {
             @Override
             public void onSucess(String fileName) {
@@ -300,9 +300,12 @@ public class UserFormFragment extends AbstractFragment implements View.OnClickLi
 
             getUserFromUserInput();
 
-            if (userModel != null && userModel.getId() != null) {
-                updateUser();
-            }
+            UserModel userRequest = new UserModel();
+            userRequest.setId(userModel.getId());
+            userRequest.setFullName(userModel.getFullName());
+            userRequest.setRoleIds(userModel.getRoleIds());
+
+            updateUser(userRequest);
         }
     }
 }
