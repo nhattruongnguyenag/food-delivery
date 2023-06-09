@@ -10,11 +10,8 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-<<<<<<< HEAD
 import android.widget.EditText;
-=======
 import android.widget.ImageView;
->>>>>>> develop
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -241,14 +238,14 @@ public class MainActivity extends AbstractActivity {
         });
     }
 
-<<<<<<< HEAD
     public static void clearSearchView() {
         searchView.setQuery("", false);
         searchView.clearFocus();
     }
 
     private void setNavigationView() {
-=======
+        
+    }
     @Override
     protected void onResume() {
         super.onResume();
