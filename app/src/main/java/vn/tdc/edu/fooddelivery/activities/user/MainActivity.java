@@ -40,6 +40,7 @@ import vn.tdc.edu.fooddelivery.activities.admin.RoleManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.enums.Role;
+import vn.tdc.edu.fooddelivery.fragments.SearchFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.NotificationFragment;

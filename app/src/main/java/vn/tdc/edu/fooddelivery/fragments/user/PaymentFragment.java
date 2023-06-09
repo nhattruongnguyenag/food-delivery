@@ -39,6 +39,8 @@ import vn.tdc.edu.fooddelivery.fragments.admin.OrdersListFragment;
 import vn.tdc.edu.fooddelivery.models.CarstModel;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
+import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
@@ -54,7 +56,8 @@ public class PaymentFragment extends AbstractFragment {
     private CartFragment cartFragment = new CartFragment();
     private List<CarstModel> listOrders;
 
-    private int userID = 1;
+    UserModel userModel = Authentication.getUserLogin();
+    int userID = userModel.getId();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,7 +111,7 @@ public class PaymentFragment extends AbstractFragment {
                 if (alidatePhoneAction() && alidateAddressAction()) {
                     OrderModel orderModel = new OrderModel();
                     orderModel.setAddress(String.valueOf(deliveryAddress.getText()));
-                    orderModel.setUserId(listOrders.get(0).getUser().getId());
+                    orderModel.setUserId(userID);
                     orderModel.setPhone(edt_phone.getText().toString().trim());
                     createOrder(orderModel);
                     showNotification(fragmentLayout.getContext(), "THÔNG BÁO TỪ HỆ THỐNG", "Ấn vào biểu tượng để xem thêm..", "Đơn hàng của bạn đã đặt thành công chúng tôi sẽ sơm giao" +

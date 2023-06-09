@@ -21,12 +21,11 @@ public interface OrderAPI {
     @GET("api/orders")
     Call<List<OrderModel>> findAll(@Query("status") Integer status);
 
-<<<<<<< HEAD
+    @GET("api/orders")
     Call<List<OrderModel>> findOrderOfUser(@Query("userId") Integer userId);
-=======
+
     @GET("api/orders")
     Call<List<OrderModel>> findAll(@Query("status") Integer status, @Query("shipperId") Integer shipperId);
->>>>>>> develop
 
     @POST("api/orders")
     Call<OrderModel> save(@Body OrderModel orderModel);

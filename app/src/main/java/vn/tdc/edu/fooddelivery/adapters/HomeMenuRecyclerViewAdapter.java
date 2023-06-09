@@ -23,10 +23,13 @@ import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.components.CreateStart;
 import vn.tdc.edu.fooddelivery.components.SendDataAndGotoAnotherFragment;
+import vn.tdc.edu.fooddelivery.dal.DatabaseLayer;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.models.AddCarstModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
+import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 
 public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRecyclerViewAdapter.MyViewHolder> {
 
@@ -37,7 +40,9 @@ public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRe
     private List<ProductModel> arrayList;
     private onRecyclerViewOnClickListener _onRecyclerViewOnClickListener;
     private int flag = 1;
+
     private MainActivity mainActivity = null;
+
 
     public HomeMenuRecyclerViewAdapter(Activity activity, int layout_ID, List<ProductModel> arrayList) {
         this.activity = activity;
@@ -95,7 +100,8 @@ public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRe
 
             @Override
             public void onClick(View v) {
-                int userId = 1;
+                UserModel userModel = Authentication.getUserLogin();
+                int userId = userModel.getId();
                 CartFragment cartFragment1 = new CartFragment();
                 AddCarstModel carstModel = new AddCarstModel();
                 carstModel.setProduct_id(cart.getId());

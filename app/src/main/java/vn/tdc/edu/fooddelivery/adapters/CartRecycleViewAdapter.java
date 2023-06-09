@@ -88,6 +88,7 @@ public class CartRecycleViewAdapter extends RecyclerView.Adapter<CartRecycleView
                 int userId = 1;
                 CartFragment cartFragment = new CartFragment();
                 AddCarstModel carstModel = new AddCarstModel();
+                carstModel.setId(cart.getCart_id());
                 carstModel.setUser_id(cart.getUser().getId());
                 carstModel.setQuantity(cart.getQuantity());
                 carstModel.setProduct_id(cart.getProduct().getId());

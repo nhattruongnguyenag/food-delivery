@@ -44,6 +44,7 @@ import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class HomeFragment extends AbstractFragment {
+    private int i = 0;
 
     private static LayoutInflater layoutInflater = null;
     private static View fragmentLayout = null;

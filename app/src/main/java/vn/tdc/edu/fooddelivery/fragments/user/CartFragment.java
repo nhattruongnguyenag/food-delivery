@@ -36,6 +36,8 @@ import vn.tdc.edu.fooddelivery.models.AddCarstModel;
 import vn.tdc.edu.fooddelivery.models.CarstModel;
 import vn.tdc.edu.fooddelivery.models.CategoryModel;
 import vn.tdc.edu.fooddelivery.models.NotificationModel;
+import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 
@@ -51,7 +53,8 @@ public class CartFragment extends AbstractFragment {
     private static Button btnBuy;
 
     private static List<CarstModel> listOrders;
-    private final int userID = 1;
+    UserModel userModel = Authentication.getUserLogin();
+    private final int userID = userModel.getId();
 
     public Activity getActivityCart() {
         return activityCart;
@@ -128,7 +131,7 @@ public class CartFragment extends AbstractFragment {
 
     public void deleteCarst(AddCarstModel carstModel) {
 
-        Call<CarstModel> call = RetrofitBuilder.getClient().create(CartsAPI.class).delete(carstModel.getUser_id());
+        Call<CarstModel> call = RetrofitBuilder.getClient().create(CartsAPI.class).delete(carstModel.getId());
         call.enqueue(new Callback<CarstModel>() {
             @Override
             public void onResponse(Call<CarstModel> call, Response<CarstModel> response) {

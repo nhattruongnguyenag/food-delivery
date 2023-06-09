@@ -35,7 +35,6 @@ import vn.tdc.edu.fooddelivery.enums.OrderStatus;
 import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.OrderDetailsFragment;
-import vn.tdc.edu.fooddelivery.models.NotificationModel_Test;
 import vn.tdc.edu.fooddelivery.models.OrderRequest;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
@@ -136,15 +135,6 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
                     confirmDialog.dismiss();
                 }
 
-<<<<<<< HEAD
-            @Override
-            public void ok() {
-                deleteOrder(position);
-                confirmDialog.dismiss();
-            }
-        });
-        confirmDialog.show();
-=======
                 @Override
                 public void ok() {
                     deleteOrder(position);
@@ -157,7 +147,6 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
             orderRequest.setStatus(OrderStatus.DA_HUY.getStatus());
             updateOrderStatus(orderRequest, position);
         }
->>>>>>> develop
     }
 
     private void assignmentOrderToShipper(OrderRequest orderRequest, int position) {

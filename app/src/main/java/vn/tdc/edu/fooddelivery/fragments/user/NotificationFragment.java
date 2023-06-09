@@ -32,6 +32,8 @@ import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.SendDataAndGotoAnotherFragment;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.NotificationModel;
+import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class NotificationFragment extends AbstractFragment {
@@ -45,7 +47,8 @@ public class NotificationFragment extends AbstractFragment {
 
     private static List<NotificationModel> listNotifycations;
 
-    public int user_id = 2;
+    UserModel userModel = Authentication.getUserLogin();
+    public int user_id = userModel.getId();;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

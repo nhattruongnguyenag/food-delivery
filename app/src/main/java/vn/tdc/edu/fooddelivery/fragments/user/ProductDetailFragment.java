@@ -30,6 +30,8 @@ import vn.tdc.edu.fooddelivery.components.CreateStart;
 import vn.tdc.edu.fooddelivery.components.ToastCustome;
 import vn.tdc.edu.fooddelivery.models.AddCarstModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
+import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
@@ -57,7 +59,8 @@ public class ProductDetailFragment extends AbstractFragment {
     // -----------------Change number notify in bottomBar----//
     private MainActivity mainActivity;
 
-    private int userId = 1;
+    UserModel userModel = Authentication.getUserLogin();
+    int userId = userModel.getId();
 
     public List<ProductModel> getArrayList() {
         return arrayList;
