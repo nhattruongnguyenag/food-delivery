@@ -244,7 +244,7 @@ public class MainActivity extends AbstractActivity {
     }
 
     private void setNavigationView() {
-        
+
     }
     @Override
     protected void onResume() {
@@ -271,7 +271,6 @@ public class MainActivity extends AbstractActivity {
     }
 
     private void setToggleActionNavigationView() {
->>>>>>> develop
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawerOpen,
