@@ -69,9 +69,9 @@ class CartController extends Controller
                 "msg" => "Xoa tat ca cart"
             ], 200);
         } else {
-            $result = Cart::where('user_id', '=', $request->user_id)->where('product_id', '=', $request->product_id)->get()->first();
-            if ($result != null && isset($result)) {
-                Cart::find($result->id)->delete();
+            $cart = Cart::find($request->id);
+            if ($cart != null) {
+                $cart->delete();
                 return response($result, 200);
             } else {
                 return response([
