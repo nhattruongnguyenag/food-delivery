@@ -24,11 +24,15 @@ import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.api.UserAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
+import vn.tdc.edu.fooddelivery.components.ShowDialog;
 import vn.tdc.edu.fooddelivery.constant.SystemConstant;
 import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.models.ErrorModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 import vn.tdc.edu.fooddelivery.utils.Authentication;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AbstractActivity implements View.OnClickListener {
     private TextView tvLoginLink;
@@ -42,6 +46,8 @@ public class RegisterActivity extends AbstractActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_register);
+
+        dialogEmailRules();
 
         edNameRegister = findViewById(R.id.edNameRegister);
         edEmailRegister = findViewById(R.id.edEmailRegister);
@@ -60,20 +66,22 @@ public class RegisterActivity extends AbstractActivity implements View.OnClickLi
             switchActivity(LoginActivity.class, "Login");
         } else if (view.getId() == R.id.btnRegister) {
             if (checkNoEmpty()) {
-                UserModel userRegisterRequest = new UserModel();
-                userRegisterRequest.setEmail(edEmailRegister.getText().toString());
-                userRegisterRequest.setFullName(edNameRegister.getText().toString());
-                userRegisterRequest.setImageName("user_image_default.png");
+                if(checkRegex()){
+                    UserModel userRegisterRequest = new UserModel();
+                    userRegisterRequest.setEmail(edEmailRegister.getText().toString());
+                    userRegisterRequest.setFullName(edNameRegister.getText().toString());
+                    userRegisterRequest.setImageName("user_image_default.png");
 
-                List<Integer> roleIds = new ArrayList<>();
-                roleIds.add(Role.CUSTOMER.getId());
-                userRegisterRequest.setRoleIds(roleIds);
+                    List<Integer> roleIds = new ArrayList<>();
+                    roleIds.add(Role.CUSTOMER.getId());
+                    userRegisterRequest.setRoleIds(roleIds);
 
-                if (!edPasswordRegister.getText().toString().equals(edRePasswordRegister.getText().toString())) {
-                    edRePasswordRegister.setError("Mật khẩu nhập lại không khớp");
-                } else {
-                    userRegisterRequest.setPassword(edPasswordRegister.getText().toString());
-                    register(userRegisterRequest);
+                    if (!edPasswordRegister.getText().toString().equals(edRePasswordRegister.getText().toString())) {
+                        edRePasswordRegister.setError("Mật khẩu nhập lại không khớp");
+                    } else {
+                        userRegisterRequest.setPassword(edPasswordRegister.getText().toString());
+                        register(userRegisterRequest);
+                    }
                 }
             }
         }
@@ -88,7 +96,17 @@ public class RegisterActivity extends AbstractActivity implements View.OnClickLi
                 UserModel userResponse = response.body();
                 if (response.code() == HttpURLConnection.HTTP_CREATED) {
                     Authentication.login(userResponse);
-                    switchActivity(MainActivity.class,"Login success");
+                    ShowDialog showDialog = new ShowDialog(RegisterActivity.this);
+                    showDialog.setTitle("Đăng ký");
+                    showDialog.setMessage("Đăng ký thành công");
+                    showDialog.setOnDialogComfirmAction(new ShowDialog.DialogComfirmAction() {
+                        @Override
+                        public void ok() {
+                            showDialog.dismiss();
+                            switchActivity(MainActivity.class,"Login success");
+                        }
+                    });
+                    showDialog.show();
                 } else {
                     ResponseBody error = response.errorBody();
                     try {
@@ -128,6 +146,39 @@ public class RegisterActivity extends AbstractActivity implements View.OnClickLi
             check = false;
         }
         return check;
+    }
+
+    private boolean checkRegex(){
+        boolean check = true;
+        if(!edEmailRegister.getText().toString().matches("\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+")){
+            edEmailRegister.setError("Email không đúng định dạng");
+            check = false;
+        }
+        if(!edPasswordRegister.getText().toString().matches("(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}")){
+            edPasswordRegister.setError("Mật khẩu tối thiểu 6 ký tự , ít nhất một chữ số và một ký tự");
+            check = false;
+        }
+        return check;
+    }
+
+    private void dialogEmailRules(){
+        ShowDialog showDialog = new ShowDialog(RegisterActivity.this);
+        showDialog.setTitle("Quy tắc email");
+        showDialog.setMessage("Tên email : \n" +
+                "1. Phải có ký tự '@'. \n" +
+                "2. Không có ký tự đặc biệt nào sau và trước '@'. \n" +
+                "3. Tên miền cấp cao nhất phải hợp lệ. \n" +
+                "4. Email không được bắt đầu bằng '.'. \n" +
+                "5. Email chỉ cho phép ký tự, chữ số, dấu gạch dưới và dấu gạch ngang. \n" +
+                "6. Không được phép chấm đôi."
+        );
+        showDialog.setOnDialogComfirmAction(new ShowDialog.DialogComfirmAction() {
+            @Override
+            public void ok() {
+                showDialog.dismiss();
+            }
+        });
+        showDialog.show();
     }
 
 }
