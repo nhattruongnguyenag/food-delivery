@@ -96,15 +96,15 @@
 
             <Button
                 android:id="@+id/btnAdd"
+                android:visibility="visible"
                 style="@style/btnAdd"
                 android:layout_marginBottom="50dp"
                 android:text="Thêm người dùng" />
 
             <LinearLayout
                 android:id="@+id/editOptions"
-                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginTop="@dimen/editOptionsEditMarginTop"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
@@ -115,6 +115,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/reset_password"
                     android:textAllCaps="false"
+                    android:background="@drawable/btn_order_accept_bg"
                     app:backgroundTint="#fbac45"
                     android:layout_marginRight="@dimen/button_order_recyler_margin"/>
 
@@ -124,6 +125,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/update_user"
                     android:textAllCaps="false"
+                    android:background="@drawable/btn_order_accept_bg"
                     app:backgroundTint="#337ab7" />
             </LinearLayout>
 

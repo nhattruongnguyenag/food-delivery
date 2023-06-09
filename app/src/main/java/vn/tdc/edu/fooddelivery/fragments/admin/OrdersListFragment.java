@@ -12,7 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,18 +30,21 @@ import vn.tdc.edu.fooddelivery.api.OrderAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.AssigntOrderPopupToStaff;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
+import vn.tdc.edu.fooddelivery.components.Notification;
 import vn.tdc.edu.fooddelivery.enums.OrderStatus;
+import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.OrderDetailsFragment;
-import vn.tdc.edu.fooddelivery.models.AssignmentOrderRequest;
+import vn.tdc.edu.fooddelivery.models.NotificationModel_Test;
+import vn.tdc.edu.fooddelivery.models.OrderRequest;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 
 public class OrdersListFragment extends AbstractFragment implements OrderManagementItemRecyclerViewAdapter.OnRecylerViewItemClickListener {
     public final static String ORDER_MODEL = "ordermodel";
     private OrderManagementItemRecyclerViewAdapter adapter;
     private List<OrderModel> listOrders;
-    private Integer status;
     private AssigntOrderPopupToStaff assign;
     private RecyclerView recyclerViewOrder;
     private ConfirmDialog confirmDialog;
@@ -46,6 +52,8 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
     public List<OrderModel> getListOrders() {
         return listOrders;
     }
+
+    private Integer status;
 
     public Integer getStatus() {
         return status;
@@ -74,11 +82,8 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
 
     @Override
     public void onButtonOrderDetailClickListener(int position) {
-        Log.d("recyclerTest", "Order detais clicked at " + position);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ORDER_MODEL, listOrders.get(position));
-        ((AbstractActivity) getActivity()).setFragment(OrderDetailsFragment.class, R.id.frameLayout,true)
-                .setArguments(bundle);
+            ((AbstractActivity) getActivity()).setFragment(OrderDetailsFragment.class, R.id.frameLayout, true)
+                    .setOrderModel(listOrders.get(position));
     }
 
     @Override
@@ -90,39 +95,48 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
 
     @Override
     public void onButtonAcceptClickListener(int position) {
-        if (getActivity() != null) {
-            assign = new AssigntOrderPopupToStaff(getActivity());
-            assign.setOnAssignmentDialogAction(new AssigntOrderPopupToStaff.DialogAssignDialogAction() {
-                @Override
-                public void cancel() {
-                    assign.dismiss();
-                }
+        OrderRequest orderRequest = new OrderRequest();
+        orderRequest.setId(listOrders.get(position).getId());
+        if (Authentication.getUserLogin().getRolesString().contains(Role.ADMIN.getName())) {
+            if (getActivity() != null) {
+                assign = new AssigntOrderPopupToStaff(getActivity());
+                assign.setOnAssignmentDialogAction(new AssigntOrderPopupToStaff.DialogAssignDialogAction() {
+                    @Override
+                    public void cancel() {
+                        assign.dismiss();
+                    }
 
-                @Override
-                public void ok(UserModel shipper) {
-                    AssignmentOrderRequest orderRequest = new AssignmentOrderRequest();
-                    orderRequest.setId(listOrders.get(position).getId());
-                    orderRequest.setStatus(OrderStatus.DANG_GIAO_HANG.getStatus());
-                    orderRequest.setShipperId(shipper.getId());
-                    assignmentOrderToShipper(orderRequest);
-                }
-            });
+                    @Override
+                    public void ok(UserModel shipper) {
+                        orderRequest.setStatus(OrderStatus.DANG_GIAO_HANG.getStatus());
+                        orderRequest.setShipperId(shipper.getId());
+                        assignmentOrderToShipper(orderRequest, position);
+                    }
+                });
 
-            assign.show();
+                assign.show();
+            }
+        } else if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
+            orderRequest.setStatus(OrderStatus.DA_GIAO.getStatus());
+            updateOrderStatus(orderRequest, position);
         }
     }
 
     @Override
     public void onButtonDeleteClickListener(int position) {
-        confirmDialog = new ConfirmDialog(getActivity());
-        confirmDialog.setTitle("Xác nhận");
-        confirmDialog.setMessage("Dữ liệu đã xoá không thể hoàn tác.\nBạn có muốn tiếp tục không?");
-        confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
-            @Override
-            public void cancel() {
-                confirmDialog.dismiss();
-            }
+        OrderRequest orderRequest = new OrderRequest();
+        orderRequest.setId(listOrders.get(position).getId());
+        if (Authentication.getUserLogin().getRolesString().contains(Role.ADMIN.getName())) {
+            confirmDialog = new ConfirmDialog(getActivity());
+            confirmDialog.setTitle("Xác nhận");
+            confirmDialog.setMessage("Dữ liệu đã xoá không thể hoàn tác.\nBạn có muốn tiếp tục không?");
+            confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
+                @Override
+                public void cancel() {
+                    confirmDialog.dismiss();
+                }
 
+<<<<<<< HEAD
             @Override
             public void ok() {
                 deleteOrder(position);
@@ -130,17 +144,56 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
             }
         });
         confirmDialog.show();
+=======
+                @Override
+                public void ok() {
+                    deleteOrder(position);
+                    confirmDialog.dismiss();
+                }
+            });
+
+            confirmDialog.show();
+        } else if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
+            orderRequest.setStatus(OrderStatus.DA_HUY.getStatus());
+            updateOrderStatus(orderRequest, position);
+        }
+>>>>>>> develop
     }
 
-    private void assignmentOrderToShipper(AssignmentOrderRequest orderRequest) {
+    private void assignmentOrderToShipper(OrderRequest orderRequest, int position) {
         Call<OrderModel> call = RetrofitBuilder.getClient().create(OrderAPI.class).update(orderRequest);
 
         call.enqueue(new Callback<OrderModel>() {
             @Override
             public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
                 if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
-                    ((AbstractActivity) getActivity()).showMessageDialog("Hoá đơn đã được bàn giao cho nhân viên giao hàng");
+                    ((AbstractActivity) getActivity()).showMessageDialog("Đơn hàng đã bàn giao cho nhân viên giao hàng thành công");
+                    adapter.notifyItemRemoved(position);
                     assign.dismiss();
+                } else {
+                    ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderModel> call, Throwable t) {
+                ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
+            }
+        });
+    }
+
+    private void updateOrderStatus(OrderRequest orderRequest, int position) {
+        Call<OrderModel> call = RetrofitBuilder.getClient().create(OrderAPI.class).update(orderRequest);
+        call.enqueue(new Callback<OrderModel>() {
+            @Override
+            public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
+                if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
+                    if (response.body().getStatus() == OrderStatus.DA_GIAO.getStatus()) {
+                        ((AbstractActivity) getActivity()).showMessageDialog("Đơn hàng đã giao thành công");
+                    } else if (response.body().getStatus() == OrderStatus.DA_HUY.getStatus()) {
+                        ((AbstractActivity) getActivity()).showMessageDialog("Huỷ đơn hàng thành công");
+                    }
+                    adapter.notifyItemRemoved(position);
                 } else {
                     ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
                 }
@@ -176,7 +229,13 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
     }
 
     private void getOrderListFromAPI(Integer status) {
-        Call<List<OrderModel>> call = RetrofitBuilder.getClient().create(OrderAPI.class).findAll(status);
+        Call<List<OrderModel>> call = null;
+        if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
+            call = RetrofitBuilder.getClient().create(OrderAPI.class).findAll(status, Authentication.getUserLogin().getId());
+        } else {
+            call = RetrofitBuilder.getClient().create(OrderAPI.class).findAll(status);
+        }
+
         call.enqueue(new Callback<List<OrderModel>>() {
             @Override
             public void onResponse(Call<List<OrderModel>> call, Response<List<OrderModel>> response) {
@@ -202,7 +261,7 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
 
             @Override
             public void onFailure(Call<List<OrderModel>> call, Throwable t) {
-
+                Log.d("api-error", t.getCause().getMessage());
             }
         });
     }

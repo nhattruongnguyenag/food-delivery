@@ -17,6 +17,7 @@
     <style name="Theme.FoodDelivery.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon">@drawable/laucher</item>
         <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimationDuration">3000</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 
@@ -48,6 +49,11 @@
         <item name="android:paddingRight">10dp</item>
         <item name="android:shadowColor">#000</item>
         <item name="backgroundTint">@null</item>
+    </style>
+
+    <style name="edTextFieldWithBorder" parent="edTextField">
+        <item name="android:background">@drawable/edit_text_with_border_bg</item>
+        <item name="android:elevation">0dp</item>
     </style>
 
     <style name="spinner" parent="edTextField">

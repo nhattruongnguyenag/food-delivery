@@ -1,23 +1,18 @@
-package vn.tdc.edu.fooddelivery.Datalayer;
+package vn.tdc.edu.fooddelivery.dal;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
-
 import vn.tdc.edu.fooddelivery.models.UserModel;
 
-public class UserDatabase extends SQLiteOpenHelper {
+public class DatabaseLayer extends SQLiteOpenHelper {
     // Database 's properties
     private static String DB_NAME = "users";
 
@@ -39,15 +34,15 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     private static String USER_IMAGE = "image";
 
+    private static String USER_ROLES = "roles";
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //// Constructors
     ///////////////////////////////////////////////////////////////////////////////////////////
-    public UserDatabase(Activity context) {
+    public DatabaseLayer(Activity context) {
         super(context, DB_NAME, null, DB_VERSION);
-        UserDatabase.context = context;
+        DatabaseLayer.context = context;
     }
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //// Person Database 's Primitives - 1. Create Tables
@@ -60,18 +55,16 @@ public class UserDatabase extends SQLiteOpenHelper {
                     + USER_ID + " INTEGER, "
                     + USER_NAME + " TEXT, "
                     + USER_EMAIL + " TEXT, "
-                    + USER_IMAGE + " TEXT);";
+                    + USER_IMAGE + " TEXT, "
+                    + USER_ROLES + " TEXT);";
             // Execute the SQL Statement
             try {
                 db.execSQL(sql);
-                Toast.makeText(context, "Tao bang thanh cong!", Toast.LENGTH_SHORT).show();
+                Log.d("database", "created user table");
             } catch (Exception exception) {
-                Toast.makeText(context, "Tao bang khong thanh cong!", Toast.LENGTH_SHORT).show();
             }
-            db.close();
         }
     }
-
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -82,7 +75,8 @@ public class UserDatabase extends SQLiteOpenHelper {
     //// 2. Person Database save
     ///////////////////////////////////////////////////////////////////////////////////////////
     // 1. Save persons to Person Database
-    public void savePerson(UserModel person) {
+    public boolean savePerson(UserModel person) {
+        boolean ok = false;
         SQLiteDatabase database = getWritableDatabase();
         if (database != null) {
             ContentValues values = new ContentValues();
@@ -90,48 +84,52 @@ public class UserDatabase extends SQLiteOpenHelper {
             values.put(USER_NAME, person.getFullName());
             values.put(USER_EMAIL, person.getEmail());
             values.put(USER_IMAGE, person.getImageName());
+            values.put(USER_ROLES, String.join(";", person.getRoleCodes()));
             try {
                 database.insert(USER_TABLE_NAME, null, values);
-                Toast.makeText(context, "luu doi tuong thanh cong!", Toast.LENGTH_SHORT).show();
             } catch (Exception exception) {
-                Toast.makeText(context, "luu doi tuong khong thanh cong!", Toast.LENGTH_SHORT).show();
             }
             database.close();
         }
+        return ok;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //// 3. Get person from data base
     ///////////////////////////////////////////////////////////////////////////////////////////
     public UserModel getPerson() {
-        //1. Create new Person object
-        UserModel person = new UserModel();
+        // 1. Create new Person object
+        UserModel person = null;
         SQLiteDatabase database = getWritableDatabase();
         if (database != null) {
-            String[] selectionColunm = new String[]{USER_ID, USER_NAME, USER_EMAIL, USER_IMAGE};
+            String[] selectionColunm = new String[] { USER_ID, USER_NAME, USER_EMAIL, USER_IMAGE, USER_ROLES };
             String whereCondition = null;
             String[] whereAgr = null;
             String groupBy = null;
             String having = null;
-            Cursor cursor = database.query(USER_TABLE_NAME, selectionColunm, whereCondition, whereAgr, groupBy, having, USER_NAME + " ASC");
+            Cursor cursor = database.query(USER_TABLE_NAME, selectionColunm, whereCondition, whereAgr, groupBy, having,
+                    USER_NAME + " ASC");
             if (cursor.moveToFirst()) {
-                //2. Read data from cursor and set to person object
-                @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(USER_ID));
-                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(USER_NAME));
-                @SuppressLint("Range") String email = cursor.getString(cursor.getColumnIndex(USER_EMAIL));
-                @SuppressLint("Range") String image = cursor.getString(cursor.getColumnIndex(USER_IMAGE));
-                //Bin data for object
+                // 2. Read data from cursor and set to person object
+                @SuppressLint("Range")
+                String id = cursor.getString(cursor.getColumnIndex(USER_ID));
+                @SuppressLint("Range")
+                String name = cursor.getString(cursor.getColumnIndex(USER_NAME));
+                @SuppressLint("Range")
+                String email = cursor.getString(cursor.getColumnIndex(USER_EMAIL));
+                @SuppressLint("Range")
+                String image = cursor.getString(cursor.getColumnIndex(USER_IMAGE));
+                @SuppressLint("Range")
+                String roles = cursor.getString(cursor.getColumnIndex(USER_ROLES));
+                // Bin data for object
+                person = new UserModel();
                 person.setId(Integer.valueOf(id));
                 person.setFullName(name);
                 person.setEmail(email);
                 person.setImageName(image);
+                person.setRolesString(roles);
             }
             database.close();
-        }
-        if (person.getId() != null) {
-            Toast.makeText(context, "khong co user nao", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "doc thanh cong", Toast.LENGTH_SHORT).show();
         }
         return person;
     }
@@ -139,68 +137,79 @@ public class UserDatabase extends SQLiteOpenHelper {
     ///////////////////////////////////////////////////////////////////////////////////////////
     //// 4. Update user
     ///////////////////////////////////////////////////////////////////////////////////////////
-    public void updatePerson(UserModel newPerson) {
+    public boolean updatePerson(UserModel newPerson) {
+        boolean ok = false;
         SQLiteDatabase database = getWritableDatabase();
         if (database != null) {
-            //value để chứa cái giá trị mới để đưa vào database
+            // value để chứa cái giá trị mới để đưa vào database
             ContentValues values = new ContentValues();
-            //Viết câu điều kiện
+            // Viết câu điều kiện
             String where = USER_ID + " =?";
-            String[] whereArgs = new String[]{String.valueOf(newPerson.getId())};
+            String[] whereArgs = new String[] { String.valueOf(newPerson.getId()) };
 
-            values.put(USER_NAME, newPerson.getFullName());
-            values.put(USER_EMAIL, newPerson.getEmail());
-            values.put(USER_IMAGE, newPerson.getImageName());
+            if (newPerson.getFullName() != null && !newPerson.getFullName().isEmpty()) {
+                values.put(USER_NAME, newPerson.getFullName());
+            }
+
+            if (newPerson.getEmail() != null && !newPerson.getEmail().isEmpty()) {
+                values.put(USER_EMAIL, newPerson.getEmail());
+            }
+
+            if (newPerson.getImageName() != null && !newPerson.getImageName().isEmpty()) {
+                values.put(USER_IMAGE, newPerson.getImageName());
+            }
+
             int bool_Update = database.update(USER_TABLE_NAME, values, where, whereArgs);
 
             if (bool_Update == 1) {
-                Toast.makeText(context, "Update successfull", Toast.LENGTH_SHORT).show();
+                ok = true;
             } else {
-                Toast.makeText(context, "Update fail!", Toast.LENGTH_SHORT).show();
+                ok = false;
             }
             database.close();
         }
+        return ok;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //// 5. Delete Person
     ///////////////////////////////////////////////////////////////////////////////////////////
-    public void deletePerson(UserModel person) {
+    public boolean deletePerson(UserModel person) {
+        boolean ok = false;
         SQLiteDatabase database = getWritableDatabase();
         if (database != null) {
 
-            //Viết câu điều kiện
+            // Viết câu điều kiện
             String where = USER_ID + " =?";
-            String[] whereArgs = new String[]{String.valueOf(person.getId())};
+            String[] whereArgs = new String[] { String.valueOf(person.getId()) };
             int bool_delete = database.delete(USER_TABLE_NAME, where, whereArgs);
-
 
             // TODO Show dialog to user
             if (bool_delete > 0) {
-                Toast.makeText(context, "xoa thanh cong!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(context, "xoa khong thanh cong!", Toast.LENGTH_SHORT).show();
+                ok = true;
             }
             database.close();
         }
+        return ok;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //// 6 . Delete table
     ///////////////////////////////////////////////////////////////////////////////////////////
-    public void deleteTable() {
+    public boolean deleteTable() {
+        boolean ok = false;
         SQLiteDatabase database = getWritableDatabase();
         if (database != null) {
             String sql = "DROP TABLE IF EXISTS " + USER_TABLE_NAME;
             // Execute the SQL Statement
             try {
                 database.execSQL(sql);
-                Toast.makeText(context, "xoa database thanh cong!", Toast.LENGTH_SHORT).show();
+                ok = true;
             } catch (Exception exception) {
-                Toast.makeText(context, "xoa database that bai!", Toast.LENGTH_SHORT).show();
+                ok = false;
             }
             database.close();
         }
+        return ok;
     }
-
 }

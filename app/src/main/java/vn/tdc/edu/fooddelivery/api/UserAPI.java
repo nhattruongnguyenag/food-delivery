@@ -21,8 +21,14 @@ public interface UserAPI {
     @POST("api/users")
     Call<UserModel> save(@Body UserModel userModel);
 
+    @POST("api/users/login")
+    Call<UserModel> login(@Body UserModel userModel);
+
     @PUT("api/users")
     Call<UserModel> update(@Body UserModel userModel);
+
+    @PUT("api/users/changePassword")
+    Call<UserModel> changPassword(@Body UserModel userModel);
 
     @DELETE("api/users/{id}")
     Call<UserModel> delete(@Path("id") Integer id);

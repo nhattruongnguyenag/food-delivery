@@ -12,11 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Currency;
 import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
+import vn.tdc.edu.fooddelivery.enums.OrderStatus;
+import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.CommonUtils;
+import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 
 public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter<OrderManagementItemRecyclerViewAdapter.OrderManagementItemHolder> {
     private Activity activity;
@@ -64,14 +69,27 @@ public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter
         holder.tvCustomerFullName.setText(orderModel.getCustomer().getFullName());
         holder.tvAddress.setText(CommonUtils.createIndentedText(orderModel.getAddress(),90,0));
         holder.tvPhone.setText(orderModel.getPhone());
-        holder.tvTotal.setText(String.valueOf(orderModel.getTotal()));
+        holder.tvTotal.setText(FormatCurentcy.formatVietnamCurrency(orderModel.getTotal()) + " (đồng)");
         holder.tvCreatedAt.setText(CommonUtils.convertDateToString(orderModel.getCreatedAt()));
 
-        if (orderModel.getStatus() == 2 || orderModel.getStatus() == 3) {
-            holder.btnAccept.setEnabled(false);
-            holder.btnDelete.setEnabled(false);
-        } else if (orderModel.getStatus() == 4) {
-            holder.btnAccept.setEnabled(false);
+        if (orderModel.getStatus() != OrderStatus.CHUA_XU_LY.getStatus()) {
+            if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())
+            && orderModel.getStatus() == OrderStatus.DANG_GIAO_HANG.getStatus()) {
+                holder.btnAccept.setEnabled(true);
+                holder.btnDelete.setEnabled(true);
+            } else {
+                holder.btnAccept.setEnabled(false);
+                if (orderModel.getStatus() == OrderStatus.DA_HUY.getStatus()) {
+                    holder.btnDelete.setEnabled(true);
+                } else {
+                    holder.btnDelete.setEnabled(false);
+                }
+            }
+        }
+
+        if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
+            holder.btnAccept.setText("Giao");
+            holder.btnDelete.setText("Huỷ");
         }
 
         holder.onClickListener = new View.OnClickListener() {

@@ -11,10 +11,10 @@
     <dimen name="rounded_radius">999dp</dimen>
     <dimen name="round20">20dp</dimen>
     <dimen name="btn_order_margin_top">10dp</dimen>
-    <dimen name="button_order_recyler_margin">10dp</dimen>
+    <dimen name="button_order_recyler_margin">15dp</dimen>
     <dimen name="textSmall">12sp</dimen>
     <dimen name="title_recycler_margin_bottom">5dp</dimen>
-    <dimen name="editOptionsEditMarginTop">25dp</dimen>
+    <dimen name="editOptionsEditMarginTop">50dp</dimen>
 
     //-----------------------------Chu dinh hanh--------------------------------//
     <dimen name="cardCornerRadius_cart_screen">5dp</dimen>

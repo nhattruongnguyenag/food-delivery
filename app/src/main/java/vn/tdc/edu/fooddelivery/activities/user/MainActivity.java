@@ -2,7 +2,6 @@ package vn.tdc.edu.fooddelivery.activities.user;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -11,8 +10,13 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+<<<<<<< HEAD
 import android.widget.EditText;
+=======
+import android.widget.ImageView;
+>>>>>>> develop
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,8 +24,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -29,23 +35,27 @@ import java.util.ArrayList;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
+import vn.tdc.edu.fooddelivery.activities.LoginActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.CategoryManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.OrderManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.ProductManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.RoleManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
-import vn.tdc.edu.fooddelivery.fragments.SearchFragment;
+import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
+import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.NotificationFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.OrderFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.ProfileFragment;
+import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class MainActivity extends AbstractActivity {
     // ------------------CHU DINH HANH----------------//
     private static BottomNavigationView bottomNavigation;
     private static Activity mainActivitySave;
-
     public static SearchView searchView;
 
     public static Activity getMainActivitySave() {
@@ -58,13 +68,14 @@ public class MainActivity extends AbstractActivity {
     }
 
     // --------------------------End--------------------------//
-    NavigationView navigation;
+    private NavigationView navigation;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
-
-    // private SearchView searchView;
-
+    private View navigationHeader;
+    private ShapeableImageView userImage;
+    private TextView tvUserName;
+    private TextView tvUserEmail;
     private Fragment prevFragment;
 
     @Override
@@ -72,33 +83,41 @@ public class MainActivity extends AbstractActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
+
+        navigation = findViewById(R.id.navigation);
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.drawerLayout);
+        searchView = findViewById(R.id.searchView);
+        navigationHeader = navigation.getHeaderView(0);
+        userImage = navigationHeader.findViewById(R.id.userImage);
+        tvUserName = navigationHeader.findViewById(R.id.tvUserName);
+        tvUserEmail = navigationHeader.findViewById(R.id.tvUserEmail);
+        setSupportActionBar(toolbar);
+        setToggleActionNavigationView();
+        setMenuByUserRole();
+        setUserLoginInfo();
+
         // -------------------CHU DINH HANH----------------//
         bottomNavigation = findViewById(R.id.bottomNavigation);
         MainActivity.setMainActivitySave(MainActivity.this);
         catchDataCartIconNotify();
         catchDataNotifyIcon();
         // -------------------------End------------------------//
-        navigation = findViewById(R.id.navigation);
-        // Show the navigation view and display the button for navigation view toggle in
-        // tool bar
-        toolbar = findViewById(R.id.toolbar);
-        // ---------Search--------------------------//
-        searchView = findViewById(R.id.searchView);
-        // ---------Search--------------------------//
-        setSupportActionBar(toolbar);
-
-        setNavigationView();
 
         prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                navigation.setCheckedItem(item.getItemId());
                 switch (item.getItemId()) {
                     case R.id.menu_home:
                         prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_cart:
                         prevFragment = setFragment(CartFragment.class, R.id.frameLayout, false);
+                        break;
+                    case R.id.menu_order:
+                        prevFragment = setFragment(OrderFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_notification:
                         prevFragment = setFragment(NotificationFragment.class, R.id.frameLayout, false);
@@ -118,7 +137,28 @@ public class MainActivity extends AbstractActivity {
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                bottomNavigation.setSelectedItemId(item.getItemId());
                 switch (item.getItemId()) {
+                    case R.id.menu_home:
+                        prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_cart:
+                        prevFragment = setFragment(CartFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_order:
+                        prevFragment = setFragment(OrderFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_notification:
+                        prevFragment = setFragment(NotificationFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_profile:
+                        prevFragment = setFragment(ProfileFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
                     case R.id.nav_product_management:
                         switchActivity(ProductManagementActivity.class, "Quản lý hàng hoá");
                         break;
@@ -133,6 +173,28 @@ public class MainActivity extends AbstractActivity {
                         break;
                     case R.id.nav_role_management:
                         switchActivity(RoleManagementActivity.class, "Quản lý vai trò");
+                        break;
+                    case R.id.nav_logout:
+                        ConfirmDialog confirmDialog = new ConfirmDialog(MainActivity.this);
+                        confirmDialog.setTitle("Đăng xuất");
+                        confirmDialog.setMessage("Đăng xuất khỏi tài khoản của bạn ?");
+                        confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
+                            @Override
+                            public void cancel() {
+                                confirmDialog.dismiss();
+                            }
+
+                            @Override
+                            public void ok() {
+                                confirmDialog.dismiss();
+                                if (Authentication.logout()) {
+                                    switchActivity(LoginActivity.class, "Logout");
+                                    finish();
+                                };
+                            }
+                        });
+
+                        confirmDialog.show();
                         break;
                     default:
                         break;
@@ -167,17 +229,54 @@ public class MainActivity extends AbstractActivity {
                 return true;
             }
         });
+
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+               if (Authentication.isUpdated) {
+                   setUserLoginInfo();
+                   Authentication.isUpdated = false;
+               }
+            }
+        });
     }
 
+<<<<<<< HEAD
     public static void clearSearchView() {
         searchView.setQuery("", false);
         searchView.clearFocus();
     }
 
     private void setNavigationView() {
+=======
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    private void setUserLoginInfo() {
+        Glide.with(this).load(Authentication.getUserLogin().getImageUrl())
+                .into(userImage);
+        tvUserName.setText(Authentication.getUserLogin().getFullName());
+        tvUserEmail.setText(Authentication.getUserLogin().getEmail());
+    }
+
+    private void setMenuByUserRole() {
+        navigation.getMenu().clear();
+        if (Authentication.getUserLogin().getRolesString().contains(Role.ADMIN.getName())) {
+            navigation.inflateMenu(R.menu.navigation_menu_admin);
+        } else if (Authentication.getUserLogin().getRolesString().contains(Role.SHIPPER.getName())) {
+            navigation.inflateMenu(R.menu.navigation_menu_shipper);
+        } else {
+            navigation.inflateMenu(R.menu.navigation_menu_customer);
+            navigation.setCheckedItem(R.id.menu_home);
+        }
+    }
+
+    private void setToggleActionNavigationView() {
+>>>>>>> develop
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        drawerLayout = findViewById(R.id.drawerLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawerOpen,
                 R.string.drawerClose);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);

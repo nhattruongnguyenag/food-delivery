@@ -40,26 +40,12 @@
         android:layout_marginBottom="25dp">
 
         <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Huỷ"
-            android:textSize="@dimen/textMedium"
-            android:textAllCaps="false"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/btn_cancel_bg"
-            android:layout_marginBottom="5dp"
-            app:backgroundTint="@null"
-            android:paddingHorizontal="@dimen/confirm_dialog_btn_horizontal_pd"/>
-
-        <Button
             android:id="@+id/btnOk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ok"
             android:textSize="@dimen/textMedium"
             android:textAllCaps="false"
-            android:layout_marginLeft="20dp"
             android:background="@drawable/btn_ok_bg"
             android:layout_marginBottom="5dp"
             app:backgroundTint="@null"

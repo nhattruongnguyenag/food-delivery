@@ -5,6 +5,8 @@ import android.os.Bundle;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.fragments.admin.OrderManagementFragment;
+import vn.tdc.edu.fooddelivery.fragments.admin.OrdersListFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.OrderDetailsFragment;
 
 public class OrderManagementActivity extends AbstractActivity {
 
