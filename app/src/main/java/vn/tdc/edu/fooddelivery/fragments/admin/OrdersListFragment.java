@@ -129,7 +129,6 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
                 confirmDialog.dismiss();
             }
         });
-
         confirmDialog.show();
     }
 

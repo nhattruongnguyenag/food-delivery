@@ -19,14 +19,23 @@
             android:layout_height="match_parent"
             android:layout_weight="4">
             <!--Image-->
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/img_cart_screen"
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.7"
-                android:scaleType="fitXY"
-                android:src="@drawable/food2"
-                app:riv_corner_radius="5dp" />
+                app:cardCornerRadius="5dp"
+                app:cardElevation="8dp">
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/img_cart_screen"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/food2"
+                    app:riv_corner_radius="5dp" />
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -61,14 +70,16 @@
                     android:layout_weight="1"
                     android:gravity="center|left">
 
+
                     <ImageButton
-                        android:id="@+id/btn_plus_cart_screen"
+                        android:id="@+id/btn_sub_cart_screen"
                         android:layout_width="20dp"
                         android:layout_height="match_parent"
                         android:layout_marginRight="10dp"
                         android:background="@drawable/customize_btn_cart_screen"
                         android:gravity="center"
-                        android:src="@drawable/ic_baseline_plus_one_24"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_tru"
                         android:textColor="@color/green"
                         android:textStyle="bold"
                         app:backgroundTint="@null" />
@@ -85,12 +96,13 @@
                         android:textStyle="bold" />
 
                     <ImageButton
-                        android:id="@+id/btn_sub_cart_screen"
+                        android:id="@+id/btn_plus_cart_screen"
                         android:layout_width="20dp"
                         android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
                         android:background="@drawable/customize_btn_cart_screen"
                         android:gravity="center"
-                        android:src="@drawable/ic_baseline_exposure_neg_1_24"
+                        android:src="@drawable/ic_cong"
                         android:textColor="@color/green"
                         android:textStyle="bold"
                         app:backgroundTint="@null" />
@@ -113,7 +125,9 @@
                 android:elevation="@dimen/Button_item_elevation_cart_screen"
                 android:gravity="center"
                 android:text="Xóa"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:backgroundTint="@null" />
         </LinearLayout>

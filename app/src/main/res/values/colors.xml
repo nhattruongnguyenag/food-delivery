@@ -30,5 +30,8 @@
     <color name="shadow">#bcbbbb</color>
     <color name="red">#e10b0b</color>
     <color name="green_light">#00ff00</color>
+    <color name="yellow_main">#ffe350</color>
+    <color name="red_main">#fa3939</color>
+    <color name="shadow_color">#RRGGBB</color>
     <!--   End Chu dinh hanh-->
 </resources>

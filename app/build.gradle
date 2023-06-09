@@ -58,6 +58,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:5.2.0'
     //Mood
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    //shadow
+    implementation 'androidx.cardview:cardview:1.0.0'
 
     //----------------------------------------------------------------------------------
 }

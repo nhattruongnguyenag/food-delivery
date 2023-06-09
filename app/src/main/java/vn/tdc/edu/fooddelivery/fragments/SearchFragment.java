@@ -3,6 +3,7 @@ package vn.tdc.edu.fooddelivery.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,25 +13,29 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
-import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.adapters.SearchRecyclerViewAdapter;
-import vn.tdc.edu.fooddelivery.fragments.user.ProductDetailFragment;
-import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
+import vn.tdc.edu.fooddelivery.api.ProductAPI;
+import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.components.SendDataAndGotoAnotherFragment;
+import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class SearchFragment extends AbstractFragment implements SearchRecyclerViewAdapter.UserClicListenter {
     private int typeView = 1;
     public static RecyclerView recyclerView;
     private SearchRecyclerViewAdapter myRecycleViewAdapter;
-    private ArrayList<ProductModel_Test> arrayList = new ArrayList<>();
+    private List<ProductModel> productsList;
     private ImageButton btn_select_type_view_search_screen;
     private SearchView searchView;
     private boolean flag = false;
@@ -41,9 +46,11 @@ public class SearchFragment extends AbstractFragment implements SearchRecyclerVi
                              Bundle savedInstanceState) {
         fragmentLayout = inflater.inflate(R.layout.seartch_layout, container, false);
         //---------------------------Processing-------------------------//
+        if (productsList == null) {
+            productsList = new ArrayList<>();
+        }
         anhXa();
         chooseTypeView();
-        createFakeData();
         recyclerView.setFocusable(false);
         recyclerView.setNestedScrollingEnabled(false);
         btn_select_type_view_search_screen.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +62,29 @@ public class SearchFragment extends AbstractFragment implements SearchRecyclerVi
         searchActivity();
         //--------------------------End--------------------------//
         return fragmentLayout;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Call<List<ProductModel>> callProduct = RetrofitBuilder.getClient().create(ProductAPI.class).findAll();
+        callProduct.enqueue(new Callback<List<ProductModel>>() {
+            @Override
+            public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
+                if (response.body() != null) {
+                    productsList.clear();
+                    productsList.addAll(response.body());
+                    myRecycleViewAdapter.notifyDataSetChanged();
+                    Log.d("api-call", "Fetch product data successfully");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProductModel>> call, Throwable t) {
+                Log.d("api-call", "Fetch product data fail");
+            }
+        });
     }
 
 
@@ -78,7 +108,7 @@ public class SearchFragment extends AbstractFragment implements SearchRecyclerVi
                 if (myRecycleViewAdapter.cartArrayListOnChange != null) {
                     myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item3, myRecycleViewAdapter.cartArrayListOnChange, this::selectedUser);
                 } else {
-                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item3, arrayList, this::selectedUser);
+                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item3, productsList, this::selectedUser);
                 }
                 recyclerView.setAdapter(myRecycleViewAdapter);
                 break;
@@ -89,7 +119,7 @@ public class SearchFragment extends AbstractFragment implements SearchRecyclerVi
                 if (myRecycleViewAdapter.cartArrayListOnChange != null) {
                     myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item1, myRecycleViewAdapter.cartArrayListOnChange, this::selectedUser);
                 } else {
-                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item1, arrayList, this::selectedUser);
+                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item1, productsList, this::selectedUser);
                 }
                 recyclerView.setAdapter(myRecycleViewAdapter);
                 break;
@@ -103,32 +133,6 @@ public class SearchFragment extends AbstractFragment implements SearchRecyclerVi
         recyclerView = fragmentLayout.findViewById(R.id.recyclerView_search_screen);
     }
 
-    public void createFakeData() {
-        ProductModel_Test cart = new ProductModel_Test(10,1,"ca chien1", 12, 9999, R.drawable.anh_nhopng, 1, "");
-        ProductModel_Test cart2 = new ProductModel_Test(11,2,"ca chien2", 12, 9999, R.drawable.food4png, 1, "");
-        ProductModel_Test cart3 = new ProductModel_Test(12,3,"ca chien3", 12, 9999, R.drawable.anh1, 1, "");
-        arrayList.add(cart2);
-        arrayList.add(cart3);
-        arrayList.add(cart);
-        arrayList.add(cart);
-        arrayList.add(cart);
-        arrayList.add(cart);
-        arrayList.add(cart);
-        arrayList.add(cart);
-        arrayList.add(cart);
-        arrayList.add(cart);
-        arrayList.add(cart);
-        arrayList.add(cart);
-        arrayList.add(cart);
-    }
-
-
-    public void sendDataForDetailScreen(ProductModel_Test cart, ArrayList<ProductModel_Test> arrayList) {
-        ((AbstractActivity) fragmentLayout.getContext()).setFragment(ProductDetailFragment.class, R.id.frameLayout, true)
-                .setDetailProduct(cart).
-                setArrayList(null)
-                .setArrayList(arrayList);
-    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -164,18 +168,19 @@ public class SearchFragment extends AbstractFragment implements SearchRecyclerVi
 
     public void binData() {
         if (typeView == 1) {
-            myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item3, arrayList, this::selectedUser);
+            myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item3, productsList, this::selectedUser);
         } else {
-            myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item1, arrayList, this::selectedUser);
+            myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item1, productsList, this::selectedUser);
         }
         recyclerView.setAdapter(myRecycleViewAdapter);
     }
 
 
     @Override
-    public void selectedUser(ProductModel_Test userModel) {
-        int index =  arrayList.indexOf(userModel);
-        ProductModel_Test cart = arrayList.get(index);
-        sendDataForDetailScreen(cart,arrayList);
+    public void selectedUser(ProductModel cart) {
+        if (fragmentLayout.getContext() instanceof Activity) {
+            Activity activity = (Activity) fragmentLayout.getContext();
+            SendDataAndGotoAnotherFragment.sendToProduceDetail(activity, cart);
+        }
     }
 }

@@ -10,33 +10,36 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.bumptech.glide.Glide;
+
+import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.components.CreateStart;
-import vn.tdc.edu.fooddelivery.components.SendDataAndGotoDetailScreen;
+import vn.tdc.edu.fooddelivery.components.SendDataAndGotoAnotherFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
-import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
-import vn.tdc.edu.fooddelivery.utils.FileUtils;
+import vn.tdc.edu.fooddelivery.models.AddCarstModel;
+import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRecyclerViewAdapter.MyViewHolder> {
 
+    private SendDataAndGotoAnotherFragment sendDataAndGotoDetailScreen = new SendDataAndGotoAnotherFragment();
     private Activity activity;
     private HomeFragment homeFragment;
     private int layout_ID;
-    private ArrayList<ProductModel_Test> arrayList;
+    private List<ProductModel> arrayList;
     private onRecyclerViewOnClickListener _onRecyclerViewOnClickListener;
     private int flag = 1;
     private MainActivity mainActivity = null;
 
-    public HomeMenuRecyclerViewAdapter(Activity activity, int layout_ID, ArrayList<ProductModel_Test> arrayList) {
+    public HomeMenuRecyclerViewAdapter(Activity activity, int layout_ID, List<ProductModel> arrayList) {
         this.activity = activity;
         this.layout_ID = layout_ID;
         this.arrayList = arrayList;
@@ -52,15 +55,17 @@ public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRe
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        ProductModel_Test cart = arrayList.get(position);
+        ProductModel cart = arrayList.get(position);
         holder.txt_name.setText(cart.getName());
         holder.txt_price.setText(String.valueOf(cart.getPrice()) + " đ");
-        holder.txt_qtyStart.setText("(" + String.valueOf(cart.getRate()) + ")");
+        holder.txt_qtyStart.setText("(" + String.valueOf(cart.getRating()) + ")");
         holder.linearLayout.removeAllViews();
         //-------------------------Start add star-------------------------//
         CreateStart.renderStart(holder.linearLayout, cart, activity);
         //-------------------------End add start-------------------------//
-        holder.imageView.setImageDrawable(activity.getResources().getDrawable(cart.getImg(), activity.getTheme()));
+        //holder.imageView.setImageDrawable(activity.getResources().getDrawable(cart.getImageName(), activity.getTheme()));
+        Glide.with(activity).load(cart.getImageUrl())
+                .into(holder.imageView);
         //----------------------------Star event click to detail screen-------------------//
         holder.onClickListener = new View.OnClickListener() {
             @Override
@@ -68,7 +73,7 @@ public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRe
                 if (_onRecyclerViewOnClickListener != null) {
                     flag = 2;
                     //MARK
-                    SendDataAndGotoDetailScreen.send(activity, cart, arrayList);
+                    SendDataAndGotoAnotherFragment.sendToProduceDetail(activity, cart);
                 }
             }
         };
@@ -76,24 +81,38 @@ public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRe
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    SendDataAndGotoDetailScreen.send(activity, cart, arrayList);
+                    SendDataAndGotoAnotherFragment.sendToProduceDetail(activity, cart);
                 }
             });
         }
-        //------------------------------Start catch click event---------------------------//
+//        //------------------------------Start catch click event---------------------------//
         buttonBuyEventClick(holder, cart);
     }
 
-    public void buttonBuyEventClick(MyViewHolder holder, ProductModel_Test cart) {
+    public void buttonBuyEventClick(MyViewHolder holder, ProductModel cart) {
         //Btn buy event
         holder.btn_buy.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                homeFragment = new HomeFragment();
-                homeFragment.addToCardAndNotify(cart);
+                int userId = 1;
+                CartFragment cartFragment1 = new CartFragment();
+                AddCarstModel carstModel = new AddCarstModel();
+                carstModel.setProduct_id(cart.getId());
+                carstModel.setUser_id(userId);
+                carstModel.setQuantity(1);
+                cartFragment1.updateCart(carstModel);
+                showMessageDialog("Đặt hàng thành công");
             }
         });
+    }
+
+    public void showMessageDialog(String message) {
+        androidx.appcompat.app.AlertDialog alert = new androidx.appcompat.app.AlertDialog.Builder(activity)
+                .setTitle("Message")
+                .setMessage(message)
+                .setPositiveButton("Ok", null)
+                .show();
     }
 
 

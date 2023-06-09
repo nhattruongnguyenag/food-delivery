@@ -2,6 +2,7 @@ package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,15 +25,22 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.adapters.HomeMenuRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.adapters.HomeCategoryRecyclerViewAdapter;
+import vn.tdc.edu.fooddelivery.api.CategoryAPI;
+import vn.tdc.edu.fooddelivery.api.ProductAPI;
+import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.ToastCustome;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.models.CategoryModel_Test;
-import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
+import vn.tdc.edu.fooddelivery.models.CategoryModel;
+import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class HomeFragment extends AbstractFragment {
@@ -44,14 +52,16 @@ public class HomeFragment extends AbstractFragment {
     private RecyclerView recyclerView_category;
     private RecyclerView recyclerView_menu;
     private HomeMenuRecyclerViewAdapter myAdapterMenu;
-    private HomeCategoryRecyclerViewAdapter categoryAdapter;
+    private HomeCategoryRecyclerViewAdapter myAdapterCategories;
     private SearchView searchView;
     private TextView txtMenu;
     private NestedScrollView nestedScrollView;
     private FloatingActionButton fab;
-    private CategoryModel_Test categoryHasChoose;
+    private CategoryModel categoryHasChoose;
     private int selectedRow = -1;
     private TextView previousCartViewItemClicked;
+    List<ProductModel> productsList;
+    List<CategoryModel> categoriesList;
 
 
     @Override
@@ -59,10 +69,13 @@ public class HomeFragment extends AbstractFragment {
                              Bundle savedInstanceState) {
         fragmentLayout = inflater.inflate(R.layout.fragment_home, container, false);
         layoutInflater = getLayoutInflater();
+        if (productsList == null) {
+            productsList = new ArrayList<>();
+        }
+        if (categoriesList == null) {
+            categoriesList = new ArrayList<>();
+        }
         //----------------------------Processing---------------------//
-        fakeDataCartegory();
-        fakeDataForMenu();
-        //---------------------------------------------------------
         anhXa();
         setInvisibleFab();
         ActionViewFlipper();
@@ -71,9 +84,48 @@ public class HomeFragment extends AbstractFragment {
         //Event scroll up
         ClickEventFab();
         catchEventScrollNestedScrollView();
-
         //--------------------------------End---------------------------//
         return fragmentLayout;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Call<List<ProductModel>> callProduct = RetrofitBuilder.getClient().create(ProductAPI.class).findAll();
+        Call<List<CategoryModel>> callCategories = RetrofitBuilder.getClient().create(CategoryAPI.class).findAll(null);
+        callProduct.enqueue(new Callback<List<ProductModel>>() {
+            @Override
+            public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
+                if (response.body() != null) {
+                    productsList.clear();
+                    productsList.addAll(response.body());
+                    myAdapterMenu.notifyDataSetChanged();
+                    Log.d("api-call", "Fetch product data successfully");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProductModel>> call, Throwable t) {
+                Log.d("api-call", "Fetch product data fail");
+            }
+        });
+        callCategories.enqueue(new Callback<List<CategoryModel>>() {
+            @Override
+            public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
+                if (response.body() != null) {
+                    categoriesList.clear();
+                    categoriesList.addAll(response.body());
+                    myAdapterCategories.notifyDataSetChanged();
+                    Log.d("api-call", "Fetch product data successfully");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryModel>> call, Throwable t) {
+                Log.d("api-call", "Fetch product data fail");
+            }
+        });
     }
 
     public void catchEventScrollNestedScrollView() {
@@ -119,28 +171,6 @@ public class HomeFragment extends AbstractFragment {
         recyclerView_menu.setNestedScrollingEnabled(false);
     }
 
-    //--------------------------------Fake data------------------------------//
-    public void fakeDataCartegory() {
-        if (FileUtils.categoryList.size() == 0) {
-            FileUtils.categoryList.add(new CategoryModel_Test(1, "Com heo1", R.drawable.anh1));
-            FileUtils.categoryList.add(new CategoryModel_Test(2, "Com heo2", R.drawable.anh1));
-            FileUtils.categoryList.add(new CategoryModel_Test(3, "Com heo3", R.drawable.anh1));
-        }
-    }
-
-    public void fakeDataForMenu() {
-        if (FileUtils.product.size() == 0) {
-            FileUtils.product.add(new ProductModel_Test(1, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(2, 2, "menu_2", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(3, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(4, 3, "menu_3", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(5, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(6, 2, "menu_2", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(7, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(8, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-            FileUtils.product.add(new ProductModel_Test(9, 1, "menu_1", 12, 900000, R.drawable.anh1, 4, "dwadwadwa"));
-        }
-    }
 
     public void anhXa() {
         nestedScrollView = fragmentLayout.findViewById(R.id.nestedScrollView);
@@ -156,8 +186,8 @@ public class HomeFragment extends AbstractFragment {
     }
 
     public void binDataCategory() {
-        categoryAdapter = new HomeCategoryRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.home_layout_category_item, FileUtils.categoryList);
-        recyclerView_category.setAdapter(categoryAdapter);
+        myAdapterCategories = new HomeCategoryRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.home_layout_category_item, (ArrayList<CategoryModel>) categoriesList);
+        recyclerView_category.setAdapter(myAdapterCategories);
     }
 
 
@@ -166,10 +196,10 @@ public class HomeFragment extends AbstractFragment {
         layoutManager.setOrientation(layoutManager.HORIZONTAL);
         recyclerView_category.setLayoutManager(layoutManager);
         //Setup menu recyclerView
-        grifViewList(FileUtils.product);
+        grifViewList(productsList);
     }
 
-    public void grifViewList(ArrayList<ProductModel_Test> arrayList) {
+    public void grifViewList(List<ProductModel> arrayList) {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(fragmentLayout.getContext(), 2);
         recyclerView_menu.setLayoutManager(gridLayoutManager);
         myAdapterMenu = new HomeMenuRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.home_layout_menu_item, arrayList);
@@ -179,12 +209,11 @@ public class HomeFragment extends AbstractFragment {
     //----------------------------------Banner------------------------//
     private void ActionViewFlipper() {
         ArrayList<Integer> mangQuangCao = new ArrayList<Integer>();
-        mangQuangCao.add(R.drawable.anh1);
-        mangQuangCao.add(R.drawable.anh2);
-        mangQuangCao.add(R.drawable.anh3);
-        mangQuangCao.add(R.drawable.anh4);
-        mangQuangCao.add(R.drawable.anh5);
-        mangQuangCao.add(R.drawable.anh6);
+        mangQuangCao.add(R.drawable.banner_1);
+        mangQuangCao.add(R.drawable.banner_2);
+        mangQuangCao.add(R.drawable.banner_3);
+        mangQuangCao.add(R.drawable.banner_4);
+        mangQuangCao.add(R.drawable.banner_5);
 
         for (int i = 0; i < mangQuangCao.size(); i++) {
             ImageView imageView = new ImageView(fragmentLayout.getContext().getApplicationContext());
@@ -211,32 +240,11 @@ public class HomeFragment extends AbstractFragment {
     }
 
 
-    public void addToCardAndNotify(ProductModel_Test cart) {
-        toaslCustomize = new ToastCustome();
-        toaslCustomize.customeToasl(fragmentLayout, layoutInflater);
-        int index = -1;
-        if (FileUtils.cartList == null) {
-            FileUtils.cartList = new ArrayList<>();
-        } else {
-            for (int i = 0; i < FileUtils.cartList.size(); i++) {
-                if (FileUtils.cartList.get(i).get_id() == (cart.get_id())) {
-                    index = i;
-                }
-            }
-        }
-        if (index != -1) {
-            ProductModel_Test cartOld = FileUtils.cartList.get(index);
-            FileUtils.cartList.get(index).setQty(cartOld.getQty() + 1);
-        } else {
-            cart.setQty(1);
-            FileUtils.cartList.add(cart);
-        }
-        //------------------Toasl--------------------------------------//
+    //------------------Toasl--------------------------------------//
 
-        //-----------------Create notify cart number--------------------//
-        MainActivity.CreateNumberBuyButtonEventClick();
-        //--------------------Toasl----------------------------------------//
-    }
+    //-----------------Create notify cart number--------------------//
+//        MainActivity.CreateNumberBuyButtonEventClick();
+    //--------------------Toasl----------------------------------------//
 
 
     //-------------------------------Chuyen man hinh---------------------------------//
@@ -264,23 +272,21 @@ public class HomeFragment extends AbstractFragment {
 
     //--------------------------Catch event click category---------------------------//
     public void ClickEventCategory() {
-        categoryAdapter.setonRecyclerViewOnClickListener(new HomeCategoryRecyclerViewAdapter.onRecyclerViewOnClickListener() {
-
+        myAdapterCategories.setonRecyclerViewOnClickListener(new HomeCategoryRecyclerViewAdapter.onRecyclerViewOnClickListener() {
             @Override
             public void onItemRecyclerViewOnClickListener(int p, View CardView) {
-                final ArrayList<ProductModel_Test> arrayFilter = new ArrayList<>();
-                categoryHasChoose = FileUtils.categoryList.get(p);
-                for (int i = 0; i < FileUtils.product.size(); i++) {
-                    if (FileUtils.product.get(i).getCategory_id() == categoryHasChoose.getIdCategory()) {
-                        arrayFilter.add(FileUtils.product.get(i));
+                final List<ProductModel> arrayFilter = new ArrayList<>();
+                categoryHasChoose = categoriesList.get(p);
+                for (int i = 0; i < productsList.size(); i++) {
+                    if (productsList.get(i).getCategoryIds().contains(categoryHasChoose.getId())) {
+                        arrayFilter.add(productsList.get(i));
                     }
                 }
-
                 //Add into menu
                 grifViewList(arrayFilter);
                 //Bin color for category clicked
                 fillColorForCategoryClicked(p, CardView);
-                txtMenu.setText(FileUtils.categoryList.get(p).getName());
+                txtMenu.setText(categoriesList.get(p).getName());
             }
         });
     }

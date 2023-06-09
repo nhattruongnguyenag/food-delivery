@@ -29,7 +29,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_category_home_screen"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/fragment_home_recyclerview_height_category" />
+                android:layout_height="@dimen/fragment_home_recyclerview_height_category"
+                android:paddingLeft="10dp" />
 
             <ViewFlipper
                 android:id="@+id/viewFlipper_home_screen"
@@ -50,7 +51,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_menu_home_screen"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

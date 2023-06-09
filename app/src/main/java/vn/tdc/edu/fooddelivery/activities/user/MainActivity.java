@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -107,6 +110,7 @@ public class MainActivity extends AbstractActivity {
                         prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
                         break;
                 }
+                clearSearchView();
                 return true;
             }
         });
@@ -137,6 +141,17 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    setFragment(SearchFragment.class, R.id.frameLayout, false);
+                } else {
+                    Log.d("TAG", "onFocusChange: bo cham");
+                }
+            }
+        });
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -152,6 +167,11 @@ public class MainActivity extends AbstractActivity {
                 return true;
             }
         });
+    }
+
+    public static void clearSearchView() {
+        searchView.setQuery("", false);
+        searchView.clearFocus();
     }
 
     private void setNavigationView() {
@@ -196,6 +216,7 @@ public class MainActivity extends AbstractActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -206,34 +227,22 @@ public class MainActivity extends AbstractActivity {
     // HANH----------------------------------------//
 
     public void catchDataCartIconNotify() {
-        if (FileUtils.cartList == null) {
-            FileUtils.cartList = new ArrayList<>();
-        }
-        // Them vo o day
-
-        createNum(FileUtils.cartList.size(), 2);
+//        createNum(FileUtils.cartList.size(), 2);
     }
 
     public void catchDataNotifyIcon() {
-        if (FileUtils.arrayListNotifications == null) {
-            FileUtils.arrayListNotifications = new ArrayList<>();
-        }
-        // Them vo o day
-        createNum(FileUtils.arrayListNotifications.size(), 3);
+//        createNum(FileUtils.arrayListNotifications.size(), 3);
     }
 
     public static void CreateNumberBuyButtonEventClick() {
-        if (FileUtils.cartList != null) {
-            createNum(FileUtils.cartList.size(), 2);
-        }
+//            createNum(FileUtils.cartList.size(), 2);
     }
 
     public void clearAllSelectNavigation() {
 
     }
 
-    // -------------------------------------Create number notify in navigation bar
-    // bottom--------------------------------------------//
+
     public static void createNum(int number, int menu) {
         Context context = MainActivity.getMainActivitySave();
         bottomNavigation
@@ -277,5 +286,4 @@ public class MainActivity extends AbstractActivity {
         return Math.round(
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, ((Resources) resource).getDisplayMetrics()));
     }
-    // -----------------------------------------------End--------------------------------------------------------//
 }

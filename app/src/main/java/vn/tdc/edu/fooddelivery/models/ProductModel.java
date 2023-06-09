@@ -25,6 +25,18 @@ public class ProductModel extends BaseModel {
     @SerializedName("categoryIds")
     private List<Integer> categoryIds;
 
+
+    //    @SerializedName("categoryIds")
+    private double rating = 3.0f;
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
     public String getName() {
         return name;
     }
