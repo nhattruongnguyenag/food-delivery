@@ -7,29 +7,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.bumptech.glide.Glide;
 import java.util.ArrayList;
-
+import java.util.List;
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
-import vn.tdc.edu.fooddelivery.models.CategoryModel_Test;
+import vn.tdc.edu.fooddelivery.models.CategoryModel;
 
-public class HomeCategoryRecyclerViewAdapter extends RecyclerView.Adapter<HomeCategoryRecyclerViewAdapter.MyViewHolder>{
+public class HomeCategoryRecyclerViewAdapter extends RecyclerView.Adapter<HomeCategoryRecyclerViewAdapter.MyViewHolder> {
     private onRecyclerViewOnClickListener onRecyclerViewOnClickListener;
     private Activity activity;
     private int layout_id;
-    public ArrayList<CategoryModel_Test> arrayList;
+
+    public List<CategoryModel> arrayList;
+
     private HomeFragment homeFragment = new HomeFragment();
 
-    public void setArrayList(ArrayList<CategoryModel_Test> arrayList) {
+    public void setArrayList(ArrayList<CategoryModel> arrayList) {
         this.arrayList = arrayList;
     }
 
-    public HomeCategoryRecyclerViewAdapter(Activity activity, int layout_id, ArrayList<CategoryModel_Test> arrayList) {
+    public HomeCategoryRecyclerViewAdapter(Activity activity, int layout_id, List<CategoryModel> arrayList) {
         this.activity = activity;
         this.layout_id = layout_id;
         this.arrayList = arrayList;
@@ -47,9 +48,11 @@ public class HomeCategoryRecyclerViewAdapter extends RecyclerView.Adapter<HomeCa
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        CategoryModel_Test cart = arrayList.get(position);
+        CategoryModel cart = arrayList.get(position);
         holder.txt_name.setText(cart.getName());
-        holder.img.setImageDrawable(activity.getResources().getDrawable(cart.getImage(), activity.getTheme()));
+        //holder.img.setImageDrawable(activity.getResources().getDrawable(cart.getImage(), activity.getTheme()));
+        Glide.with(activity).load(cart.getImageUrl())
+                .into(holder.img);
         //B3: Event click
         holder.onClickListener = new View.OnClickListener() {
             @Override

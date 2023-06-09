@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,18 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
+import vn.tdc.edu.fooddelivery.models.AddCarstModel;
+import vn.tdc.edu.fooddelivery.models.CarstModel;
+import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
-import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 
@@ -32,12 +38,12 @@ public class CartRecycleViewAdapter extends RecyclerView.Adapter<CartRecycleView
     private onRecyclerViewOnClickListener _onRecyclerViewOnClickListener;
     private Activity activity;
     private int layout_id;
-    private ArrayList<ProductModel_Test> arrayList;
+    private List<CarstModel> arrayList;
     private CartFragment cartScreenActivity = new CartFragment();
     private MainActivity mainActivity;
 
 
-    public CartRecycleViewAdapter(Activity activity, int layout_id, ArrayList<ProductModel_Test> arrayList) {
+    public CartRecycleViewAdapter(Activity activity, int layout_id, List<CarstModel> arrayList) {
         this.activity = activity;
         this.layout_id = layout_id;
         this.arrayList = arrayList;
@@ -54,11 +60,12 @@ public class CartRecycleViewAdapter extends RecyclerView.Adapter<CartRecycleView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        ProductModel_Test cart = arrayList.get(position);
-        holder.txt_name.setText(String.valueOf(cart.getName()));
-        holder.txt_total.setText(FormatCurentcy.format(cart.getPrice() + "") + " x " + FormatCurentcy.format(cart.getQty() + "") + " = " +  FormatCurentcy.format((cart.getQty() * cart.getPrice()) + "") + " VND ");
-        holder.txt_qty.setText(String.valueOf(cart.getQty()));
-        holder.img.setImageDrawable(activity.getResources().getDrawable(cart.getImg(), activity.getTheme()));
+        CarstModel cart = arrayList.get(position);
+        holder.txt_name.setText(String.valueOf(cart.getProduct().getName()));
+        holder.txt_total.setText(FormatCurentcy.format(cart.getProduct().getPrice() + "") + " x " + FormatCurentcy.format(cart.getQuantity() + "") + " = " + FormatCurentcy.format((cart.getQuantity() * cart.getProduct().getPrice()) + "") + " VND ");
+        holder.txt_qty.setText(String.valueOf(cart.getQuantity()));
+        Glide.with(activity).load(cart.getProduct().getImageUrl())
+                .into(holder.img);
         //B3: Event click
         holder.onClickListener = new View.OnClickListener() {
             @Override
@@ -74,97 +81,70 @@ public class CartRecycleViewAdapter extends RecyclerView.Adapter<CartRecycleView
         deleteButtonEventClick(holder, cart);
     }
 
-    public void deleteButtonEventClick(MyViewHolder holder, ProductModel_Test cart) {
+    public void deleteButtonEventClick(MyViewHolder holder, CarstModel cart) {
         holder.btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createAlertDialog(cart);
+                int userId = 1;
+                CartFragment cartFragment = new CartFragment();
+                AddCarstModel carstModel = new AddCarstModel();
+                carstModel.setId(cart.getCart_id());
+                carstModel.setUser_id(cart.getUser().getId());
+                carstModel.setQuantity(cart.getQuantity());
+                carstModel.setProduct_id(cart.getProduct().getId());
+                Log.d("TAG", "onClick: xoa");
+                cartFragment.deleteCarst(carstModel);
             }
         });
     }
 
-
-    public void createAlertDialog(ProductModel_Test cart) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setIcon(R.drawable.ic_baseline_warning_24);
-        builder.setTitle("Bạn có muốn xóa sản phẩm này chứ!");
-        builder.setNegativeButton("không", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.setPositiveButton("có", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                FileUtils.cartList.remove(cart);
-                updateArrayListCart();
-            }
-        });
-        builder.show();
-    }
 
     public void CreateNumberBuyButtonEventClick() {
         if (mainActivity == null) {
             mainActivity = new MainActivity();
         }
-        if (FileUtils.cartList != null) {
-            mainActivity.createNum(FileUtils.cartList.size(), 2);
-        }
+//        if (FileUtils.cartList != null) {
+//            mainActivity.createNum(FileUtils.cartList.size(), 2);
+//        }
     }
 
-    public void btnPlustClickEvent(MyViewHolder holder, ProductModel_Test cart) {
+    public void btnPlustClickEvent(MyViewHolder holder, CarstModel cart) {
         holder.plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeQtyProductInCart(1, cart);
+                Log.d("TAG", "onClick: cong" + cart.getQuantity());
+                AddCarstModel carstItem = new AddCarstModel();
+                carstItem.setUser_id(cart.getUser().getId());
+                carstItem.setProduct_id(cart.getProduct().getId());
+                carstItem.setQuantity(1);
+                CartFragment cartFragment = new CartFragment();
+                cartFragment.updateCart(carstItem);
             }
         });
     }
 
 
-    public void btnSubClickEvent(MyViewHolder holder, ProductModel_Test cart) {
+    public void btnSubClickEvent(MyViewHolder holder, CarstModel cart) {
         holder.sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeQtyProductInCart(2, cart);
+                Log.d("TAG", "onClick: tru" + cart.getQuantity());
+                AddCarstModel carstItem = new AddCarstModel();
+                carstItem.setUser_id(cart.getUser().getId());
+                carstItem.setProduct_id(cart.getProduct().getId());
+                carstItem.setQuantity(-1);
+                CartFragment cartFragment = new CartFragment();
+                cartFragment.updateCart(carstItem);
             }
         });
     }
 
-    public void changeQtyProductInCart(int type, ProductModel_Test cart) {
-        int index = -1;
-        if (FileUtils.cartList == null) {
-            FileUtils.cartList = new ArrayList<>();
-        } else {
-            for (int i = 0; i < FileUtils.cartList.size(); i++) {
-                if (FileUtils.cartList.get(i).get_id() ==  cart.get_id()) {
-                    index = i;
-                }
-            }
-        }
-        if (index != -1) {
-            ProductModel_Test cartOld = FileUtils.cartList.get(index);
-            if (type == 1) {
-                FileUtils.cartList.get(index).setQty(cartOld.getQty() + 1);
-            } else {
-                FileUtils.cartList.get(index).setQty(cartOld.getQty() - 1);
-                if (FileUtils.cartList.get(index).getQty() < 1) {
-                    FileUtils.cartList.remove(index);
-                }
-            }
-            //Update data array
-            updateArrayListCart();
-        } else {
-            Toast.makeText(activity, "Thay doi so luong that bai!", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public void updateArrayListCart() {
         CreateNumberBuyButtonEventClick();
         CartFragment.myRecycleViewAdapter.notifyDataSetChanged();
         cartScreenActivity.setActivityCart(activity);
-        cartScreenActivity.CalculateAndAssign(FileUtils.cartList);
+        cartScreenActivity.CalculateAndAssign(arrayList);
     }
 
     @Override

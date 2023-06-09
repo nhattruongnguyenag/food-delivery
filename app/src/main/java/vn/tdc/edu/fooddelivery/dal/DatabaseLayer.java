@@ -147,9 +147,18 @@ public class DatabaseLayer extends SQLiteOpenHelper {
             String where = USER_ID + " =?";
             String[] whereArgs = new String[] { String.valueOf(newPerson.getId()) };
 
-            values.put(USER_NAME, newPerson.getFullName());
-            values.put(USER_EMAIL, newPerson.getEmail());
-            values.put(USER_IMAGE, newPerson.getImageName());
+            if (newPerson.getFullName() != null && !newPerson.getFullName().isEmpty()) {
+                values.put(USER_NAME, newPerson.getFullName());
+            }
+
+            if (newPerson.getEmail() != null && !newPerson.getEmail().isEmpty()) {
+                values.put(USER_EMAIL, newPerson.getEmail());
+            }
+
+            if (newPerson.getImageName() != null && !newPerson.getImageName().isEmpty()) {
+                values.put(USER_IMAGE, newPerson.getImageName());
+            }
+
             int bool_Update = database.update(USER_TABLE_NAME, values, where, whereArgs);
 
             if (bool_Update == 1) {

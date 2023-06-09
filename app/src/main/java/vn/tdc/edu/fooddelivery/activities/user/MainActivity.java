@@ -3,11 +3,14 @@ package vn.tdc.edu.fooddelivery.activities.user;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -37,9 +40,11 @@ import vn.tdc.edu.fooddelivery.activities.admin.RoleManagementActivity;
 import vn.tdc.edu.fooddelivery.activities.admin.UserManagementActivity;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.enums.Role;
+import vn.tdc.edu.fooddelivery.fragments.SearchFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.NotificationFragment;
+import vn.tdc.edu.fooddelivery.fragments.user.OrderFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.ProfileFragment;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 import vn.tdc.edu.fooddelivery.utils.Authentication;
@@ -87,8 +92,8 @@ public class MainActivity extends AbstractActivity {
         tvUserEmail = navigationHeader.findViewById(R.id.tvUserEmail);
         setSupportActionBar(toolbar);
         setToggleActionNavigationView();
-        setUserLoginInfo();
         setMenuByUserRole();
+        setUserLoginInfo();
 
         // -------------------CHU DINH HANH----------------//
         bottomNavigation = findViewById(R.id.bottomNavigation);
@@ -101,12 +106,16 @@ public class MainActivity extends AbstractActivity {
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                navigation.setCheckedItem(item.getItemId());
                 switch (item.getItemId()) {
                     case R.id.menu_home:
                         prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_cart:
                         prevFragment = setFragment(CartFragment.class, R.id.frameLayout, false);
+                        break;
+                    case R.id.menu_order:
+                        prevFragment = setFragment(OrderFragment.class, R.id.frameLayout, false);
                         break;
                     case R.id.menu_notification:
                         prevFragment = setFragment(NotificationFragment.class, R.id.frameLayout, false);
@@ -118,6 +127,7 @@ public class MainActivity extends AbstractActivity {
                         prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
                         break;
                 }
+                clearSearchView();
                 return true;
             }
         });
@@ -125,7 +135,28 @@ public class MainActivity extends AbstractActivity {
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                bottomNavigation.setSelectedItemId(item.getItemId());
                 switch (item.getItemId()) {
+                    case R.id.menu_home:
+                        prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_cart:
+                        prevFragment = setFragment(CartFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_order:
+                        prevFragment = setFragment(OrderFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_notification:
+                        prevFragment = setFragment(NotificationFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
+                    case R.id.menu_profile:
+                        prevFragment = setFragment(ProfileFragment.class, R.id.frameLayout, false);
+                        drawerLayout.close();
+                        break;
                     case R.id.nav_product_management:
                         switchActivity(ProductManagementActivity.class, "Quản lý hàng hoá");
                         break;
@@ -170,6 +201,17 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    setFragment(SearchFragment.class, R.id.frameLayout, false);
+                } else {
+                    Log.d("TAG", "onFocusChange: bo cham");
+                }
+            }
+        });
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -185,6 +227,29 @@ public class MainActivity extends AbstractActivity {
                 return true;
             }
         });
+
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+               if (Authentication.isUpdated) {
+                   setUserLoginInfo();
+                   Authentication.isUpdated = false;
+               }
+            }
+        });
+    }
+
+    public static void clearSearchView() {
+        searchView.setQuery("", false);
+        searchView.clearFocus();
+    }
+
+    private void setNavigationView() {
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void setUserLoginInfo() {
@@ -202,6 +267,7 @@ public class MainActivity extends AbstractActivity {
             navigation.inflateMenu(R.menu.navigation_menu_shipper);
         } else {
             navigation.inflateMenu(R.menu.navigation_menu_customer);
+            navigation.setCheckedItem(R.id.menu_home);
         }
     }
 
@@ -246,6 +312,7 @@ public class MainActivity extends AbstractActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -256,34 +323,22 @@ public class MainActivity extends AbstractActivity {
     // HANH----------------------------------------//
 
     public void catchDataCartIconNotify() {
-        if (FileUtils.cartList == null) {
-            FileUtils.cartList = new ArrayList<>();
-        }
-        // Them vo o day
-
-        createNum(FileUtils.cartList.size(), 2);
+//        createNum(FileUtils.cartList.size(), 2);
     }
 
     public void catchDataNotifyIcon() {
-        if (FileUtils.arrayListNotifications == null) {
-            FileUtils.arrayListNotifications = new ArrayList<>();
-        }
-        // Them vo o day
-        createNum(FileUtils.arrayListNotifications.size(), 3);
+//        createNum(FileUtils.arrayListNotifications.size(), 3);
     }
 
     public static void CreateNumberBuyButtonEventClick() {
-        if (FileUtils.cartList != null) {
-            createNum(FileUtils.cartList.size(), 2);
-        }
+//            createNum(FileUtils.cartList.size(), 2);
     }
 
     public void clearAllSelectNavigation() {
 
     }
 
-    // -------------------------------------Create number notify in navigation bar
-    // bottom--------------------------------------------//
+
     public static void createNum(int number, int menu) {
         Context context = MainActivity.getMainActivitySave();
         bottomNavigation
@@ -327,5 +382,4 @@ public class MainActivity extends AbstractActivity {
         return Math.round(
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, ((Resources) resource).getDisplayMetrics()));
     }
-    // -----------------------------------------------End--------------------------------------------------------//
 }

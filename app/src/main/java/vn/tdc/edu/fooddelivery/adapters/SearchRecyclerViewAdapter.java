@@ -14,25 +14,28 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
-import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
+import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.MyViewHolder> implements Filterable {
     private Activity activity;
     private int layout_id;
-    public ArrayList<ProductModel_Test> arrayList;
-    private ArrayList<ProductModel_Test> arrayListOld;
-    public static ArrayList<ProductModel_Test> cartArrayListOnChange;
+    public List<ProductModel> arrayList;
+    private List<ProductModel> arrayListOld;
+    public static List<ProductModel> cartArrayListOnChange;
     public UserClicListenter userClicListenter;
 
-    public void setArrayList(ArrayList<ProductModel_Test> arrayList) {
+    public void setArrayList(List<ProductModel> arrayList) {
         this.arrayList = arrayList;
     }
 
-    public SearchRecyclerViewAdapter(Activity activity, int layout_id, ArrayList<ProductModel_Test> arrayList, UserClicListenter userClicListenter) {
+    public SearchRecyclerViewAdapter(Activity activity, int layout_id, List<ProductModel> arrayList, UserClicListenter userClicListenter) {
         this.activity = activity;
         this.layout_id = layout_id;
         this.arrayList = arrayList;
@@ -55,10 +58,10 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        ProductModel_Test cart = arrayList.get(position);
+        ProductModel cart = arrayList.get(position);
         holder.txt_name.setText(cart.getName());
-        holder.img.setImageDrawable(activity.getResources().getDrawable(cart.getImg(), activity.getTheme()));
-        //B3: Event click
+        Glide.with(activity).load(cart.getImageUrl())
+                .into(holder.img);
         //B3: Event click
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +84,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
         private ImageView img;
         private TextView txt_name;
+
         View.OnClickListener onClickListener;
 
         public MyViewHolder(@NonNull View v) {
@@ -102,9 +106,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                     filterResults.count = arrayListOld.size();
                 } else {
                     String searchStr = constraint.toString().toLowerCase();
-                    List<ProductModel_Test> userModels = new ArrayList<>();
-                    for (ProductModel_Test userModel : arrayListOld) {
-                        if (userModel.getName().toLowerCase().contains(searchStr)) {
+                    List<ProductModel> userModels = new ArrayList<>();
+                    for (ProductModel userModel : arrayListOld) {
+                        if (containsVietnameseWithAccents(userModel.getName(), searchStr)) {
                             userModels.add(userModel);
                         }
                     }
@@ -116,7 +120,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults Results) {
-                arrayList = (ArrayList<ProductModel_Test>) Results.values;
+                arrayList = (List<ProductModel>) Results.values;
                 cartArrayListOnChange = arrayList;
                 notifyDataSetChanged();
             }
@@ -124,8 +128,21 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         return filter;
     }
 
+    private boolean containsVietnameseWithAccents(String input, String searchStr) {
+        String normalizedInput = normalizeString(input);
+        String normalizedSearchStr = normalizeString(searchStr);
+        return normalizedInput.toLowerCase().contains(normalizedSearchStr.toLowerCase());
+    }
+
+    private String normalizeString(String input) {
+        String normalizedString = Normalizer.normalize(input, Normalizer.Form.NFD);
+        normalizedString = normalizedString.replaceAll("\\p{M}", ""); // Loại bỏ dấu
+        return normalizedString;
+    }
+
+
     public interface UserClicListenter {
-        void selectedUser(ProductModel_Test userModel);
+        void selectedUser(ProductModel userModel);
     }
 
 }

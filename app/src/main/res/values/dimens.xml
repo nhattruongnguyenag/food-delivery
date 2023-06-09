@@ -11,10 +11,10 @@
     <dimen name="rounded_radius">999dp</dimen>
     <dimen name="round20">20dp</dimen>
     <dimen name="btn_order_margin_top">10dp</dimen>
-    <dimen name="button_order_recyler_margin">10dp</dimen>
+    <dimen name="button_order_recyler_margin">15dp</dimen>
     <dimen name="textSmall">12sp</dimen>
     <dimen name="title_recycler_margin_bottom">5dp</dimen>
-    <dimen name="editOptionsEditMarginTop">25dp</dimen>
+    <dimen name="editOptionsEditMarginTop">50dp</dimen>
 
     //-----------------------------Chu dinh hanh--------------------------------//
     <dimen name="cardCornerRadius_cart_screen">5dp</dimen>
@@ -49,7 +49,7 @@
     <dimen name="home_layout_item_radious">5dp</dimen>
     <dimen name="home_layout_item_width">110dp</dimen>
     <dimen name="home_layout_item_menu_elevation">10dp</dimen>
-    <dimen name="home_layout_item_rounded_imgv_width">190dp</dimen>
+    <dimen name="home_layout_item_rounded_imgv_width">180dp</dimen>
     <dimen name="home_layout_item_rounded_imgv_height">165dp</dimen>
     <dimen name="home_layout_item_linear_layout_elevation">10dp</dimen>
     <dimen name="home_layout_item_btn_add_cart_height">32dp</dimen>

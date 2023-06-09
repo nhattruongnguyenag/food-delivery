@@ -8,6 +8,10 @@
         android:icon="@drawable/ic_cart"
         android:title="Giỏ hàng"/>
 
+    <item android:id="@+id/menu_order"
+        android:icon="@drawable/ic_order"
+        android:title="Đơn hàng"/>
+
     <item android:id="@+id/menu_notification"
         android:icon="@drawable/ic_notification"
         android:title="Thông báo"/>

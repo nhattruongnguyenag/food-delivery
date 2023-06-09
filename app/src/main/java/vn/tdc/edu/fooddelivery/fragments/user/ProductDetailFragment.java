@@ -3,6 +3,7 @@ package vn.tdc.edu.fooddelivery.fragments.user;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,24 +18,30 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.adapters.ProductDetailRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.components.CreateStart;
 import vn.tdc.edu.fooddelivery.components.ToastCustome;
+import vn.tdc.edu.fooddelivery.models.AddCarstModel;
+import vn.tdc.edu.fooddelivery.models.ProductModel;
+import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class ProductDetailFragment extends AbstractFragment {
     private ToastCustome _customeToasl;
     private RecyclerView recyclerView;
     private ProductDetailRecyclerViewAdapter myRecycleViewAdapter;
-    private ArrayList<ProductModel_Test> arrayList = new ArrayList<>();
-    private ProductModel_Test DetailProduct;
+    private List<ProductModel> arrayList = new ArrayList<>();
+    private ProductModel DetailProduct;
     private ImageButton buttonHeart;
     private ImageButton buttonCart;
     private View fragmentLayout = null;
@@ -52,36 +59,37 @@ public class ProductDetailFragment extends AbstractFragment {
     // -----------------Change number notify in bottomBar----//
     private MainActivity mainActivity;
 
-    public ArrayList<ProductModel_Test> getArrayList() {
+    UserModel userModel = Authentication.getUserLogin();
+    int userId = userModel.getId();
+
+    public List<ProductModel> getArrayList() {
         return arrayList;
     }
 
-    public ProductDetailFragment setArrayList(ArrayList<ProductModel_Test> arrayList) {
+    public ProductDetailFragment setArrayList(List<ProductModel> arrayList) {
         this.arrayList = arrayList;
         return this;
     }
 
-    public ProductModel_Test getDetailProduct() {
+    public ProductModel getDetailProduct() {
         return DetailProduct;
     }
 
-    public ProductDetailFragment setDetailProduct(ProductModel_Test detailProduct) {
+    public ProductDetailFragment setDetailProduct(ProductModel detailProduct) {
         DetailProduct = detailProduct;
         return this;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         fragmentLayout = inflater.inflate(R.layout.fragment_product, container, false);
         // --------------------------Start-------------------------//
+        Log.d("TAG", "onCreateView: chay ");
         anhXa();
         RatingEvent();
         createDataForMainProduct();
         ClickEvent();
-        // -------------Catch event click button back-----------------//
-        buttonHeart();
-        // -----------------Catch event click button back--------------//
         buttonCart();
         // -----------------------------End---------------------------//
         return fragmentLayout;
@@ -91,46 +99,30 @@ public class ProductDetailFragment extends AbstractFragment {
         buttonCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // --------------Toasl Custome-------//
-                LayoutInflater layoutInflater = getLayoutInflater();
-                _customeToasl = new ToastCustome();
-                _customeToasl.customeToasl(fragmentLayout, layoutInflater);
-                // --------------End--------------//
-                buttonBuyEventClick(DetailProduct);
-                CreateNumberBuyButtonEventClick();
+                CartFragment cartFragment1 = new CartFragment();
+                AddCarstModel carstModel = new AddCarstModel();
+                carstModel.setProduct_id(DetailProduct.getId());
+                carstModel.setUser_id(userId);
+                carstModel.setQuantity(1);
+                cartFragment1.updateCart(carstModel);
+                showMessageDialog("Đặt hàng thành công");
             }
         });
     }
 
     public void CreateNumberBuyButtonEventClick() {
-        if (mainActivity == null) {
-            mainActivity = new MainActivity();
-        }
-        if (FileUtils.cartList != null) {
-            if (FileUtils.cartList.size() != 0) {
-                mainActivity.createNum(FileUtils.cartList.size(), 2);
-            }
-        }
+//        if (mainActivity == null) {
+//            mainActivity = new MainActivity();
+//        }
+//        if (FileUtils.cartList != null) {
+//            if (FileUtils.cartList.size() != 0) {
+//                mainActivity.createNum(FileUtils.cartList.size(), 2);
+//            }
+//        }
     }
 
-    public void buttonBuyEventClick(ProductModel_Test cart) {
-        int index = -1;
-        if (FileUtils.cartList == null) {
-            FileUtils.cartList = new ArrayList<>();
-        } else {
-            for (int i = 0; i < FileUtils.cartList.size(); i++) {
-                if (FileUtils.cartList.get(i).get_id() == cart.get_id()) {
-                    index = i;
-                }
-            }
-        }
-        if (index != -1) {
-            ProductModel_Test cartOld = FileUtils.cartList.get(index);
-            FileUtils.cartList.get(index).setQty(cartOld.getQty() + 1);
-        } else {
-            cart.setQty(1);
-            FileUtils.cartList.add(cart);
-        }
+    public void buttonBuyEventClick(ProductModel cart) {
+
     }
 
     public void buttonHeart() {
@@ -195,7 +187,9 @@ public class ProductDetailFragment extends AbstractFragment {
     }
 
     public void createDataForMainProduct() {
-        img_MainProduct.setBackgroundResource(DetailProduct.getImg());
+        Log.d("TAG", "createDataForMainProduct: processing produce detail!");
+        Glide.with(fragmentLayout).load(DetailProduct.getImageUrl())
+                .into(img_MainProduct);
         if (DetailProduct.getDescription().trim().isEmpty() == true) {
             txt_DescriptionProductMain.setText("" +
                     "Xin lỗi, sản phẩm này chưa được cập nhât chi tiết chúng" +
@@ -206,13 +200,7 @@ public class ProductDetailFragment extends AbstractFragment {
         }
         txt_NameProductMain.setText(DetailProduct.getName());
         txt_PriceProductMain.setText((FormatCurentcy.format(String.valueOf(DetailProduct.getPrice()))) + " đồng");
-        txt_start.setText(String.valueOf(DetailProduct.getRate()));
-        // ----------------------Star Start printf-----------------//
-        // for (int i = 0; i < DetailProduct.getRate(); i++) {
-        // ImageView imageView = new ImageView(fragmentLayout.getContext());
-        // imageView.setBackgroundResource(R.drawable.ic_baseline_star_24);
-        // startLayoutWrapper.addView(imageView);
-        // }
+        txt_start.setText(String.valueOf(DetailProduct.getRating()));
         CreateStart.renderStart(startLayoutWrapper, DetailProduct, (Activity) fragmentLayout.getContext());
         // ----------------------End Start printf------------------//
     }
@@ -222,12 +210,17 @@ public class ProductDetailFragment extends AbstractFragment {
         myRecycleViewAdapter
                 .set_OnRecyclerViewOnClickListener(new ProductDetailRecyclerViewAdapter.onRecyclerViewOnClickListener() {
                     @Override
-                    public void onItemRecyclerViewOnClickListener(int p, View CardView) {
-                        // MARK actions
+                    public void onItemRecyclerViewOnClickListener(int id) {
+                        Toast.makeText(mainActivity, "" + id, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    // ----------------------------Customize toasl------------------------------//
-
+    public void showMessageDialog(String message) {
+        androidx.appcompat.app.AlertDialog alert = new androidx.appcompat.app.AlertDialog.Builder(fragmentLayout.getContext())
+                .setTitle("Message")
+                .setMessage(message)
+                .setPositiveButton("Ok", null)
+                .show();
+    }
 }

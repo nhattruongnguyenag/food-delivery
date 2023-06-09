@@ -8,12 +8,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.HttpURLConnection;
 
@@ -50,6 +54,14 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
     private OrderDetailRecyclerViewAdapter adapter;
     private OrderModel orderModel;
 
+    public OrderModel getOrderModel() {
+        return orderModel;
+    }
+
+    public void setOrderModel(OrderModel orderModel) {
+        this.orderModel = orderModel;
+    }
+
     @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,12 +81,6 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
 
         btnSuccess.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
-
-        Bundle bundleReceive = getArguments();
-
-        if (bundleReceive != null) {
-            orderModel = (OrderModel) bundleReceive.getSerializable(OrdersListFragment.ORDER_MODEL);
-        }
 
         if (orderModel != null && orderModel.getItems() != null) {
             tvCustomerName.setText(orderModel.getCustomer().getFullName());
@@ -122,7 +128,6 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
         return view;
     }
 
-
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnSuccess || view.getId() == R.id.btnCancel) {
@@ -151,13 +156,13 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
                     }
                     getActivity().onBackPressed();
                 } else {
-                    ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
+                    ((AbstractActivity) getActivity()).showMessageDialog("Hệ thống đang bảo trì");
                 }
             }
 
             @Override
             public void onFailure(Call<OrderModel> call, Throwable t) {
-                ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
+                ((AbstractActivity) getActivity()).showMessageDialog("Hệ thống đang bảo trì");
             }
         });
     }

@@ -12,6 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +30,7 @@ import vn.tdc.edu.fooddelivery.api.OrderAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.AssigntOrderPopupToStaff;
 import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
+import vn.tdc.edu.fooddelivery.components.Notification;
 import vn.tdc.edu.fooddelivery.enums.OrderStatus;
 import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
@@ -76,11 +81,8 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
 
     @Override
     public void onButtonOrderDetailClickListener(int position) {
-        Log.d("recyclerTest", "Order detais clicked at " + position);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ORDER_MODEL, listOrders.get(position));
-        ((AbstractActivity) getActivity()).setFragment(OrderDetailsFragment.class, R.id.frameLayout, true)
-                .setArguments(bundle);
+            ((AbstractActivity) getActivity()).setFragment(OrderDetailsFragment.class, R.id.frameLayout, true)
+                    .setOrderModel(listOrders.get(position));
     }
 
     @Override

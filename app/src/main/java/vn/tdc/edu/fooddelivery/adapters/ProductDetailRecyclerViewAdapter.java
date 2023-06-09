@@ -11,21 +11,23 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.bumptech.glide.Glide;
+
+import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.fragments.user.ProductDetailFragment;
-import vn.tdc.edu.fooddelivery.models.ProductModel_Test;
+import vn.tdc.edu.fooddelivery.models.ProductModel;
 
 public class ProductDetailRecyclerViewAdapter extends RecyclerView.Adapter<ProductDetailRecyclerViewAdapter.MyViewHolder> {
     private Activity activity;
     private int layout_ID;
-    private ArrayList<ProductModel_Test> arrayList;
+    private List<ProductModel> arrayList;
     private onRecyclerViewOnClickListener _onRecyclerViewOnClickListener;
     //Doi tuong do du lieu vao
 
-    public ProductDetailRecyclerViewAdapter(Activity activity, int layout_ID, ArrayList<ProductModel_Test> arrayList) {
+    public ProductDetailRecyclerViewAdapter(Activity activity, int layout_ID, List<ProductModel> arrayList) {
         this.activity = activity;
         this.layout_ID = layout_ID;
         this.arrayList = arrayList;
@@ -41,21 +43,23 @@ public class ProductDetailRecyclerViewAdapter extends RecyclerView.Adapter<Produ
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        ProductModel_Test cart = arrayList.get(position);
-        holder.imageViewListItem.setImageDrawable(activity.getResources().getDrawable(cart.getImg(), activity.getTheme()));
+        ProductModel cart = arrayList.get(position);
+        Glide.with(activity).load(cart.getImageUrl())
+                .into(holder.imageViewListItem);
         //B3: Event click
         holder.onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (_onRecyclerViewOnClickListener != null) {
-                    _onRecyclerViewOnClickListener.onItemRecyclerViewOnClickListener(position, holder.itemView);
-                    sendDataForDetailScreen(cart, arrayList);
+                    if (activity != null) {
+                        sendDataForDetailScreen(cart, arrayList);
+                    }
                 }
             }
         };
     }
 
-    public void sendDataForDetailScreen(ProductModel_Test cart, ArrayList<ProductModel_Test> arrayList) {
+    public void sendDataForDetailScreen(ProductModel cart, List<ProductModel> arrayList) {
         ((AbstractActivity) activity).setFragment(ProductDetailFragment.class, R.id.frameLayout, true)
                 .setDetailProduct(cart)
                 .setArrayList(arrayList);
@@ -91,7 +95,7 @@ public class ProductDetailRecyclerViewAdapter extends RecyclerView.Adapter<Produ
     }
 
     public interface onRecyclerViewOnClickListener {
-        public void onItemRecyclerViewOnClickListener(int p, View CardView);
+        public void onItemRecyclerViewOnClickListener(int productModel);
     }
 
     public void set_OnRecyclerViewOnClickListener(onRecyclerViewOnClickListener _OnRecyclerViewOnClickListener) {

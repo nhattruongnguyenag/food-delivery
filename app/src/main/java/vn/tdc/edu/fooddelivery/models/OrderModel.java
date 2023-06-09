@@ -8,6 +8,9 @@ public class OrderModel extends BaseModel {
     @SerializedName("user")
     private UserModel customer;
 
+    @SerializedName("user_id")
+    private Integer userId;
+
     @SerializedName("shipper")
     private UserModel shipper;
 
@@ -83,6 +86,14 @@ public class OrderModel extends BaseModel {
 
     public void setItems(List<OrderItemModel> items) {
         this.items = items;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getShipperId() {

@@ -6,6 +6,7 @@ import vn.tdc.edu.fooddelivery.dal.DatabaseLayer;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 
 public class Authentication {
+    public static boolean isUpdated = false;
     private static Activity context;
 
     private static DatabaseLayer dal;
@@ -18,6 +19,10 @@ public class Authentication {
         if (dal == null) {
             dal = new DatabaseLayer(context);
         }
+    }
+
+    public static boolean updateUser(UserModel userModel) {
+        return dal.updatePerson(userModel);
     }
 
     public static UserModel getUserLogin() {

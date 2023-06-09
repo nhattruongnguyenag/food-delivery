@@ -40,11 +40,8 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
         recyclerViewCategory = view.findViewById(R.id.recyclerViewCategory);
         btnAdd = view.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(this);
-
         categoriesList = new ArrayList<>();
-
         adapter = new CategoryManagementRecyclerViewAdapter((AbstractActivity) getActivity(), R.layout.recycler_category, categoriesList);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewCategory.setLayoutManager(layoutManager);
@@ -80,7 +77,6 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
                 confirmDialog.show();
             }
         });
-
         return view;
     }
 
@@ -115,7 +111,6 @@ public class CategoriesListFragment extends AbstractFragment implements View.OnC
                     adapter.notifyDataSetChanged();
                 }
             }
-
             @Override
             public void onFailure(Call<List<CategoryModel>> call, Throwable t) {
 

@@ -86,6 +86,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center|left"
+                android:maxLines="1"
                 android:text="Ga cay"
                 android:textColor="@color/black"
                 android:textSize="@dimen/fragment_product_txt_content_name_txtsize"
@@ -124,20 +125,21 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/txt_start_detail_screen"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.0001"
-                    android:gravity="center|left"
-                    android:text="4.6"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/fragment_product_number_rating_txt_size"
-                    android:textStyle="bold"
-                    tools:ignore="NestedWeights" />
+                <!--                <TextView-->
+                <!--                    android:id="@+id/txt_start_detail_screen"-->
+                <!--                    android:layout_width="0dp"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    android:layout_weight="0.0001"-->
+                <!--                    android:gravity="center|left"-->
+                <!--                    android:text="3.0"-->
+                <!--                    android:textColor="@color/black"-->
+                <!--                    android:textSize="@dimen/fragment_product_number_rating_txt_size"-->
+                <!--                    android:textStyle="bold"-->
+                <!--                android:id="@+id/txt_qty_user_detail_screen"-->
+                <!--                    tools:ignore="NestedWeights" />-->
 
                 <TextView
-                    android:id="@+id/txt_qty_user_detail_screen"
+                    android:id="@+id/txt_start_detail_screen"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.001"

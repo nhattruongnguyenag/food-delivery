@@ -71,6 +71,7 @@ public class LoginActivity extends AbstractActivity implements View.OnClickListe
                 if (response.code() == HttpURLConnection.HTTP_OK) {
                     Authentication.login(userResponse);
                     switchActivity(MainActivity.class,"Login success");
+                    finish();
                 } else {
                     ResponseBody error = response.errorBody();
                     try {

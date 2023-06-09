@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="360,000 đồng"
+                android:text="loading..."
                 android:textColor="@color/black" />
         </LinearLayout>
         <!--Bottom right area-->
@@ -74,12 +74,14 @@
 
             <Button
                 android:id="@+id/btn_order_btn_cart_screen"
-                android:layout_width="87.25dp"
-                android:layout_height="38dp"
+                android:layout_width="104dp"
+                android:layout_height="40dp"
                 android:background="@drawable/customize_btn_add_cart_screen"
                 android:gravity="center"
                 android:text="@string/btn_txt_buy_cart_screen"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:backgroundTint="@null" />
         </LinearLayout>

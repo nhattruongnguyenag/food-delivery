@@ -14,8 +14,15 @@ import vn.tdc.edu.fooddelivery.models.OrderRequest;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
 
 public interface OrderAPI {
+
+    @POST("api/orders")
+    Call<List<OrderModel>> create(@Body OrderModel orderModel);
+
     @GET("api/orders")
     Call<List<OrderModel>> findAll(@Query("status") Integer status);
+
+    @GET("api/orders")
+    Call<List<OrderModel>> findOrderOfUser(@Query("userId") Integer userId);
 
     @GET("api/orders")
     Call<List<OrderModel>> findAll(@Query("status") Integer status, @Query("shipperId") Integer shipperId);
