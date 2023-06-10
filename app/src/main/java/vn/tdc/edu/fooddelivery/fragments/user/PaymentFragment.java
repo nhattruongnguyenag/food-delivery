@@ -1,60 +1,46 @@
 package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.service.autofill.Validators;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
-import vn.tdc.edu.fooddelivery.adapters.OrderManagementItemRecyclerViewAdapter;
+import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.api.CartsAPI;
 import vn.tdc.edu.fooddelivery.api.OrderAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
-import vn.tdc.edu.fooddelivery.fragments.admin.OrdersListFragment;
-import vn.tdc.edu.fooddelivery.models.CarstModel;
+import vn.tdc.edu.fooddelivery.models.CartsModel;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
-import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 
 public class PaymentFragment extends AbstractFragment {
-    private EditText deliveryAddress;
-    private EditText edt_phone;
-    private Button buttonBuy;
+    private EditText address;
+    private EditText phone;
+    private Button btnBuy;
     private TextView txtPrice;
     private View fragmentLayout = null;
 
-    private CartFragment cartFragment = new CartFragment();
-    private List<CarstModel> listOrders;
+    private CartFragment carstFragment = new CartFragment();
+    private List<CartsModel> listOrders;
 
     UserModel userModel = Authentication.getUserLogin();
     int userID = userModel.getId();
@@ -70,8 +56,16 @@ public class PaymentFragment extends AbstractFragment {
             }
         }
         anhXa();
+        clearDataInputFile();
         buyBtnClick();
         return fragmentLayout;
+    }
+
+    private void clearDataInputFile() {
+        address.setText("");
+        phone.setText("");
+        address.setError(null);
+        phone.setError(null);
     }
 
     @Override
@@ -81,10 +75,10 @@ public class PaymentFragment extends AbstractFragment {
     }
 
     private void getOrderListFromAPI() {
-        Call<List<CarstModel>> call = RetrofitBuilder.getClient().create(CartsAPI.class).findCartsOfUser(userID);
-        call.enqueue(new Callback<List<CarstModel>>() {
+        Call<List<CartsModel>> call = RetrofitBuilder.getClient().create(CartsAPI.class).findCartsOfUser(userID);
+        call.enqueue(new Callback<List<CartsModel>>() {
             @Override
-            public void onResponse(Call<List<CarstModel>> call, Response<List<CarstModel>> response) {
+            public void onResponse(Call<List<CartsModel>> call, Response<List<CartsModel>> response) {
                 if (response.code() == HttpURLConnection.HTTP_OK) {
                     listOrders.clear();
                     listOrders.addAll(response.body());
@@ -96,7 +90,7 @@ public class PaymentFragment extends AbstractFragment {
             }
 
             @Override
-            public void onFailure(Call<List<CarstModel>> call, Throwable t) {
+            public void onFailure(Call<List<CartsModel>> call, Throwable t) {
                 CalculateAndAssign(listOrders);
                 Log.d("api-call", "Fetch product data fail");
             }
@@ -105,17 +99,19 @@ public class PaymentFragment extends AbstractFragment {
 
 
     private void buyBtnClick() {
-        buttonBuy.setOnClickListener(new View.OnClickListener() {
+        btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (alidatePhoneAction() && alidateAddressAction()) {
                     OrderModel orderModel = new OrderModel();
-                    orderModel.setAddress(String.valueOf(deliveryAddress.getText()));
+                    orderModel.setAddress(String.valueOf(address.getText()));
                     orderModel.setUserId(userID);
-                    orderModel.setPhone(edt_phone.getText().toString().trim());
+                    orderModel.setPhone(phone.getText().toString().trim());
                     createOrder(orderModel);
                     showNotification(fragmentLayout.getContext(), "THÔNG BÁO TỪ HỆ THỐNG", "Ấn vào biểu tượng để xem thêm..", "Đơn hàng của bạn đã đặt thành công chúng tôi sẽ sơm giao" +
                             " đến sớm nhất, vui lòng để điện thoai ở trạng thái chờ chúng tôi sẽ gọi điện cho ban sớm");
+                    ((AbstractActivity) getActivity()).showMessageDialog("Đặt hàng thành công");
+                    setFragment(HomeFragment.class, R.id.frameLayout, false);
                 } else {
                     Toast.makeText(fragmentLayout.getContext(), "loi", Toast.LENGTH_SHORT).show();
                 }
@@ -125,11 +121,12 @@ public class PaymentFragment extends AbstractFragment {
 
     private boolean alidatePhoneAction() {
         boolean ok = true;
-        if (edt_phone.getText().toString().trim() == "" || edt_phone.getText().toString().trim().isEmpty()) {
-            edt_phone.setError("Yêu cầu nhập số điện thoại");
+        if (phone.getText().toString().trim() == "" || phone.getText().toString().trim().isEmpty()) {
+            phone.setError("Hãy nhập số điện thoại của bạn");
             ok = false;
         } else {
-            if (!isNumber(edt_phone.getText().toString().trim())) {
+            if (!isValidPhoneNumber(phone.getText().toString().trim())) {
+                phone.setError("Số điện thoại của bạn không đúng định dạng");
                 ok = false;
             }
         }
@@ -139,31 +136,35 @@ public class PaymentFragment extends AbstractFragment {
 
     private boolean alidateAddressAction() {
         boolean ok = true;
-        if (deliveryAddress.getText().toString().trim() == "" || deliveryAddress.getText().toString().trim().isEmpty()) {
-            deliveryAddress.setError("Yêu cầu nhập địa chỉ");
+        if (address.getText().toString().trim() == "" || address.getText().toString().trim().isEmpty()) {
+            address.setError("Yêu cầu nhập địa chỉ");
             ok = false;
         }
         return ok;
     }
 
 
-    public boolean isNumber(String str) {
-        return str.matches("-?\\d+(\\d+)?");
+    public boolean isValidPhoneNumber(String phoneNumber) {
+        // Biểu thức chính quy để kiểm tra số điện thoại Việt Nam
+        String regex = "^(\\+?84|0)\\d{9,10}$";
+
+        // Kiểm tra phoneNumber với biểu thức chính quy
+        return phoneNumber.matches(regex);
     }
 
 
     //-----------------------End date picket-----------------------------//
     public void anhXa() {
         //Action
-        deliveryAddress = fragmentLayout.findViewById(R.id.edt_address_receive_item_address_payment_screen);
+        address = fragmentLayout.findViewById(R.id.edt_address_receive_item_address_payment_screen);
         txtPrice = fragmentLayout.findViewById(R.id.txt_price_paymetn_screen);
-        edt_phone = fragmentLayout.findViewById(R.id.edt_date_receive_item_payment_screen);
+        phone = fragmentLayout.findViewById(R.id.edt_date_receive_item_payment_screen);
         //layout
-        buttonBuy = fragmentLayout.findViewById(R.id.btn_buy_payment_screen);
+        btnBuy = fragmentLayout.findViewById(R.id.btn_buy_payment_screen);
     }
 
 
-    public void CalculateAndAssign(List<CarstModel> orderItemModels) {
+    public void CalculateAndAssign(List<CartsModel> orderItemModels) {
         int sum = 0;
         for (int i = 0; i < orderItemModels.size(); i++) {
             sum += orderItemModels.get(i).getProduct().getPrice() * orderItemModels.get(i).getQuantity();

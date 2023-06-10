@@ -28,13 +28,12 @@ import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.adapters.ProductDetailRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.components.CreateStart;
 import vn.tdc.edu.fooddelivery.components.ToastCustome;
-import vn.tdc.edu.fooddelivery.models.AddCarstModel;
+import vn.tdc.edu.fooddelivery.models.ItemCartsModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class ProductDetailFragment extends AbstractFragment {
     private ToastCustome _customeToasl;
@@ -76,6 +75,7 @@ public class ProductDetailFragment extends AbstractFragment {
     }
 
     public ProductDetailFragment setDetailProduct(ProductModel detailProduct) {
+        Log.d("TAG", "onCreateView: da set fragment ");
         DetailProduct = detailProduct;
         return this;
     }
@@ -85,7 +85,6 @@ public class ProductDetailFragment extends AbstractFragment {
                              Bundle savedInstanceState) {
         fragmentLayout = inflater.inflate(R.layout.fragment_product, container, false);
         // --------------------------Start-------------------------//
-        Log.d("TAG", "onCreateView: chay ");
         anhXa();
         RatingEvent();
         createDataForMainProduct();
@@ -100,26 +99,16 @@ public class ProductDetailFragment extends AbstractFragment {
             @Override
             public void onClick(View view) {
                 CartFragment cartFragment1 = new CartFragment();
-                AddCarstModel carstModel = new AddCarstModel();
+                ItemCartsModel carstModel = new ItemCartsModel();
                 carstModel.setProduct_id(DetailProduct.getId());
                 carstModel.setUser_id(userId);
                 carstModel.setQuantity(1);
-                cartFragment1.updateCart(carstModel);
-                showMessageDialog("Đặt hàng thành công");
+                cartFragment1.updateCart(carstModel, null, (Activity) fragmentLayout.getContext());
             }
         });
     }
 
-    public void CreateNumberBuyButtonEventClick() {
-//        if (mainActivity == null) {
-//            mainActivity = new MainActivity();
-//        }
-//        if (FileUtils.cartList != null) {
-//            if (FileUtils.cartList.size() != 0) {
 //                mainActivity.createNum(FileUtils.cartList.size(), 2);
-//            }
-//        }
-    }
 
     public void buttonBuyEventClick(ProductModel cart) {
 
@@ -216,11 +205,4 @@ public class ProductDetailFragment extends AbstractFragment {
                 });
     }
 
-    public void showMessageDialog(String message) {
-        androidx.appcompat.app.AlertDialog alert = new androidx.appcompat.app.AlertDialog.Builder(fragmentLayout.getContext())
-                .setTitle("Message")
-                .setMessage(message)
-                .setPositiveButton("Ok", null)
-                .show();
-    }
 }

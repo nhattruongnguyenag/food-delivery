@@ -31,7 +31,7 @@ import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.components.SendDataAndGotoAnotherFragment;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 
-public class SearchFragment extends AbstractFragment implements SearchRecyclerViewAdapter.UserClicListenter {
+public class SearchFragment extends AbstractFragment implements SearchRecyclerViewAdapter.ProductClickListener {
     private int typeView = 1;
     public static RecyclerView recyclerView;
     private SearchRecyclerViewAdapter myRecycleViewAdapter;
@@ -106,9 +106,9 @@ public class SearchFragment extends AbstractFragment implements SearchRecyclerVi
                 StaggeredGridLayoutManager layoutManager1 = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(layoutManager1);
                 if (myRecycleViewAdapter.cartArrayListOnChange != null) {
-                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item3, myRecycleViewAdapter.cartArrayListOnChange, this::selectedUser);
+                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item3, myRecycleViewAdapter.cartArrayListOnChange, this::selectProduct);
                 } else {
-                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item3, productsList, this::selectedUser);
+                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item3, productsList, this::selectProduct);
                 }
                 recyclerView.setAdapter(myRecycleViewAdapter);
                 break;
@@ -117,9 +117,9 @@ public class SearchFragment extends AbstractFragment implements SearchRecyclerVi
                 GridLayoutManager layoutManager2 = new GridLayoutManager((Activity) fragmentLayout.getContext(), 2);
                 recyclerView.setLayoutManager(layoutManager2);
                 if (myRecycleViewAdapter.cartArrayListOnChange != null) {
-                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item1, myRecycleViewAdapter.cartArrayListOnChange, this::selectedUser);
+                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item1, myRecycleViewAdapter.cartArrayListOnChange, this::selectProduct);
                 } else {
-                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item1, productsList, this::selectedUser);
+                    myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item1, productsList, this::selectProduct);
                 }
                 recyclerView.setAdapter(myRecycleViewAdapter);
                 break;
@@ -168,16 +168,16 @@ public class SearchFragment extends AbstractFragment implements SearchRecyclerVi
 
     public void binData() {
         if (typeView == 1) {
-            myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item3, productsList, this::selectedUser);
+            myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item3, productsList, this::selectProduct);
         } else {
-            myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item1, productsList, this::selectedUser);
+            myRecycleViewAdapter = new SearchRecyclerViewAdapter((Activity) fragmentLayout.getContext(), R.layout.search_layout_item1, productsList, this::selectProduct);
         }
         recyclerView.setAdapter(myRecycleViewAdapter);
     }
 
 
     @Override
-    public void selectedUser(ProductModel cart) {
+    public void selectProduct(ProductModel cart) {
         if (fragmentLayout.getContext() instanceof Activity) {
             Activity activity = (Activity) fragmentLayout.getContext();
             SendDataAndGotoAnotherFragment.sendToProduceDetail(activity, cart);
