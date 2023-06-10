@@ -1,49 +1,34 @@
 package vn.tdc.edu.fooddelivery.fragments.user;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.service.autofill.Validators;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.tdc.edu.fooddelivery.R;
-import vn.tdc.edu.fooddelivery.adapters.OrderManagementItemRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.api.CartsAPI;
 import vn.tdc.edu.fooddelivery.api.OrderAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
-import vn.tdc.edu.fooddelivery.fragments.admin.OrdersListFragment;
-import vn.tdc.edu.fooddelivery.models.CarstModel;
+import vn.tdc.edu.fooddelivery.models.CartModel;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
-import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 
 public class PaymentFragment extends AbstractFragment {
@@ -54,7 +39,7 @@ public class PaymentFragment extends AbstractFragment {
     private View fragmentLayout = null;
 
     private CartFragment cartFragment = new CartFragment();
-    private List<CarstModel> listOrders;
+    private List<CartModel> listOrders;
 
     UserModel userModel = Authentication.getUserLogin();
     int userID = userModel.getId();
@@ -81,10 +66,10 @@ public class PaymentFragment extends AbstractFragment {
     }
 
     private void getOrderListFromAPI() {
-        Call<List<CarstModel>> call = RetrofitBuilder.getClient().create(CartsAPI.class).findCartsOfUser(userID);
-        call.enqueue(new Callback<List<CarstModel>>() {
+        Call<List<CartModel>> call = RetrofitBuilder.getClient().create(CartsAPI.class).findCartsOfUser(userID);
+        call.enqueue(new Callback<List<CartModel>>() {
             @Override
-            public void onResponse(Call<List<CarstModel>> call, Response<List<CarstModel>> response) {
+            public void onResponse(Call<List<CartModel>> call, Response<List<CartModel>> response) {
                 if (response.code() == HttpURLConnection.HTTP_OK) {
                     listOrders.clear();
                     listOrders.addAll(response.body());
@@ -96,7 +81,7 @@ public class PaymentFragment extends AbstractFragment {
             }
 
             @Override
-            public void onFailure(Call<List<CarstModel>> call, Throwable t) {
+            public void onFailure(Call<List<CartModel>> call, Throwable t) {
                 CalculateAndAssign(listOrders);
                 Log.d("api-call", "Fetch product data fail");
             }
@@ -114,6 +99,8 @@ public class PaymentFragment extends AbstractFragment {
                     orderModel.setUserId(userID);
                     orderModel.setPhone(edt_phone.getText().toString().trim());
                     createOrder(orderModel);
+                    showMessageDialog("Đặt hàng thành công");
+                    clearData();
                     showNotification(fragmentLayout.getContext(), "THÔNG BÁO TỪ HỆ THỐNG", "Ấn vào biểu tượng để xem thêm..", "Đơn hàng của bạn đã đặt thành công chúng tôi sẽ sơm giao" +
                             " đến sớm nhất, vui lòng để điện thoai ở trạng thái chờ chúng tôi sẽ gọi điện cho ban sớm");
                 } else {
@@ -121,6 +108,19 @@ public class PaymentFragment extends AbstractFragment {
                 }
             }
         });
+    }
+
+    public void clearData() {
+        edt_phone.setText("");
+        deliveryAddress.setText("");
+    }
+
+    public void showMessageDialog(String message) {
+        androidx.appcompat.app.AlertDialog alert = new androidx.appcompat.app.AlertDialog.Builder(fragmentLayout.getContext())
+                .setTitle("Message")
+                .setMessage(message)
+                .setPositiveButton("Ok", null)
+                .show();
     }
 
     private boolean alidatePhoneAction() {
@@ -163,7 +163,7 @@ public class PaymentFragment extends AbstractFragment {
     }
 
 
-    public void CalculateAndAssign(List<CarstModel> orderItemModels) {
+    public void CalculateAndAssign(List<CartModel> orderItemModels) {
         int sum = 0;
         for (int i = 0; i < orderItemModels.size(); i++) {
             sum += orderItemModels.get(i).getProduct().getPrice() * orderItemModels.get(i).getQuantity();

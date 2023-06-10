@@ -9,20 +9,16 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import vn.tdc.edu.fooddelivery.models.AddCarstModel;
-import vn.tdc.edu.fooddelivery.models.CarstModel;
-import vn.tdc.edu.fooddelivery.models.CategoryModel;
-import vn.tdc.edu.fooddelivery.models.NotificationModel;
-import vn.tdc.edu.fooddelivery.models.ProductModel;
-import vn.tdc.edu.fooddelivery.models.UserModel;
+import vn.tdc.edu.fooddelivery.models.ItemCartModel;
+import vn.tdc.edu.fooddelivery.models.CartModel;
 
 public interface CartsAPI {
     @GET("api/carts")
-    Call<List<CarstModel>> findCartsOfUser(@Query("userId") Integer userId);
+    Call<List<CartModel>> findCartsOfUser(@Query("userId") Integer userId);
 
     @POST("api/carts")
-    Call<List<CarstModel>> updateAndCreate(@Body AddCarstModel carstModel);
+    Call<List<CartModel>> updateAndCreate(@Body ItemCartModel carstModel);
 
     @DELETE("api/carts/{id}")
-    Call<CarstModel> delete(@Path("id") Integer id);
+    Call<CartModel> delete(@Path("id") Integer id);
 }

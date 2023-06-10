@@ -48,7 +48,7 @@ public class HomeFragment extends AbstractFragment {
 
     private static LayoutInflater layoutInflater = null;
     private static View fragmentLayout = null;
-    private ToastCustome toaslCustomize;
+
     private ViewFlipper viewFlipper;
     private RecyclerView recyclerView_category;
     private RecyclerView recyclerView_menu;
@@ -76,7 +76,6 @@ public class HomeFragment extends AbstractFragment {
         if (categoriesList == null) {
             categoriesList = new ArrayList<>();
         }
-        //----------------------------Processing---------------------//
         anhXa();
         setInvisibleFab();
         ActionViewFlipper();
@@ -85,7 +84,6 @@ public class HomeFragment extends AbstractFragment {
         //Event scroll up
         ClickEventFab();
         catchEventScrollNestedScrollView();
-        //--------------------------------End---------------------------//
         return fragmentLayout;
     }
 
@@ -102,7 +100,6 @@ public class HomeFragment extends AbstractFragment {
                     productsList.clear();
                     productsList.addAll(response.body());
                     myAdapterMenu.notifyDataSetChanged();
-                    Log.d("api-call", "Fetch product data successfully");
                 }
             }
 
@@ -142,7 +139,6 @@ public class HomeFragment extends AbstractFragment {
         });
     }
 
-    //-----------------------------Set disable for fab-----------------//
     public void setInvisibleFab() {
         fab.setVisibility(View.INVISIBLE);
     }
@@ -150,7 +146,6 @@ public class HomeFragment extends AbstractFragment {
     public void setVisibleFab() {
         fab.setVisibility(View.VISIBLE);
     }
-    //-----------------------------Set disable for fab-----------------//
 
     private void ClickEventFab() {
         fab.setOnClickListener(new View.OnClickListener() {
@@ -240,15 +235,6 @@ public class HomeFragment extends AbstractFragment {
         });
     }
 
-
-    //------------------Toasl--------------------------------------//
-
-    //-----------------Create notify cart number--------------------//
-//        MainActivity.CreateNumberBuyButtonEventClick();
-    //--------------------Toasl----------------------------------------//
-
-
-    //-------------------------------Chuyen man hinh---------------------------------//
     public <T> T setFragment(Class<T> tClass, int layout, boolean addToBackStack) {
         T fragment = null;
         try {

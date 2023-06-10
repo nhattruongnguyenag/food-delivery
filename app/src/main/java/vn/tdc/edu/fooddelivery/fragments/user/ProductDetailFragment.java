@@ -28,13 +28,12 @@ import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.adapters.ProductDetailRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.components.CreateStart;
 import vn.tdc.edu.fooddelivery.components.ToastCustome;
-import vn.tdc.edu.fooddelivery.models.AddCarstModel;
+import vn.tdc.edu.fooddelivery.models.ItemCartModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class ProductDetailFragment extends AbstractFragment {
     private ToastCustome _customeToasl;
@@ -100,26 +99,16 @@ public class ProductDetailFragment extends AbstractFragment {
             @Override
             public void onClick(View view) {
                 CartFragment cartFragment1 = new CartFragment();
-                AddCarstModel carstModel = new AddCarstModel();
+                ItemCartModel carstModel = new ItemCartModel();
                 carstModel.setProduct_id(DetailProduct.getId());
                 carstModel.setUser_id(userId);
                 carstModel.setQuantity(1);
-                cartFragment1.updateCart(carstModel);
+                cartFragment1.updateCart(carstModel,null);
                 showMessageDialog("Đặt hàng thành công");
             }
         });
     }
 
-    public void CreateNumberBuyButtonEventClick() {
-//        if (mainActivity == null) {
-//            mainActivity = new MainActivity();
-//        }
-//        if (FileUtils.cartList != null) {
-//            if (FileUtils.cartList.size() != 0) {
-//                mainActivity.createNum(FileUtils.cartList.size(), 2);
-//            }
-//        }
-    }
 
     public void buttonBuyEventClick(ProductModel cart) {
 

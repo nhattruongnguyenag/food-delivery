@@ -62,7 +62,6 @@ public abstract class AbstractFragment extends Fragment {
             if (fragmentManager.findFragmentByTag(tClass.getSimpleName() + "") == null) {
                 transaction.addToBackStack(null);
             }
-
             transaction.commit();
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);

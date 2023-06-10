@@ -11,7 +11,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,13 +28,9 @@ import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.adapters.CartRecycleViewAdapter;
 import vn.tdc.edu.fooddelivery.api.CartsAPI;
-import vn.tdc.edu.fooddelivery.api.CategoryAPI;
-import vn.tdc.edu.fooddelivery.api.NotificationAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
-import vn.tdc.edu.fooddelivery.models.AddCarstModel;
-import vn.tdc.edu.fooddelivery.models.CarstModel;
-import vn.tdc.edu.fooddelivery.models.CategoryModel;
-import vn.tdc.edu.fooddelivery.models.NotificationModel;
+import vn.tdc.edu.fooddelivery.models.ItemCartModel;
+import vn.tdc.edu.fooddelivery.models.CartModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
@@ -45,14 +40,14 @@ public class CartFragment extends AbstractFragment {
 
     public static CartRecycleViewAdapter myRecycleViewAdapter;
     private RecyclerView recyclerView;
-    private TextView total_cart_screen;
+    private static TextView cartScreeb;
     private Button order_btn_cart_screen;
     private static View fragmentLayout = null;
     private Activity activityCart;
     private static LinearLayout linearLayoutWrapper;
     private static Button btnBuy;
 
-    private static List<CarstModel> listOrders;
+    private static List<CartModel> listCarts;
     UserModel userModel = Authentication.getUserLogin();
     private final int userID = userModel.getId();
 
@@ -69,15 +64,11 @@ public class CartFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentLayout = inflater.inflate(R.layout.fragment_cart, container, false);
-        //-----------------------Processing-----------------//
-        if (listOrders == null) {
-            listOrders = new ArrayList<>();
+        if (listCarts == null) {
+            listCarts = new ArrayList<>();
         }
         AnhXa();
-        ClickEvent();
         clickBtnBuyEvent();
-        //Catch event click into Add btn
-        //-------------------------End---------------------//
         return fragmentLayout;
     }
 
@@ -89,62 +80,63 @@ public class CartFragment extends AbstractFragment {
 
     private void getOrderListFromAPI() {
         Log.d("TAG", "getOrderListFromAPI: " + userID);
-        Call<List<CarstModel>> call = RetrofitBuilder.getClient().create(CartsAPI.class).findCartsOfUser(userID);
-        call.enqueue(new Callback<List<CarstModel>>() {
+        Call<List<CartModel>> call = RetrofitBuilder.getClient().create(CartsAPI.class).findCartsOfUser(userID);
+        call.enqueue(new Callback<List<CartModel>>() {
             @Override
-            public void onResponse(Call<List<CarstModel>> call, Response<List<CarstModel>> response) {
+            public void onResponse(Call<List<CartModel>> call, Response<List<CartModel>> response) {
                 if (response.code() == HttpURLConnection.HTTP_OK) {
-                    listOrders.clear();
-                    listOrders.addAll(response.body());
-                    setUpCart(listOrders);
-                    CalculateAndAssign(listOrders);
-                    Log.d("api-call", "Fetch product data successfully");
+                    listCarts.clear();
+                    listCarts.addAll(response.body());
+                    setUpCart(listCarts);
+                    CalculateAndAssign(listCarts);
                 } else {
-                    Log.d("api-call", "Fetch product data fail");
                 }
             }
 
             @Override
-            public void onFailure(Call<List<CarstModel>> call, Throwable t) {
-                CalculateAndAssign(listOrders);
-                Log.d("api-call", "Fetch product data fail");
+            public void onFailure(Call<List<CartModel>> call, Throwable t) {
+                CalculateAndAssign(listCarts);
             }
         });
     }
 
 
-    public void updateCart(AddCarstModel carstModel) {
-        Call<List<CarstModel>> call = RetrofitBuilder.getClient().create(CartsAPI.class).updateAndCreate(carstModel);
-        call.enqueue(new Callback<List<CarstModel>>() {
+    public void updateCart(ItemCartModel carstModel, CartModel cart) {
+        Call<List<CartModel>> call = RetrofitBuilder.getClient().create(CartsAPI.class).updateAndCreate(carstModel);
+        call.enqueue(new Callback<List<CartModel>>() {
             @Override
-            public void onResponse(Call<List<CarstModel>> call, Response<List<CarstModel>> response) {
-                if (response.code() == HttpURLConnection.HTTP_CREATED) {
-                    Log.d("TAG", "onResponse: xoa thanh cong");
-                    getOrderListFromAPI();
-                }
+            public void onResponse(Call<List<CartModel>> call, Response<List<CartModel>> response) {
+
             }
 
             @Override
-            public void onFailure(Call<List<CarstModel>> call, Throwable t) {
+            public void onFailure(Call<List<CartModel>> call, Throwable t) {
+                if (listCarts != null && cart != null) {
+                    int index = listCarts.indexOf(cart);
+                    listCarts.get(index).setQuantity(listCarts.get(index).getQuantity() + carstModel.getQuantity());
+                    myRecycleViewAdapter.notifyDataSetChanged();
+                    CalculateAndAssign(listCarts);
+                }
             }
         });
     }
 
 
-    public void deleteCarst(AddCarstModel carstModel) {
+    public void deleteCarst(ItemCartModel carstModel, CartModel p) {
 
-        Call<CarstModel> call = RetrofitBuilder.getClient().create(CartsAPI.class).delete(carstModel.getId());
-        call.enqueue(new Callback<CarstModel>() {
+        Call<CartModel> call = RetrofitBuilder.getClient().create(CartsAPI.class).delete(carstModel.getId());
+        call.enqueue(new Callback<CartModel>() {
             @Override
-            public void onResponse(Call<CarstModel> call, Response<CarstModel> response) {
-                if (response.code() == HttpURLConnection.HTTP_CREATED) {
-                    Log.d("TAG", "onResponse: xoa thanh cong");
-                }
+            public void onResponse(Call<CartModel> call, Response<CartModel> response) {
             }
 
             @Override
-            public void onFailure(Call<CarstModel> call, Throwable t) {
-                Log.d("TAG", "onResponse: xoa khong thanh cong");
+            public void onFailure(Call<CartModel> call, Throwable t) {
+                if (listCarts != null) {
+                    listCarts.remove(p);
+                    myRecycleViewAdapter.notifyDataSetChanged();
+                    CalculateAndAssign(listCarts);
+                }
             }
         });
     }
@@ -162,30 +154,27 @@ public class CartFragment extends AbstractFragment {
     }
 
 
-    //-----------------------Calculate total and assign to TextViewTotal------------------------//
-    public void CalculateAndAssign(List<CarstModel> orderItemModels) {
+    public void CalculateAndAssign(List<CartModel> orderItemModels) {
         int sum = 0;
         for (int i = 0; i < orderItemModels.size(); i++) {
             sum += orderItemModels.get(i).getProduct().getPrice() * orderItemModels.get(i).getQuantity();
         }
         String value = FormatCurentcy.format(sum + "");
-        if (total_cart_screen == null) {
-            total_cart_screen = activityCart.findViewById(R.id.total_cart_screen);
+        if (cartScreeb == null) {
+            cartScreeb = activityCart.findViewById(R.id.total_cart_screen);
         }
 
         if (sum == 0) {
-            Log.d("TAG", "CalculateAndAssign: rong");
             btnBuy.setVisibility(View.INVISIBLE);
-            total_cart_screen.setText("0 đồng ");
+            cartScreeb.setText("0 đồng ");
             //--------------------Create animation gif!----------------------------//
             createAnimation();
         } else {
-            Log.d("TAG", "CalculateAndAssign: khong rong");
             //-----------------------------------
             linearLayoutWrapper.removeAllViews();
             //-----------------------------------
             btnBuy.setVisibility(View.VISIBLE);
-            total_cart_screen.setText(value + " đồng ");
+            cartScreeb.setText(value + " đồng ");
         }
     }
 
@@ -202,30 +191,16 @@ public class CartFragment extends AbstractFragment {
         linearLayoutWrapper.addView(anim);
     }
 
-    //--------------------------------Catch event click-------------------------------//
-    public void ClickEvent() {
-//        myRecycleViewAdapter.set_onRecyclerViewOnClickListener(new CartRecycleViewAdapter.onRecyclerViewOnClickListener() {
-//            @Override
-//            public void onItemRecyclerViewOnClickListener(int p, View CardView) {
-//                //MARK actions
-//                Toast.makeText(fragmentLayout.getContext(), "click", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-    }
 
-    //--------------------------------Create fake data-----------------------//
-
-
-    //----------------------------------------Anh xa----------------------------//
     public void AnhXa() {
         btnBuy = fragmentLayout.findViewById(R.id.btn_order_btn_cart_screen);
         linearLayoutWrapper = fragmentLayout.findViewById(R.id.linearLayout_wrapper_cart_Screen);
-        total_cart_screen = fragmentLayout.findViewById(R.id.total_cart_screen);
+        cartScreeb = fragmentLayout.findViewById(R.id.total_cart_screen);
         order_btn_cart_screen = fragmentLayout.findViewById(R.id.btn_order_btn_cart_screen);
         recyclerView = fragmentLayout.findViewById(R.id.recyclerView_card_screen);
     }
 
-    public void setUpCart(List<CarstModel> orderModel) {
+    public void setUpCart(List<CartModel> orderModel) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentLayout.getContext());
         layoutManager.setOrientation(layoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);

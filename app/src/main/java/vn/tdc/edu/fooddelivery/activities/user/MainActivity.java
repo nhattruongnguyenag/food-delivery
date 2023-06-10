@@ -188,7 +188,8 @@ public class MainActivity extends AbstractActivity {
                                 if (Authentication.logout()) {
                                     switchActivity(LoginActivity.class, "Logout");
                                     finish();
-                                };
+                                }
+                                ;
                             }
                         });
 
@@ -201,16 +202,14 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
-//        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (hasFocus) {
-//                    setFragment(SearchFragment.class, R.id.frameLayout, false);
-//                } else {
-//                    Log.d("TAG", "onFocusChange: bo cham");
-//                }
-//            }
-//        });
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    setFragment(SearchFragment.class, R.id.frameLayout, false);
+                }
+            }
+        });
 
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -231,10 +230,10 @@ public class MainActivity extends AbstractActivity {
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerOpened(View drawerView) {
-               if (Authentication.isUpdated) {
-                   setUserLoginInfo();
-                   Authentication.isUpdated = false;
-               }
+                if (Authentication.isUpdated) {
+                    setUserLoginInfo();
+                    Authentication.isUpdated = false;
+                }
             }
         });
     }
@@ -247,6 +246,7 @@ public class MainActivity extends AbstractActivity {
     private void setNavigationView() {
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();

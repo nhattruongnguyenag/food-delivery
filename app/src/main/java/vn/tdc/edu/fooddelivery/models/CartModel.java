@@ -2,7 +2,7 @@ package vn.tdc.edu.fooddelivery.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CarstModel {
+public class CartModel {
 
     @SerializedName("cart_id")
     private Integer cart_id;

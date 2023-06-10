@@ -89,31 +89,6 @@ public class NotificationFragment extends AbstractFragment {
     }
 
 
-    //-----------------------Fake alert-----------------//
-    public void createAlertDialog(int cart) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(fragmentLayout.getContext());
-        builder.setIcon(R.drawable.ic_baseline_warning_24);
-        builder.setTitle("Bạn có muốn xóa sản phẩm này chứ!");
-
-        builder.setPositiveButton("có", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                FileUtils.arrayListNotifications.remove(cart);
-//                updateArrayListCart();
-//                createAnimation();
-//                mainActivity.catchDataNotifyIcon();
-            }
-        });
-
-        builder.setNegativeButton("không", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.show();
-    }
-
     public void updateArrayListCart() {
         myAdapter.notifyDataSetChanged();
     }
