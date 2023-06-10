@@ -202,12 +202,10 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+        searchView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    setFragment(SearchFragment.class, R.id.frameLayout, false);
-                }
+            public void onClick(View v) {
+                setFragment(SearchFragment.class, R.id.frameLayout, false);
             }
         });
 
