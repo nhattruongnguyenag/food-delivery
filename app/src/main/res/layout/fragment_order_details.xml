@@ -42,11 +42,11 @@
                     android:textColor="@color/textBlack"/>
             </LinearLayout>
 
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="@dimen/text_field_padding"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:gravity="center_vertical"
@@ -64,9 +64,9 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:textSize="@dimen/textNormal"
-                    android:text="\t\t\t\t\t\t\t\t53 Võ Văn Ngân, P. Linh Chiểu, Tp. Thủ Đức, Tp. HCM"
+                    android:text="53 Võ Văn Ngân, P. Linh Chiểu, Tp. Thủ Đức, Tp. HCM"
                     android:textColor="@color/textBlack" />
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

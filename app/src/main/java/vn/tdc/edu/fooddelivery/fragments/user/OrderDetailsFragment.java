@@ -83,7 +83,7 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
         if (orderModel != null && orderModel.getItems() != null) {
             tvCustomerName.setText(orderModel.getCustomer().getFullName());
             tvCreateDate.setText(CommonUtils.convertDateToString(orderModel.getCreatedAt()));
-            tvAddress.setText("\t\t\t\t\t" + orderModel.getAddress());
+            tvAddress.setText(orderModel.getAddress());
             tvTotal.setText(FormatCurentcy.formatVietnamCurrency(orderModel.getTotal()));
 
             if (orderModel.getStatus() != OrderStatus.DANG_GIAO_HANG.getStatus()

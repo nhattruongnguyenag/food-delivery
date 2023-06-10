@@ -67,7 +67,7 @@ public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter
         OrderModel orderModel = listOrders.get(position);
         holder.tvOrderId.setText(String.valueOf(orderModel.getId()));
         holder.tvCustomerFullName.setText(orderModel.getCustomer().getFullName());
-        holder.tvAddress.setText("\t\t\t\t\t" + orderModel.getAddress());
+        holder.tvAddress.setText(orderModel.getAddress());
         holder.tvPhone.setText(orderModel.getPhone());
         holder.tvTotal.setText(FormatCurentcy.formatVietnamCurrency(orderModel.getTotal()) + " (đồng)");
         holder.tvCreatedAt.setText(CommonUtils.convertDateToString(orderModel.getCreatedAt()));
