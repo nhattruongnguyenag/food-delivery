@@ -2,7 +2,7 @@ package vn.tdc.edu.fooddelivery.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class OrderRequest {
+public class OrderRequestModel {
     @SerializedName("id")
     private Integer id;
     @SerializedName("shipper_id")

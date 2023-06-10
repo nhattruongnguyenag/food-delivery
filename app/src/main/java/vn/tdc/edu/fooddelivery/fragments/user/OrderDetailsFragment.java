@@ -8,16 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.HttpURLConnection;
 
@@ -32,8 +28,7 @@ import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
 import vn.tdc.edu.fooddelivery.enums.OrderStatus;
 import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
-import vn.tdc.edu.fooddelivery.fragments.admin.OrdersListFragment;
-import vn.tdc.edu.fooddelivery.models.OrderRequest;
+import vn.tdc.edu.fooddelivery.models.OrderRequestModel;
 import vn.tdc.edu.fooddelivery.models.OrderModel;
 import vn.tdc.edu.fooddelivery.utils.Authentication;
 import vn.tdc.edu.fooddelivery.utils.CommonUtils;
@@ -131,7 +126,7 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnSuccess || view.getId() == R.id.btnCancel) {
-            OrderRequest orderRequest = new OrderRequest();
+            OrderRequestModel orderRequest = new OrderRequestModel();
             orderRequest.setId(orderModel.getId());
             if (view.getId() == R.id.btnSuccess) {
                 orderRequest.setStatus(OrderStatus.DA_GIAO.getStatus());
@@ -143,7 +138,7 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
         }
     }
 
-    private void updateOrderStatus(OrderRequest orderRequest) {
+    private void updateOrderStatus(OrderRequestModel orderRequest) {
         Call<OrderModel> call = RetrofitBuilder.getClient().create(OrderAPI.class).update(orderRequest);
         call.enqueue(new Callback<OrderModel>() {
             @Override
