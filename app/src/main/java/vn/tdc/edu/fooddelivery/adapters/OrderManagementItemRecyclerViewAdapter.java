@@ -79,7 +79,7 @@ public class OrderManagementItemRecyclerViewAdapter extends RecyclerView.Adapter
                 holder.btnDelete.setEnabled(true);
             } else {
                 holder.btnAccept.setEnabled(false);
-                if (orderModel.getStatus() == OrderStatus.DA_HUY.getStatus()) {
+                if (orderModel.getStatus() == OrderStatus.DA_HUY.getStatus() && Authentication.getUserLogin().getRolesString().contains(Role.ADMIN.getName())) {
                     holder.btnDelete.setEnabled(true);
                 } else {
                     holder.btnDelete.setEnabled(false);
