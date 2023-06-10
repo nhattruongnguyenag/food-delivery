@@ -201,16 +201,16 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    setFragment(SearchFragment.class, R.id.frameLayout, false);
-                } else {
-                    Log.d("TAG", "onFocusChange: bo cham");
-                }
-            }
-        });
+//        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    setFragment(SearchFragment.class, R.id.frameLayout, false);
+//                } else {
+//                    Log.d("TAG", "onFocusChange: bo cham");
+//                }
+//            }
+//        });
 
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
