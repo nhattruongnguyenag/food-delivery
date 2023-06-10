@@ -104,11 +104,13 @@ public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRe
                 int userId = userModel.getId();
                 CartFragment cartFragment1 = new CartFragment();
                 AddCarstModel carstModel = new AddCarstModel();
-                carstModel.setProduct_id(cart.getId());
-                carstModel.setUser_id(userId);
-                carstModel.setQuantity(1);
-                cartFragment1.updateCart(carstModel);
-                showMessageDialog("Đặt hàng thành công");
+                if (cart.getId() != null) {
+                    carstModel.setProduct_id(cart.getId());
+                    carstModel.setUser_id(userId);
+                    carstModel.setQuantity(1);
+                    cartFragment1.updateCart(carstModel);
+                    showMessageDialog("Đặt hàng thành công");
+                }
             }
         });
     }

@@ -103,9 +103,6 @@ public class CartRecycleViewAdapter extends RecyclerView.Adapter<CartRecycleView
         if (mainActivity == null) {
             mainActivity = new MainActivity();
         }
-//        if (FileUtils.cartList != null) {
-//            mainActivity.createNum(FileUtils.cartList.size(), 2);
-//        }
     }
 
     public void btnPlustClickEvent(MyViewHolder holder, CarstModel cart) {

@@ -88,6 +88,7 @@ public class CartFragment extends AbstractFragment {
     }
 
     private void getOrderListFromAPI() {
+        Log.d("TAG", "getOrderListFromAPI: " + userID);
         Call<List<CarstModel>> call = RetrofitBuilder.getClient().create(CartsAPI.class).findCartsOfUser(userID);
         call.enqueue(new Callback<List<CarstModel>>() {
             @Override
@@ -113,17 +114,18 @@ public class CartFragment extends AbstractFragment {
 
 
     public void updateCart(AddCarstModel carstModel) {
-        AnhXa();
         Call<List<CarstModel>> call = RetrofitBuilder.getClient().create(CartsAPI.class).updateAndCreate(carstModel);
         call.enqueue(new Callback<List<CarstModel>>() {
             @Override
             public void onResponse(Call<List<CarstModel>> call, Response<List<CarstModel>> response) {
-                getOrderListFromAPI();
+                if (response.code() == HttpURLConnection.HTTP_CREATED) {
+                    Log.d("TAG", "onResponse: xoa thanh cong");
+                    getOrderListFromAPI();
+                }
             }
 
             @Override
             public void onFailure(Call<List<CarstModel>> call, Throwable t) {
-                getOrderListFromAPI();
             }
         });
     }
@@ -135,7 +137,7 @@ public class CartFragment extends AbstractFragment {
         call.enqueue(new Callback<CarstModel>() {
             @Override
             public void onResponse(Call<CarstModel> call, Response<CarstModel> response) {
-                if (response.code() == HttpURLConnection.HTTP_OK) {
+                if (response.code() == HttpURLConnection.HTTP_CREATED) {
                     Log.d("TAG", "onResponse: xoa thanh cong");
                 }
             }
