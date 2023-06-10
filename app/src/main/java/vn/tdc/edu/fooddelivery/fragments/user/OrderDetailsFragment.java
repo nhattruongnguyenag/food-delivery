@@ -25,6 +25,7 @@ import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.adapters.OrderDetailRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.api.OrderAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.enums.OrderStatus;
 import vn.tdc.edu.fooddelivery.enums.Role;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
@@ -48,6 +49,8 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
     private Button btnCancel;
     private OrderDetailRecyclerViewAdapter adapter;
     private OrderModel orderModel;
+
+    private ConfirmDialog confirmDialog;
 
     public OrderModel getOrderModel() {
         return orderModel;
@@ -129,12 +132,42 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
             OrderRequestModel orderRequest = new OrderRequestModel();
             orderRequest.setId(orderModel.getId());
             if (view.getId() == R.id.btnSuccess) {
-                orderRequest.setStatus(OrderStatus.DA_GIAO.getStatus());
-            } else {
-                orderRequest.setStatus(OrderStatus.DA_HUY.getStatus());
-            }
+                confirmDialog = new ConfirmDialog(getActivity());
+                confirmDialog.setTitle("Xác nhận giao hàng");
+                confirmDialog.setMessage("Bạn có muốn tiếp tục không?");
+                confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
+                    @Override
+                    public void cancel() {
+                        confirmDialog.dismiss();
+                    }
 
-            updateOrderStatus(orderRequest);
+                    @Override
+                    public void ok() {
+                        orderRequest.setStatus(OrderStatus.DA_GIAO.getStatus());
+                        updateOrderStatus(orderRequest);
+                    }
+                });
+
+                confirmDialog.show();
+            } else {
+                confirmDialog = new ConfirmDialog(getActivity());
+                confirmDialog.setTitle("Xác nhận huỷ đơn hàng");
+                confirmDialog.setMessage("Bạn có muốn tiếp tục không?");
+                confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
+                    @Override
+                    public void cancel() {
+                        confirmDialog.dismiss();
+                    }
+
+                    @Override
+                    public void ok() {
+                        orderRequest.setStatus(OrderStatus.DA_HUY.getStatus());
+                        updateOrderStatus(orderRequest);
+                    }
+                });
+
+                confirmDialog.show();
+            }
         }
     }
 
@@ -149,6 +182,7 @@ public class OrderDetailsFragment extends AbstractFragment implements View.OnCli
                     } else if (response.body().getStatus() == OrderStatus.DA_HUY.getStatus()) {
                         ((AbstractActivity) getActivity()).showMessageDialog("Huỷ đơn hàng thành công");
                     }
+                    confirmDialog.dismiss();
                     getActivity().onBackPressed();
                 } else {
                     ((AbstractActivity) getActivity()).showMessageDialog("Hệ thống đang bảo trì");

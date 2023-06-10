@@ -126,7 +126,6 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
                 public void ok() {
                     orderRequest.setStatus(OrderStatus.DA_GIAO.getStatus());
                     updateOrder(orderRequest, position);
-                    confirmDialog.dismiss();
                 }
             });
 
@@ -170,7 +169,6 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
                 public void ok() {
                     orderRequest.setStatus(OrderStatus.DA_HUY.getStatus());
                     updateOrder(orderRequest, position);
-                    confirmDialog.dismiss();
                 }
             });
 
@@ -186,6 +184,8 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
             public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
                 if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
                     ((AbstractActivity) getActivity()).showMessageDialog("Đơn hàng đã được bàn giao cho nhân viên");
+
+                    listOrders.remove(listOrders.get(position));
                     adapter.notifyItemRemoved(position);
                     assign.dismiss();
 
@@ -212,9 +212,11 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
             @Override
             public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
                 if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
+                    listOrders.remove(listOrders.get(position));
+                    adapter.notifyItemRemoved(position);
+                    confirmDialog.dismiss();
                     if (response.body().getStatus() == OrderStatus.DA_GIAO.getStatus()) {
                         ((AbstractActivity) getActivity()).showMessageDialog("Đơn hàng đã giao thành công");
-                        adapter.notifyItemRemoved(position);
                         NotificationModel notificationModel = new NotificationModel();
                         notificationModel.setUser_id(response.body().getCustomer().getId());
                         notificationModel.setTitle("Đơn hàng đã được giao thành công");
@@ -229,7 +231,6 @@ public class OrdersListFragment extends AbstractFragment implements OrderManagem
                         + " đã huỷ thành công. Cảm ơn quý khách đã đặt món từ nhà hàng chúng tôi. Trân trọng !");
                         addNotification(notificationModel);
                     }
-                    adapter.notifyItemRemoved(position);
                 } else {
                     ((AbstractActivity) getActivity()).showMessageDialog("Thao tác không thành công");
                 }
