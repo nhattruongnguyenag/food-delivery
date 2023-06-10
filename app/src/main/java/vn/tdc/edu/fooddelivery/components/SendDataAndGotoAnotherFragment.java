@@ -15,6 +15,7 @@ import vn.tdc.edu.fooddelivery.activities.AbstractActivity;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.api.ProductAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.NotifyCationDetailFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.ProductDetailFragment;
 import vn.tdc.edu.fooddelivery.models.NotificationModel;
@@ -40,6 +41,7 @@ public class SendDataAndGotoAnotherFragment {
 
 
     private static List<ProductModel> getProductSameCategory(List<ProductModel> productModelList, ProductModel cart) {
+        Log.d("TAG", "binData: detail2");
         List<ProductModel> productModels = new ArrayList<>();
         for (ProductModel p : productModelList) {
             for (int id : p.getCategoryIds()) {
@@ -52,6 +54,7 @@ public class SendDataAndGotoAnotherFragment {
     }
 
     private static void binData(Activity activity, ProductModel cart, List<ProductModel> productsList) {
+        Log.d("TAG", "binData: detail1");
         ((AbstractActivity) activity).setFragment(ProductDetailFragment.class, R.id.frameLayout, true)
                 .setDetailProduct(cart).
                 setArrayList(null)
@@ -62,6 +65,11 @@ public class SendDataAndGotoAnotherFragment {
         ((AbstractActivity) activity).setFragment(NotifyCationDetailFragment.class, R.id.frameLayout, true)
                 .setNotificationModel(cart);
     }
+
+    public static void sendToHomeFragment(Activity activity) {
+        ((AbstractActivity) activity).setFragment(HomeFragment.class, R.id.frameLayout, true);
+    }
+
     private static CompletableFuture<List<ProductModel>> getProduct() {
         CompletableFuture<List<ProductModel>> future = new CompletableFuture<>();
         Call<List<ProductModel>> callProduct = RetrofitBuilder.getClient().create(ProductAPI.class).findAll();

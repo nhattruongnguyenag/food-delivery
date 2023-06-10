@@ -29,6 +29,7 @@ import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.adapters.NotificationRecyclerViewAdapter;
 import vn.tdc.edu.fooddelivery.api.NotificationAPI;
 import vn.tdc.edu.fooddelivery.api.builder.RetrofitBuilder;
+import vn.tdc.edu.fooddelivery.components.ConfirmDialog;
 import vn.tdc.edu.fooddelivery.components.SendDataAndGotoAnotherFragment;
 import vn.tdc.edu.fooddelivery.fragments.AbstractFragment;
 import vn.tdc.edu.fooddelivery.models.NotificationModel;
@@ -42,13 +43,16 @@ public class NotificationFragment extends AbstractFragment {
     private RecyclerView recyclerView;
     private static NotificationRecyclerViewAdapter myAdapter;
     private static View fragmentLayout = null;
-    private LinearLayout linearLayoutWrapper;
-    private MainActivity mainActivity = new MainActivity();
+    private static LinearLayout linearLayoutWrapper;
+
+    private static MainActivity mainActivity = new MainActivity();
 
     private static List<NotificationModel> listNotifycations;
 
     UserModel userModel = Authentication.getUserLogin();
-    public int user_id = userModel.getId();;
+    public int user_id = userModel.getId();
+    ;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +71,10 @@ public class NotificationFragment extends AbstractFragment {
     @Override
     public void onResume() {
         super.onResume();
+        getNotifycationAPI();
+    }
+
+    public void getNotifycationAPI() {
         Call<List<NotificationModel>> callNotifycations = RetrofitBuilder.getClient().create(NotificationAPI.class).findNotifyCationsOfUser(user_id);
         callNotifycations.enqueue(new Callback<List<NotificationModel>>() {
             @Override
@@ -75,8 +83,8 @@ public class NotificationFragment extends AbstractFragment {
                     listNotifycations.clear();
                     listNotifycations.addAll(response.body());
                     setUp(listNotifycations);
-                    createAnimation();
                     clickEvent();
+                    createAnimation();
                     Log.d("api-call", "Fetch product data successfully !");
                 }
             }
@@ -88,31 +96,27 @@ public class NotificationFragment extends AbstractFragment {
         });
     }
 
-
-    //-----------------------Fake alert-----------------//
-    public void createAlertDialog(int cart) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(fragmentLayout.getContext());
-        builder.setIcon(R.drawable.ic_baseline_warning_24);
-        builder.setTitle("Bạn có muốn xóa sản phẩm này chứ!");
-
-        builder.setPositiveButton("có", new DialogInterface.OnClickListener() {
+    public void getNotifycationAPIForPrintNumber() {
+        Call<List<NotificationModel>> callNotifycations = RetrofitBuilder.getClient().create(NotificationAPI.class).findNotifyCationsOfUser(user_id);
+        callNotifycations.enqueue(new Callback<List<NotificationModel>>() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                FileUtils.arrayListNotifications.remove(cart);
-//                updateArrayListCart();
-//                createAnimation();
-//                mainActivity.catchDataNotifyIcon();
+            public void onResponse(Call<List<NotificationModel>> call, Response<List<NotificationModel>> response) {
+                if (response.body() != null) {
+                    if (listNotifycations == null) {
+                        listNotifycations = new ArrayList<>();
+                    }
+                    listNotifycations.clear();
+                    listNotifycations.addAll(response.body());
+                    mainActivity.catchDataNotifyIcon(listNotifycations.size());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<NotificationModel>> call, Throwable t) {
             }
         });
-
-        builder.setNegativeButton("không", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.show();
     }
+
 
     public void updateArrayListCart() {
         myAdapter.notifyDataSetChanged();
@@ -163,18 +167,36 @@ public class NotificationFragment extends AbstractFragment {
     }
 
     public void deleteNotifications(NotificationModel notificationModel) {
+        ConfirmDialog confirmDialog = new ConfirmDialog(fragmentLayout.getContext());
+        confirmDialog.setTitle("Xóa sản phẩm ");
+        confirmDialog.setMessage("Xóa sản phẩm ra khỏi giỏ hàng của bạn ?");
+        confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
+            @Override
+            public void cancel() {
+                confirmDialog.dismiss();
+            }
+
+            @Override
+            public void ok() {
+                deleteNotifycationActivity(notificationModel);
+                confirmDialog.dismiss();
+            }
+        });
+        confirmDialog.show();
+
+    }
+
+    public void deleteNotifycationActivity(NotificationModel notificationModel) {
         Call<NotificationModel> call = RetrofitBuilder.getClient().create(NotificationAPI.class).delete(notificationModel.getId());
 
         call.enqueue(new Callback<NotificationModel>() {
             @Override
             public void onResponse(Call<NotificationModel> call, Response<NotificationModel> response) {
                 if (response.code() == HttpURLConnection.HTTP_OK || response.code() == HttpURLConnection.HTTP_CREATED) {
-                    Log.d("TAG", "onResponse: xoa thong bao thanh cong!");
                     listNotifycations.remove(notificationModel);
+                    mainActivity.catchDataNotifyIcon(listNotifycations.size());
                     myAdapter.notifyDataSetChanged();
                     showMessageDialog("Đã xóa thông báo thành công");
-                } else {
-                    Log.d("TAG", "onResponse: xoa thong bao khong thanh cong!");
                 }
             }
 

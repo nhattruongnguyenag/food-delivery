@@ -1,6 +1,6 @@
 package vn.tdc.edu.fooddelivery.models;
 
-public class AddCarstModel {
+public class ItemCartsModel {
 
     private Integer id;
     private Integer user_id;

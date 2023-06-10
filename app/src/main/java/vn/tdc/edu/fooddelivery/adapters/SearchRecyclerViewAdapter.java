@@ -29,18 +29,18 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     public List<ProductModel> arrayList;
     private List<ProductModel> arrayListOld;
     public static List<ProductModel> cartArrayListOnChange;
-    public UserClicListenter userClicListenter;
+    public ProductClickListener ProductClickListener;
 
     public void setArrayList(List<ProductModel> arrayList) {
         this.arrayList = arrayList;
     }
 
-    public SearchRecyclerViewAdapter(Activity activity, int layout_id, List<ProductModel> arrayList, UserClicListenter userClicListenter) {
+    public SearchRecyclerViewAdapter(Activity activity, int layout_id, List<ProductModel> arrayList, ProductClickListener ProductClickListener) {
         this.activity = activity;
         this.layout_id = layout_id;
         this.arrayList = arrayList;
         arrayListOld = arrayList;
-        this.userClicListenter = userClicListenter;
+        this.ProductClickListener = ProductClickListener;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userClicListenter.selectedUser(cart);
+                ProductClickListener.selectProduct(cart);
             }
         });
     }
@@ -141,8 +141,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     }
 
 
-    public interface UserClicListenter {
-        void selectedUser(ProductModel userModel);
+    public interface ProductClickListener {
+        void selectProduct(ProductModel userModel);
     }
 
 }

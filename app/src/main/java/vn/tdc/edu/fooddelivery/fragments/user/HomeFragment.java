@@ -44,8 +44,6 @@ import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 public class HomeFragment extends AbstractFragment {
-    private int i = 0;
-
     private static LayoutInflater layoutInflater = null;
     private static View fragmentLayout = null;
     private ToastCustome toaslCustomize;
@@ -142,7 +140,6 @@ public class HomeFragment extends AbstractFragment {
         });
     }
 
-    //-----------------------------Set disable for fab-----------------//
     public void setInvisibleFab() {
         fab.setVisibility(View.INVISIBLE);
     }
@@ -150,7 +147,6 @@ public class HomeFragment extends AbstractFragment {
     public void setVisibleFab() {
         fab.setVisibility(View.VISIBLE);
     }
-    //-----------------------------Set disable for fab-----------------//
 
     private void ClickEventFab() {
         fab.setOnClickListener(new View.OnClickListener() {
@@ -239,16 +235,6 @@ public class HomeFragment extends AbstractFragment {
             }
         });
     }
-
-
-    //------------------Toasl--------------------------------------//
-
-    //-----------------Create notify cart number--------------------//
-//        MainActivity.CreateNumberBuyButtonEventClick();
-    //--------------------Toasl----------------------------------------//
-
-
-    //-------------------------------Chuyen man hinh---------------------------------//
     public <T> T setFragment(Class<T> tClass, int layout, boolean addToBackStack) {
         T fragment = null;
         try {

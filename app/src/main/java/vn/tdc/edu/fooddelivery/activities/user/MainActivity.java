@@ -76,12 +76,20 @@ public class MainActivity extends AbstractActivity {
     private TextView tvUserEmail;
     private Fragment prevFragment;
 
+    private static CartFragment cartFragment = new CartFragment();
+    private static NotificationFragment notificationFragment = new NotificationFragment();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-
+        //-----------------------------------------
+        //get carts to print number on bottom nav
+//        cartFragment.getOrderListFromAPI();
+        ////get carts to print number on bottom nav
+//        notificationFragment.getNotifycationAPIForPrintNumber();
+        //-----------------------------------------
         navigation = findViewById(R.id.navigation);
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -98,8 +106,6 @@ public class MainActivity extends AbstractActivity {
         // -------------------CHU DINH HANH----------------//
         bottomNavigation = findViewById(R.id.bottomNavigation);
         MainActivity.setMainActivitySave(MainActivity.this);
-        catchDataCartIconNotify();
-        catchDataNotifyIcon();
         // -------------------------End------------------------//
 
         prevFragment = setFragment(HomeFragment.class, R.id.frameLayout, false);
@@ -188,7 +194,8 @@ public class MainActivity extends AbstractActivity {
                                 if (Authentication.logout()) {
                                     switchActivity(LoginActivity.class, "Logout");
                                     finish();
-                                };
+                                }
+                                ;
                             }
                         });
 
@@ -231,10 +238,10 @@ public class MainActivity extends AbstractActivity {
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerOpened(View drawerView) {
-               if (Authentication.isUpdated) {
-                   setUserLoginInfo();
-                   Authentication.isUpdated = false;
-               }
+                if (Authentication.isUpdated) {
+                    setUserLoginInfo();
+                    Authentication.isUpdated = false;
+                }
             }
         });
     }
@@ -247,6 +254,7 @@ public class MainActivity extends AbstractActivity {
     private void setNavigationView() {
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -319,20 +327,15 @@ public class MainActivity extends AbstractActivity {
         drawerLayout.close();
     }
 
-    // -------------------------------CHU DINH
-    // HANH----------------------------------------//
 
-    public void catchDataCartIconNotify() {
-//        createNum(FileUtils.cartList.size(), 2);
+    public void catchDataCartIconNotify(int number) {
+        createNum(number, 2);
     }
 
-    public void catchDataNotifyIcon() {
-//        createNum(FileUtils.arrayListNotifications.size(), 3);
+    public void catchDataNotifyIcon(int number) {
+        createNum(number, 3);
     }
 
-    public static void CreateNumberBuyButtonEventClick() {
-//            createNum(FileUtils.cartList.size(), 2);
-    }
 
     public void clearAllSelectNavigation() {
 

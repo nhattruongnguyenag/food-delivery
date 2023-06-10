@@ -2,7 +2,6 @@ package vn.tdc.edu.fooddelivery.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +22,9 @@ import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
 import vn.tdc.edu.fooddelivery.components.CreateStart;
 import vn.tdc.edu.fooddelivery.components.SendDataAndGotoAnotherFragment;
-import vn.tdc.edu.fooddelivery.dal.DatabaseLayer;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
 import vn.tdc.edu.fooddelivery.fragments.user.HomeFragment;
-import vn.tdc.edu.fooddelivery.models.AddCarstModel;
+import vn.tdc.edu.fooddelivery.models.ItemCartsModel;
 import vn.tdc.edu.fooddelivery.models.ProductModel;
 import vn.tdc.edu.fooddelivery.models.UserModel;
 import vn.tdc.edu.fooddelivery.utils.Authentication;
@@ -103,22 +101,13 @@ public class HomeMenuRecyclerViewAdapter extends RecyclerView.Adapter<HomeMenuRe
                 UserModel userModel = Authentication.getUserLogin();
                 int userId = userModel.getId();
                 CartFragment cartFragment1 = new CartFragment();
-                AddCarstModel carstModel = new AddCarstModel();
+                ItemCartsModel carstModel = new ItemCartsModel();
                 carstModel.setProduct_id(cart.getId());
                 carstModel.setUser_id(userId);
                 carstModel.setQuantity(1);
-                cartFragment1.updateCart(carstModel);
-                showMessageDialog("Đặt hàng thành công");
+                cartFragment1.updateCart(carstModel, null, activity);
             }
         });
-    }
-
-    public void showMessageDialog(String message) {
-        androidx.appcompat.app.AlertDialog alert = new androidx.appcompat.app.AlertDialog.Builder(activity)
-                .setTitle("Message")
-                .setMessage(message)
-                .setPositiveButton("Ok", null)
-                .show();
     }
 
 

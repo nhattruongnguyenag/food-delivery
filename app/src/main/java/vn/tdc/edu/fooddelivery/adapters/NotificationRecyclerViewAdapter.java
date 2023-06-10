@@ -2,6 +2,7 @@ package vn.tdc.edu.fooddelivery.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,14 +74,14 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         holder.imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createDialogToConfirm(notification);
+                deleteNotifycations(notification);
             }
         });
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createDialogToConfirm(notification);
+                deleteNotifycations(notification);
             }
         });
     }
@@ -89,25 +90,6 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         notificationFragment.deleteNotifications(notification);
     }
 
-    public void createDialogToConfirm(NotificationModel NotificationModel) {
-        ConfirmDialog confirmDialog = new ConfirmDialog(activity);
-        confirmDialog.setTitle("Đăng xuất");
-        confirmDialog.setMessage("Đăng xuất khỏi tài khoản của bạn ?");
-        confirmDialog.setOnDialogComfirmAction(new ConfirmDialog.DialogComfirmAction() {
-            @Override
-            public void cancel() {
-                confirmDialog.dismiss();
-            }
-
-            @Override
-            public void ok() {
-                deleteNotifycations(NotificationModel);
-                confirmDialog.dismiss();
-            }
-        });
-
-        confirmDialog.show();
-    }
 
 
     @Override

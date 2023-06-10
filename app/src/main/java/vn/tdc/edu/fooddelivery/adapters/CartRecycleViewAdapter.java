@@ -2,8 +2,6 @@ package vn.tdc.edu.fooddelivery.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +10,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -20,17 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import vn.tdc.edu.fooddelivery.R;
 import vn.tdc.edu.fooddelivery.activities.user.MainActivity;
-import vn.tdc.edu.fooddelivery.models.AddCarstModel;
-import vn.tdc.edu.fooddelivery.models.CarstModel;
-import vn.tdc.edu.fooddelivery.models.ProductModel;
+import vn.tdc.edu.fooddelivery.models.ItemCartsModel;
+import vn.tdc.edu.fooddelivery.models.CartsModel;
 import vn.tdc.edu.fooddelivery.utils.FormatCurentcy;
 import vn.tdc.edu.fooddelivery.fragments.user.CartFragment;
-import vn.tdc.edu.fooddelivery.utils.FileUtils;
 
 
 public class CartRecycleViewAdapter extends RecyclerView.Adapter<CartRecycleViewAdapter.MyViewHolder> {
@@ -38,12 +32,12 @@ public class CartRecycleViewAdapter extends RecyclerView.Adapter<CartRecycleView
     private onRecyclerViewOnClickListener _onRecyclerViewOnClickListener;
     private Activity activity;
     private int layout_id;
-    private List<CarstModel> arrayList;
+    private List<CartsModel> arrayList;
     private CartFragment cartScreenActivity = new CartFragment();
     private MainActivity mainActivity;
 
 
-    public CartRecycleViewAdapter(Activity activity, int layout_id, List<CarstModel> arrayList) {
+    public CartRecycleViewAdapter(Activity activity, int layout_id, List<CartsModel> arrayList) {
         this.activity = activity;
         this.layout_id = layout_id;
         this.arrayList = arrayList;
@@ -60,7 +54,12 @@ public class CartRecycleViewAdapter extends RecyclerView.Adapter<CartRecycleView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        CarstModel cart = arrayList.get(position);
+        CartsModel cart = arrayList.get(position);
+        if (cart.getQuantity() <= 1) {
+            holder.sub.setVisibility(View.INVISIBLE);
+        } else {
+            holder.sub.setVisibility(View.VISIBLE);
+        }
         holder.txt_name.setText(String.valueOf(cart.getProduct().getName()));
         holder.txt_total.setText(FormatCurentcy.format(cart.getProduct().getPrice() + "") + " x " + FormatCurentcy.format(cart.getQuantity() + "") + " = " + FormatCurentcy.format((cart.getQuantity() * cart.getProduct().getPrice()) + "") + " VND ");
         holder.txt_qty.setText(String.valueOf(cart.getQuantity()));
@@ -81,19 +80,19 @@ public class CartRecycleViewAdapter extends RecyclerView.Adapter<CartRecycleView
         deleteButtonEventClick(holder, cart);
     }
 
-    public void deleteButtonEventClick(MyViewHolder holder, CarstModel cart) {
+    public void deleteButtonEventClick(MyViewHolder holder, CartsModel cart) {
         holder.btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int userId = 1;
                 CartFragment cartFragment = new CartFragment();
-                AddCarstModel carstModel = new AddCarstModel();
+                ItemCartsModel carstModel = new ItemCartsModel();
                 carstModel.setId(cart.getCart_id());
                 carstModel.setUser_id(cart.getUser().getId());
                 carstModel.setQuantity(cart.getQuantity());
                 carstModel.setProduct_id(cart.getProduct().getId());
                 Log.d("TAG", "onClick: xoa");
-                cartFragment.deleteCarst(carstModel);
+                cartFragment.deleteCarst(carstModel, cart);
             }
         });
     }
@@ -108,33 +107,33 @@ public class CartRecycleViewAdapter extends RecyclerView.Adapter<CartRecycleView
 //        }
     }
 
-    public void btnPlustClickEvent(MyViewHolder holder, CarstModel cart) {
+    public void btnPlustClickEvent(MyViewHolder holder, CartsModel cart) {
         holder.plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("TAG", "onClick: cong" + cart.getQuantity());
-                AddCarstModel carstItem = new AddCarstModel();
+                ItemCartsModel carstItem = new ItemCartsModel();
                 carstItem.setUser_id(cart.getUser().getId());
                 carstItem.setProduct_id(cart.getProduct().getId());
                 carstItem.setQuantity(1);
                 CartFragment cartFragment = new CartFragment();
-                cartFragment.updateCart(carstItem);
+                cartFragment.updateCart(carstItem, cart, null);
             }
         });
     }
 
 
-    public void btnSubClickEvent(MyViewHolder holder, CarstModel cart) {
+    public void btnSubClickEvent(MyViewHolder holder, CartsModel cart) {
         holder.sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("TAG", "onClick: tru" + cart.getQuantity());
-                AddCarstModel carstItem = new AddCarstModel();
-                carstItem.setUser_id(cart.getUser().getId());
-                carstItem.setProduct_id(cart.getProduct().getId());
-                carstItem.setQuantity(-1);
-                CartFragment cartFragment = new CartFragment();
-                cartFragment.updateCart(carstItem);
+                if (cart.getQuantity() > 1) {
+                    ItemCartsModel carstItem = new ItemCartsModel();
+                    carstItem.setUser_id(cart.getUser().getId());
+                    carstItem.setProduct_id(cart.getProduct().getId());
+                    carstItem.setQuantity(-1);
+                    CartFragment cartFragment = new CartFragment();
+                    cartFragment.updateCart(carstItem, cart, null);
+                }
             }
         });
     }
